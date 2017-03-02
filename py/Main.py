@@ -4,8 +4,11 @@ Revision: 0
 Creation of a game interface
 '''
 
-import tkinter
+import Tkinter
 import pygame
+import kinect_module
+from multiprocessing import Process
+import panda3d
 from pygame.locals import*
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -43,18 +46,17 @@ def Cube():
             glVertex3fv(vertices[vertex])
     glEnd()
 
-def Esfera():
+#def Esfera():
 
 def main():
     pygame.init()
-    display = (800, 600)
+    display = (1000, 800)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 
     glTranslatef(0.0, 0.0, -5)
     glRotatef(0, 0, 0, 0)
-
     print 'ok'
     while True:
         for event in pygame.event.get():
@@ -64,7 +66,16 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         Cube()
         pygame.display.flip()
-        pygame.time.wait(10)
+        pygame.time.wait(1)
 
-main()
+if __name__ == '__main__':
+    data = kinect_module.DATA_READ_KINECT()
+    p1 = Process(target=main)
+    p1.start()
+    p2 = Process(target=data.read_kinect())
+    p2.start()
+    p1.join()
+    p2.join()
+    #Thread(target = test1).start()
+    #Thread(target = test2).start()
 

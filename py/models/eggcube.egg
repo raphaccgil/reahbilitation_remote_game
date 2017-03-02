@@ -1,0 +1,403 @@
+<CoordinateSystem> { Y-Up }
+
+<Comment> {
+  "maya2egg2016 -o eggcube.egg cube.mb"
+}
+<Group> nurbsCube1 {
+  <Group> topnurbsCube1 {
+    <VertexPool> topnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        -0.5 0.5 0.5 1
+      }
+      <Vertex> 1 {
+        -0.166667 0.5 0.5 1
+      }
+      <Vertex> 2 {
+        0.166667 0.5 0.5 1
+      }
+      <Vertex> 3 {
+        0.5 0.5 0.5 1
+      }
+      <Vertex> 4 {
+        -0.5 0.5 0.166667 1
+      }
+      <Vertex> 5 {
+        -0.166667 0.5 0.166667 1
+      }
+      <Vertex> 6 {
+        0.166667 0.5 0.166667 1
+      }
+      <Vertex> 7 {
+        0.5 0.5 0.166667 1
+      }
+      <Vertex> 8 {
+        -0.5 0.5 -0.166667 1
+      }
+      <Vertex> 9 {
+        -0.166667 0.5 -0.166667 1
+      }
+      <Vertex> 10 {
+        0.166667 0.5 -0.166667 1
+      }
+      <Vertex> 11 {
+        0.5 0.5 -0.166667 1
+      }
+      <Vertex> 12 {
+        -0.5 0.5 -0.5 1
+      }
+      <Vertex> 13 {
+        -0.166667 0.5 -0.5 1
+      }
+      <Vertex> 14 {
+        0.166667 0.5 -0.5 1
+      }
+      <Vertex> 15 {
+        0.5 0.5 -0.5 1
+      }
+    }
+    <NurbsSurface> topnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { topnurbsCubeShape1.cvs }
+      }
+    }
+  }
+  <Group> bottomnurbsCube1 {
+    <VertexPool> bottomnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        -0.5 -0.5 0.5 1
+      }
+      <Vertex> 1 {
+        -0.5 -0.5 0.166667 1
+      }
+      <Vertex> 2 {
+        -0.5 -0.5 -0.166667 1
+      }
+      <Vertex> 3 {
+        -0.5 -0.5 -0.5 1
+      }
+      <Vertex> 4 {
+        -0.166667 -0.5 0.5 1
+      }
+      <Vertex> 5 {
+        -0.166667 -0.5 0.166667 1
+      }
+      <Vertex> 6 {
+        -0.166667 -0.5 -0.166667 1
+      }
+      <Vertex> 7 {
+        -0.166667 -0.5 -0.5 1
+      }
+      <Vertex> 8 {
+        0.166667 -0.5 0.5 1
+      }
+      <Vertex> 9 {
+        0.166667 -0.5 0.166667 1
+      }
+      <Vertex> 10 {
+        0.166667 -0.5 -0.166667 1
+      }
+      <Vertex> 11 {
+        0.166667 -0.5 -0.5 1
+      }
+      <Vertex> 12 {
+        0.5 -0.5 0.5 1
+      }
+      <Vertex> 13 {
+        0.5 -0.5 0.166667 1
+      }
+      <Vertex> 14 {
+        0.5 -0.5 -0.166667 1
+      }
+      <Vertex> 15 {
+        0.5 -0.5 -0.5 1
+      }
+    }
+    <NurbsSurface> bottomnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { bottomnurbsCubeShape1.cvs }
+      }
+    }
+  }
+  <Group> leftnurbsCube1 {
+    <VertexPool> leftnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        -0.5 -0.5 0.5 1
+      }
+      <Vertex> 1 {
+        -0.166667 -0.5 0.5 1
+      }
+      <Vertex> 2 {
+        0.166667 -0.5 0.5 1
+      }
+      <Vertex> 3 {
+        0.5 -0.5 0.5 1
+      }
+      <Vertex> 4 {
+        -0.5 -0.166667 0.5 1
+      }
+      <Vertex> 5 {
+        -0.166667 -0.166667 0.5 1
+      }
+      <Vertex> 6 {
+        0.166667 -0.166667 0.5 1
+      }
+      <Vertex> 7 {
+        0.5 -0.166667 0.5 1
+      }
+      <Vertex> 8 {
+        -0.5 0.166667 0.5 1
+      }
+      <Vertex> 9 {
+        -0.166667 0.166667 0.5 1
+      }
+      <Vertex> 10 {
+        0.166667 0.166667 0.5 1
+      }
+      <Vertex> 11 {
+        0.5 0.166667 0.5 1
+      }
+      <Vertex> 12 {
+        -0.5 0.5 0.5 1
+      }
+      <Vertex> 13 {
+        -0.166667 0.5 0.5 1
+      }
+      <Vertex> 14 {
+        0.166667 0.5 0.5 1
+      }
+      <Vertex> 15 {
+        0.5 0.5 0.5 1
+      }
+    }
+    <NurbsSurface> leftnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { leftnurbsCubeShape1.cvs }
+      }
+    }
+  }
+  <Group> rightnurbsCube1 {
+    <VertexPool> rightnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        -0.5 -0.5 -0.5 1
+      }
+      <Vertex> 1 {
+        -0.5 -0.166667 -0.5 1
+      }
+      <Vertex> 2 {
+        -0.5 0.166667 -0.5 1
+      }
+      <Vertex> 3 {
+        -0.5 0.5 -0.5 1
+      }
+      <Vertex> 4 {
+        -0.166667 -0.5 -0.5 1
+      }
+      <Vertex> 5 {
+        -0.166667 -0.166667 -0.5 1
+      }
+      <Vertex> 6 {
+        -0.166667 0.166667 -0.5 1
+      }
+      <Vertex> 7 {
+        -0.166667 0.5 -0.5 1
+      }
+      <Vertex> 8 {
+        0.166667 -0.5 -0.5 1
+      }
+      <Vertex> 9 {
+        0.166667 -0.166667 -0.5 1
+      }
+      <Vertex> 10 {
+        0.166667 0.166667 -0.5 1
+      }
+      <Vertex> 11 {
+        0.166667 0.5 -0.5 1
+      }
+      <Vertex> 12 {
+        0.5 -0.5 -0.5 1
+      }
+      <Vertex> 13 {
+        0.5 -0.166667 -0.5 1
+      }
+      <Vertex> 14 {
+        0.5 0.166667 -0.5 1
+      }
+      <Vertex> 15 {
+        0.5 0.5 -0.5 1
+      }
+    }
+    <NurbsSurface> rightnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { rightnurbsCubeShape1.cvs }
+      }
+    }
+  }
+  <Group> frontnurbsCube1 {
+    <VertexPool> frontnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        0.5 -0.5 0.5 1
+      }
+      <Vertex> 1 {
+        0.5 -0.5 0.166667 1
+      }
+      <Vertex> 2 {
+        0.5 -0.5 -0.166667 1
+      }
+      <Vertex> 3 {
+        0.5 -0.5 -0.5 1
+      }
+      <Vertex> 4 {
+        0.5 -0.166667 0.5 1
+      }
+      <Vertex> 5 {
+        0.5 -0.166667 0.166667 1
+      }
+      <Vertex> 6 {
+        0.5 -0.166667 -0.166667 1
+      }
+      <Vertex> 7 {
+        0.5 -0.166667 -0.5 1
+      }
+      <Vertex> 8 {
+        0.5 0.166667 0.5 1
+      }
+      <Vertex> 9 {
+        0.5 0.166667 0.166667 1
+      }
+      <Vertex> 10 {
+        0.5 0.166667 -0.166667 1
+      }
+      <Vertex> 11 {
+        0.5 0.166667 -0.5 1
+      }
+      <Vertex> 12 {
+        0.5 0.5 0.5 1
+      }
+      <Vertex> 13 {
+        0.5 0.5 0.166667 1
+      }
+      <Vertex> 14 {
+        0.5 0.5 -0.166667 1
+      }
+      <Vertex> 15 {
+        0.5 0.5 -0.5 1
+      }
+    }
+    <NurbsSurface> frontnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { frontnurbsCubeShape1.cvs }
+      }
+    }
+  }
+  <Group> backnurbsCube1 {
+    <VertexPool> backnurbsCubeShape1.cvs {
+      <Vertex> 0 {
+        -0.5 -0.5 0.5 1
+      }
+      <Vertex> 1 {
+        -0.5 -0.166667 0.5 1
+      }
+      <Vertex> 2 {
+        -0.5 0.166667 0.5 1
+      }
+      <Vertex> 3 {
+        -0.5 0.5 0.5 1
+      }
+      <Vertex> 4 {
+        -0.5 -0.5 0.166667 1
+      }
+      <Vertex> 5 {
+        -0.5 -0.166667 0.166667 1
+      }
+      <Vertex> 6 {
+        -0.5 0.166667 0.166667 1
+      }
+      <Vertex> 7 {
+        -0.5 0.5 0.166667 1
+      }
+      <Vertex> 8 {
+        -0.5 -0.5 -0.166667 1
+      }
+      <Vertex> 9 {
+        -0.5 -0.166667 -0.166667 1
+      }
+      <Vertex> 10 {
+        -0.5 0.166667 -0.166667 1
+      }
+      <Vertex> 11 {
+        -0.5 0.5 -0.166667 1
+      }
+      <Vertex> 12 {
+        -0.5 -0.5 -0.5 1
+      }
+      <Vertex> 13 {
+        -0.5 -0.166667 -0.5 1
+      }
+      <Vertex> 14 {
+        -0.5 0.166667 -0.5 1
+      }
+      <Vertex> 15 {
+        -0.5 0.5 -0.5 1
+      }
+    }
+    <NurbsSurface> backnurbsCubeShape1 {
+      <Order> { 4 4 }
+      <U-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <V-Knots> {
+        0 0 0 0 1 1 1 1
+      }
+      <RGBA> { 0.5 0.5 0.5 1 }
+      <VertexRef> {
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+        <Ref> { backnurbsCubeShape1.cvs }
+      }
+    }
+  }
+}
