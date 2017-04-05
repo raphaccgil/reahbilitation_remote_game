@@ -4,78 +4,69 @@ Revision: 0
 Creation of a game interface
 '''
 
-import Tkinter
-import pygame
-import kinect_module
-from multiprocessing import Process
-import panda3d
-from pygame.locals import*
-from OpenGL.GL import *
-from OpenGL.GLU import *
+"""Reahb main file. This module handles a few command line
+options and starts the core finite state machine, followed by Panda's task
+manager."""
 
-vertices = (
-    (1, -1, -1),
-    (1, 1, -1),
-    (-1, 1, -1),
-    (-1, -1, -1),
-    (1, -1, 1),
-    (1, 1, 1),
-    (-1, -1, 1),
-    (-1, 1, 1),
-)
+import sys
+from panda3d.core import ExecutionEnvironment as EE
+from panda3d.core import Filename
+'''
+from options import options
 
-edges = (
-    (0, 1),
-    (0, 3),
-    (0, 4),
-    (2, 1),
-    (2, 3),
-    (2, 7),
-    (6, 3),
-    (6, 4),
-    (6, 7),
-    (5, 1),
-    (5, 4),
-    (5, 7),
-)
+# If we only need to print version, do this first and leave everything else
+# untouched.
+if options.print_version:
+    try:
+        f = Filename(EE.expandString("$MAIN_DIR/VERSION")).toOsSpecific()
+        print open(f).read()
+    except IOError:
+        print "Version unknown. Can't find the VERSION file."
+    sys.exit()
+'''
+from pandac.PandaModules import loadPrcFile
+from pandac.PandaModules import Filename
+from options import options
+# Config file should be loaded as soon as possible.
+from pandac.PandaModules import loadPrcFile
+#loadPrcFile(Filename.expandFrom("$MAIN_DIR/etc/azure.prc"))
 
-def Cube():
-    glBegin(GL_LINES)
-    for edge in edges:
-        for vertex in edge:
-            glVertex3fv(vertices[vertex])
-    glEnd()
+from direct.showbase.ShowBase import ShowBase
+from Core import Core
 
-#def Esfera():
 
-def main():
-    pygame.init()
-    display = (1000, 800)
-    pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
 
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+class Azure(ShowBase):
+    def __init__(self):
+        """Program entry point."""
+        # TODO(Nemesis#13): rewrite ShowBase to not use globals.
 
-    glTranslatef(0.0, 0.0, -5)
-    glRotatef(0, 0, 0, 0)
-    print 'ok'
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        Cube()
-        pygame.display.flip()
-        pygame.time.wait(1)
+        # This basically sets up our rendering node-tree, some builtins and
+        # the master loop (which iterates each frame).
+        ShowBase.__init__(self)
 
-if __name__ == '__main__':
-    data = kinect_module.DATA_READ_KINECT()
-    p1 = Process(target=main)
-    p1.start()
-    p2 = Process(target=data.read_kinect())
-    p2.start()
-    p1.join()
-    p2.join()
-    #Thread(target = test1).start()
-    #Thread(target = test2).start()
+        # Turn off Panda3D's standard camera handling.
+        self.disableMouse()
+
+        self.setBackgroundColor(0.2, 0.2, 0.2)
+
+        # Start our Core Finite State Machine
+        self.core = Core()
+        if (options.scenario):
+            # Scenario was specified at command line.
+            self.core.demand("Loading", options.scenario)
+        else:
+            print self.core
+            self.core.demand("Menu", "MainMenu")
+
+        #base.bufferViewer.toggleEnable()
+
+		# Start the master loop.
+        self.run()
+
+if __name__ == "__main__":
+    Azure()
+    # Related to relative paths.
+    #print "Don't run this module directly! Use the run script instead!"
+    #sys.exit(2)
 

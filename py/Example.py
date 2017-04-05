@@ -61,7 +61,7 @@ class App(ShowBase):
         self.manualRecenterMouse = True
 
         # make a box to move with the mouse
-        self.model = self.loader.loadModel("smiley")
+        self.model = self.loader.loadModel("models/test1")
         self.model.setScale(0.1)
         self.model.reparentTo(self.render)
 
@@ -71,14 +71,23 @@ class App(ShowBase):
         self.model3 = self.loader.loadModel("models/box")
         self.model3.setScale(1.0)
         self.model3.reparentTo(self.render)
-        self.model3.setPos(-0.5, -1, -0.5)
+        self.model3.setPos(-0.5, -1,  0.5)
         self.model3.setColor((0, 0, 1, 1))
 
+        '''
         self.model2 = self.loader.loadModel("models/box")
         self.model2.setScale(1.5)
         self.model2.reparentTo(self.render)
         self.model2.setPos(-0.75, -0.5, -0.75)
         self.model2.setColor((0.1, 0.1, 0.1, 1))
+        '''
+        self.model2 = self.loader.loadModel("models/score_end1")
+        self.model2.setScale(0.5)
+        self.model2.reparentTo(self.render)
+        self.model2.setPos(-0.75, -0.5, -0.75)
+        #self.model2.setColor((0.1, 0.1, 0.1, 1))
+        self.model2.setHpr(-90, 180, 90)
+
 
         self.model1 = self.loader.loadModel("models/box")
         self.model1.setScale(2.0)
