@@ -12,6 +12,8 @@ from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
 from panda3d.core import *
 from direct.task.Task import Task
+import store_variable
+
 from direct.actor.Actor import Actor
 import datetime
 import sys
@@ -19,11 +21,12 @@ import sys
 # remember to generate an actor for this game and insert an animation according kinect acquiring
 
 
-class BallInMazeDemo():
+class BallInMazeDemo:
 
     def __init__(self):
 
         # Some constants for the program
+        self.alfa = 0  # buf to register when the task is finished
         self.ACCEL = 70         # Acceleration in ft/sec/sec
         self.MAX_SPEED = 4      # Max speed in ft/sec
         self.MAX_SPEED_SQ = self.MAX_SPEED ** 2  # Squared to make it easier to use lengthSquared
@@ -33,7 +36,8 @@ class BallInMazeDemo():
         camera.setPosHpr(0, 0, 25, 0, -90, 0)  # Place the camera
 
         # import the score and render it
-        self.score = loader.loadModel("models/baisc")
+        self.score = loader.loadModel("models/test_basic")
+        #self.score = loader.loadModel("models/baisc")
         self.score.setScale(1.2)
         self.score.reparentTo(render)
 
@@ -50,7 +54,8 @@ class BallInMazeDemo():
         # what height to put the ball at every frame. Since this is not something
         # that we want the ball itself to collide with, it has a different
         # bitmask.
-        self.scoreGround = self.score.find("**/ground")
+        #self.scoreGround = self.score.find("**/polySurface4")
+        self.scoreGround = self.score.find("**/ground4")
         self.scoreGround.node().setIntoCollideMask(BitMask32.bit(1))
 
 
@@ -133,7 +138,7 @@ class BallInMazeDemo():
         self.ball.setMaterial(m, 1)
 
         # Finally, we call start for more initialization
-        self.ballRoot.setPos(1, 0, 0)
+        self.ballRoot.setPos(0, 0, 0)
         self.start(self.cHandler,  self.ballRoot, self.ball, self.score)
 
     def start(self, data_solid, data_ball, ball, score):
@@ -147,7 +152,7 @@ class BallInMazeDemo():
         self.ballRoot = data_ball
         self.score = score
         self.minutes_requer = 1
-        self.time_required = self.minutes_requer * 60  # in minutes
+        self.time_required = self.minutes_requer * 10  # in minutes
 
         self.ballV = LVector3(0, 0, 0)         # Initial velocity is 0
         self.accelV = LVector3(0, 0, 0)        # Initial acceleration is 0
@@ -157,7 +162,28 @@ class BallInMazeDemo():
         # Create the movement task, but first make sure it is not already
         # running
         taskMgr.remove("rollTask")
-        self.mainLoop = taskMgr.add(self.rollTask, "rollTask")
+        self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanUp)
+        print 'kkkk7'
+        return
+
+    def cleanUp(self,task):
+        print "end of task"
+        self.score.clear()
+
+        #self.walls.clear()
+        #self.scoreGround.clear()
+        #self.ballRoot.clear()
+        #self.ball.clear()
+        #self.ballSphere.clear()
+        #self.ballGroundRay.destroy()
+        #self.ballGroundCol.clear()
+        #self.ballGroundColNp.clear()
+        #self.cHandler.destroy()
+        #self.cTrav.destroy()
+        #self.ballRoot.destroy()
+        # Reset the accumulator
+        #taskAccumulator = 0
+        return
 
     # This function handles the collision between the ray and the ground
     # Information about the interaction is passed in colEntry
@@ -252,7 +278,7 @@ class BallInMazeDemo():
                 name = entry.getIntoNode().getName()
                 if name == "wall_collide":
                     self.wallCollideHandler(entry)
-                elif name == "ground":
+                elif name == "ground4":
                     self.groundCollideHandler(entry)
                 elif name == "loseTrigger":
                     self.loseGame(entry)
@@ -295,6 +321,7 @@ class BallInMazeDemo():
 
             return Task.cont       # Continue the task indefinitely
         return Task.done
+        #return taskMgr.remove("rollTask")
 
     # If the ball hits a hole trigger, then it should fall in the hole.
     # This is faked rather than dealing with the actual physics of it.

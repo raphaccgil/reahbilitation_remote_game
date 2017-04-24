@@ -59,7 +59,7 @@ class BallInMazeDemo(ShowBase):
         camera.setPosHpr(0, 0, 25, 0, -90, 0)  # Place the camera
 
         # Load the maze and place it in the scene
-        self.score = loader.loadModel("models/baisc")
+        self.score = loader.loadModel("models/test_basic")
         print (self.score.find("*"))
         self.score.setScale(1.2)
         self.score.reparentTo(render)
@@ -118,7 +118,7 @@ class BallInMazeDemo(ShowBase):
         # what height to put the ball at every frame. Since this is not something
         # that we want the ball itself to collide with, it has a different
         # bitmask.
-        self.scoreGround = self.score.find("**/ground")
+        self.scoreGround = self.score.find("**/ground4")
         self.scoreGround.node().setIntoCollideMask(BitMask32.bit(1))
 
 
@@ -212,7 +212,7 @@ class BallInMazeDemo(ShowBase):
         # To access it we use the find command
         #startPos = self.score.find("**/start").getPos()
         # Set the ball in the starting position
-        self.ballRoot.setPos(1,0,0)
+        self.ballRoot.setPos(0, 0, 0)
         self.ballV = LVector3(0, 0, 0)         # Initial velocity is 0
         self.accelV = LVector3(0, 0, 0)        # Initial acceleration is 0
 
@@ -299,7 +299,7 @@ class BallInMazeDemo(ShowBase):
             name = entry.getIntoNode().getName()
             if name == "wall_collide":
                 self.wallCollideHandler(entry)
-            elif name == "ground":
+            elif name == "ground4":
                 self.groundCollideHandler(entry)
             elif name == "loseTrigger":
                 self.loseGame(entry)
