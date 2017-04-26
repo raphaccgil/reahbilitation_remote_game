@@ -13,6 +13,7 @@ from direct.interval.FunctionInterval import Func, Wait
 from panda3d.core import *
 from direct.task.Task import Task
 import store_variable
+import Core as cc
 
 from direct.actor.Actor import Actor
 import datetime
@@ -23,8 +24,9 @@ import sys
 
 class BallInMazeDemo:
 
-    def __init__(self):
+    def __init__(self, time_val):
 
+        self.minutes_requer = time_val
         # Some constants for the program
         self.alfa = 0  # buf to register when the task is finished
         self.ACCEL = 70         # Acceleration in ft/sec/sec
@@ -152,7 +154,7 @@ class BallInMazeDemo:
         self.ballRoot = data_ball
         self.score = score
         self.minutes_requer = 1
-        self.time_required = self.minutes_requer * 10  # in minutes
+        self.time_required = self.minutes_requer * 60  # in minutes
 
         self.ballV = LVector3(0, 0, 0)         # Initial velocity is 0
         self.accelV = LVector3(0, 0, 0)        # Initial acceleration is 0
@@ -162,13 +164,19 @@ class BallInMazeDemo:
         # Create the movement task, but first make sure it is not already
         # running
         taskMgr.remove("rollTask")
-        self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanUp)
+        self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall)
         print 'kkkk7'
         return
 
-    def cleanUp(self,task):
+    def cleanall(self,task):
         print "end of task"
-        self.score.clear()
+        #self.ballGroundRay.
+        #self.actor.delete()
+        #Vehicle.destroy(self)
+        self.score.remove_node()
+        self.ball.remove_node()
+        self.title.destroy()
+        cc.Xcore().request("Results")
 
         #self.walls.clear()
         #self.scoreGround.clear()

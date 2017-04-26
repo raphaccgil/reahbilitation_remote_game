@@ -6,24 +6,22 @@ import sys
 
 
 from panda3d.core import *
-from direct.fsm.FSM import FSM
 from direct.gui.DirectGui import *
-from game2_integration import BallInMazeDemo
-import store_variable
-# import files of game
-
+import Core as cc
+from direct.fsm.FSM import FSM
 from game2 import BallInMazeDemo
-
+import sys
 
 class MainMenu:
 
     def __init__(self):
         print 'test menu'
-        self.enterMain()
+
+        #self.pass_tr.request('Menu_game')
 
     def enterMain(self):
-        self.button = DirectButton(text="Game1", command=self.quit, scale=0.1, pos=(-1, 0, 0))
-        self.button1 = DirectButton(text="Game2", command=self.quit, scale=0.1, pos=(-0.5, 0, 0))
+        self.button = DirectButton(text="Game1", command=self.test, scale=0.1, pos=(-1, 0, 0))
+        self.button1 = DirectButton(text="Game2", command=self.test, scale=0.1, pos=(-0.5, 0, 0))
         self.button2 = DirectButton(text="Game3", command=self.quit, scale=0.1, pos=(0, 0, 0))
         self.button3 = DirectButton(text="Credits", command=self.quit, scale=0.1, pos=(0.5, 0, 0))
         self.button4 = DirectButton(text="Quit", command=self.quit, scale=0.1, pos=(1.0, 0, 0))
@@ -53,8 +51,20 @@ class MainMenu:
         self.button.destroy()
 
     def quit(self):
-       print "quit clicked"
-       self.appCallback("quit")
+       print "Leaving the system"
+       sys.exit()
+    def test(self):
+       print "test clicked"
+       self.button.destroy()
+       self.button1.destroy()
+       self.button2.destroy()
+       self.button3.destroy()
+       self.button4.destroy()
+       self.button5.destroy()
+       self.title.destroy()
+       self.instructions.destroy()
+       self.game_version.destroy()
+       cc.Xcore().request("Game1")
 
 
 
