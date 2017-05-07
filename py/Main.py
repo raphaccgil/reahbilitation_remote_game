@@ -32,8 +32,8 @@ class Azure(ShowBase):
 
         # Turn off Panda3D's standard camera handling.
         self.disableMouse()
-        self.setBackgroundColor(0.2, 0.2, 0.2)
-
+        #self.setBackgroundColor(0.2, 0.2, 0.2)
+        self.setBackgroundColor(0, 0, 0)
         # Start our Core Finite State Machine
         self.core = Xcore()
         self.core.request("Loading")

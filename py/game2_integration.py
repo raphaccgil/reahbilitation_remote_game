@@ -10,6 +10,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
+from direct.gui.OnscreenImage import OnscreenImage
 from panda3d.core import *
 from direct.task.Task import Task
 import store_variable
@@ -29,13 +30,18 @@ class BallInMazeDemo:
         self.minutes_requer = time_val
         # Some constants for the program
         self.alfa = 0  # buf to register when the task is finished
-        self.ACCEL = 70         # Acceleration in ft/sec/sec
-        self.MAX_SPEED = 4      # Max speed in ft/sec
+        self.ACCEL = 10         # Acceleration in ft/sec/sec
+        self.MAX_SPEED = 1      # Max speed in ft/sec
         self.MAX_SPEED_SQ = self.MAX_SPEED ** 2  # Squared to make it easier to use lengthSquared
 
         # set position of camera
 
         camera.setPosHpr(0, 0, 25, 0, -90, 0)  # Place the camera
+
+        # load the sounds oduring the game
+
+        self.sound_loop_music = base.loader.loadSfx("sounds/325611__shadydave__my-love-piano-loop.mp3")
+        self.sound_problem = base.loader.loadSfx("sounds/NFF-whoa-whoa.wav")
 
         # import the score and render it
         self.score = loader.loadModel("models/test_basic")
@@ -149,6 +155,15 @@ class BallInMazeDemo:
         #startPos = self.score.find("**/start").getPos()
         # Set the ball in the starting position
         #self.ballRoot.setPos(1,0,0)
+
+        # loop music, good option to relax
+
+        self.sound_loop_music.setVolume(0.02)
+        self.sound_loop_music.setLoop(True)
+        self.sound_loop_music.play()
+
+
+        # parameters
         self.ball = ball
         self.cHandler = data_solid
         self.ballRoot = data_ball
@@ -170,6 +185,8 @@ class BallInMazeDemo:
 
     def cleanall(self,task):
         print "end of task"
+        self.sound_loop_music.stop()
+        self.imageObject.destroy()
         #self.ballGroundRay.
         #self.actor.delete()
         #Vehicle.destroy(self)
@@ -267,6 +284,23 @@ class BallInMazeDemo:
                                 parent=base.a2dBottomRight, align=TextNode.ARight,
                                 fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.08,
                                 shadow=(0, 0, 0, 0.5))
+
+            # this is the moment of insertion of images....only for test
+            status_ok = 'problem'
+            self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
+            self.comments = \
+                   OnscreenText(text="Analise dos dados " + str(status_ok),
+                                parent=base.a2dBottomRight, align=TextNode.ARight,
+                                fg=(1, 1, 1, 1), pos=(-0.7, 1.92), scale=.08,
+                                shadow=(0, 0, 0, 0.5))
+
+
+            if -0.5 <= self.ballRoot.getX() <= 0.5:
+                self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
+                self.imageObject.setImage('images/ok.png')
+            else:
+                self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
+                self.imageObject.setImage('images/sad.png')
 
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame

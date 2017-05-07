@@ -16,10 +16,15 @@ class MainMenu:
 
     def __init__(self):
         print 'test menu'
+        self.sound_back = base.loader.loadSfx("sounds/186942__lemoncreme__piano-melody.wav")
+
 
         #self.pass_tr.request('Menu_game')
 
     def enterMain(self):
+        self.sound_back.setVolume(0.02)
+        self.sound_back.setLoop(True)
+        self.sound_back.play()
         self.button = DirectButton(text="Game1", command=self.test, scale=0.1, pos=(-1, 0, 0))
         self.button1 = DirectButton(text="Game2", command=self.test, scale=0.1, pos=(-0.5, 0, 0))
         self.button2 = DirectButton(text="Game3", command=self.quit, scale=0.1, pos=(0, 0, 0))
@@ -53,8 +58,10 @@ class MainMenu:
     def quit(self):
        print "Leaving the system"
        sys.exit()
+
     def test(self):
        print "test clicked"
+       self.sound_back.stop()
        self.button.destroy()
        self.button1.destroy()
        self.button2.destroy()
