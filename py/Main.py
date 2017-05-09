@@ -9,6 +9,7 @@ options and starts the core finite state machine, followed by Panda's task
 manager."""
 
 from direct.showbase.ShowBase import ShowBase
+from panda3d.core import loadPrcFile
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
@@ -24,7 +25,9 @@ class Azure(ShowBase):
 
     def __init__(self):
         """Program entry point."""
-        # TODO(Nemesis#13): rewrite ShowBase to not use globals.
+
+        # call standard config
+        loadPrcFile("config/config_file.prc")
 
         # This basically sets up our rendering node-tree, some builtins and
         # the master loop (which iterates each frame).
@@ -34,6 +37,7 @@ class Azure(ShowBase):
         self.disableMouse()
         #self.setBackgroundColor(0.2, 0.2, 0.2)
         self.setBackgroundColor(0, 0, 0)
+
         # Start our Core Finite State Machine
         self.core = Xcore()
         self.core.request("Loading")

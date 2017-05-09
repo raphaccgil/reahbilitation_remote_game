@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22205483-1bc7-4c16-899c-1b42aad37dc1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Basic_game.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Example.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data_extract.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/game1.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/mainmenu.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/paralell_code.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/preloader.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scenarioproxy.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/Main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Menu_game.py" afterPath="$PROJECT_DIR$/Menu_game.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example_kinect.py" afterPath="$PROJECT_DIR$/example_kinect.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game2_integration.py" afterPath="$PROJECT_DIR$/game2_integration.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/register_data.py" afterPath="$PROJECT_DIR$/register_data.py" />
     </list>
     <ignored path="test_reah.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
+              <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
               <folding>
                 <element signature="e#257#302#0" expanded="true" />
               </folding>
@@ -111,8 +99,8 @@
       <file leaf-file-name="game2_integration.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game2_integration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.38390094">
-              <caret line="289" column="74" selection-start-line="289" selection-start-column="74" selection-end-line="289" selection-end-column="74" />
+            <state vertical-scroll-proportion="0.68421054">
+              <caret line="415" column="0" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
               <folding>
                 <element signature="e#138#186#0" expanded="true" />
               </folding>
@@ -201,7 +189,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -222,6 +209,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -663,7 +651,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14421669" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
@@ -1129,16 +1117,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="40" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
-          <folding>
-            <element signature="e#257#302#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Menu_game.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1147,10 +1125,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding>
+            <element signature="e#257#302#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/game2_integration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38390094">
-          <caret line="289" column="74" selection-start-line="289" selection-start-column="74" selection-end-line="289" selection-end-column="74" />
+        <state vertical-scroll-proportion="0.68421054">
+          <caret line="415" column="0" selection-start-line="415" selection-start-column="0" selection-end-line="415" selection-end-column="0" />
           <folding>
             <element signature="e#138#186#0" expanded="true" />
           </folding>

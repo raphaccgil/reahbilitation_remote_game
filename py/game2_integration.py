@@ -31,7 +31,7 @@ class BallInMazeDemo:
         # Some constants for the program
         self.alfa = 0  # buf to register when the task is finished
         self.ACCEL = 10         # Acceleration in ft/sec/sec
-        self.MAX_SPEED = 1      # Max speed in ft/sec
+        self.MAX_SPEED = 5      # Max speed in ft/sec
         self.MAX_SPEED_SQ = self.MAX_SPEED ** 2  # Squared to make it easier to use lengthSquared
 
         # set position of camera
@@ -294,14 +294,6 @@ class BallInMazeDemo:
                                 fg=(1, 1, 1, 1), pos=(-0.7, 1.92), scale=.08,
                                 shadow=(0, 0, 0, 0.5))
 
-
-            if -0.5 <= self.ballRoot.getX() <= 0.5:
-                self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
-                self.imageObject.setImage('images/ok.png')
-            else:
-                self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
-                self.imageObject.setImage('images/sad.png')
-
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame
             print dt
@@ -330,6 +322,10 @@ class BallInMazeDemo:
                 mpos = base.mouseWatcherNode.getMouse()  # get the mouse position
                 print mpos
                 # here is the moment to tilt the score effectively.
+                self.inclination_y = mpos.getY() * -10
+                self.inclination_x = mpos.getX() * 10
+
+
                 self.score.setP(mpos.getY() * -10)
                 self.score.setR(mpos.getX() * 10)
 
@@ -337,16 +333,37 @@ class BallInMazeDemo:
             # In this part needs more modification, the ball needs to return when does not have inclination
             # Update the velocity based on acceleration
             self.ballV += self.accelV * dt * self.ACCEL
+
+            # invertion and arrive in the middle position
+
+            self.return_ball = self.ballV
             # Clamp the velocity to the maximum speed
             if self.ballV.lengthSquared() > self.MAX_SPEED_SQ:
                 print self.MAX_SPEED_SQ
                 self.ballV.normalize()
                 self.ballV *= self.MAX_SPEED
-            # Update the position based on the velocity
-            # Here is necessary a modification to understand the new position, if has no inclination the ball
-            #  necessaraly needs to start return on 0 position
+            else:
+                pass
 
-            self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
+            # Update the position based on the velocity
+            # This is the moment to register a smile when its is done in a correct way and, in the same time, green
+            # color the score.
+            # However if the exercise is not done in a very good way, shows up a sad face and red color in the score
+
+            if self.inclination_x > 2 or self.inclination_y > 2 or self.inclination_x < -2 or self.inclination_y < - 2:
+                self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
+                self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
+                self.imageObject.setImage('images/sad.png')
+            else:
+                self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
+                self.imageObject.setImage('images/ok.png')
+                var1 = float(self.ballRoot.getX())
+                var2 = float(self.ballRoot.getY())
+                var3 = float(self.ballRoot.getZ())
+
+                self.ballRoot.setX(var1 - var1 * dt)
+                self.ballRoot.setY(var2 - var2 * dt)
+                self.ballRoot.setZ(var3 - self.ballV[2] * dt)
             print 'ball position' + str(self.ballRoot.getPos())
             print 'new deslocation' + str(self.ballV)
             # here is the moment to send the data for postgreSQL.
