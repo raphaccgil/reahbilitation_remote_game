@@ -4,8 +4,10 @@ from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
 import game2_integration
+import calibration
 import Menu_game
 import time
+from calibration import Calibration
 import sys
 import store_variable as st
 
@@ -16,12 +18,13 @@ class Xcore(FSM):
         FSM.__init__(self, "Core Game Control")
 
         self.defaultTransitions = {"Loading": ["Menu_game"],
-                                   "Menu_game": ["Game1", "Game2", "Game3", "Credits"],
+                                   "Menu_game": ["Game1", "Game2", "Game3", "Credits", "Calibration"],
                                    "Credits": ["Menu_game"],
                                    "Game1": ["Results"],
                                    "Game2": ["Results"],
                                    "Game3": ["Results"],
-                                   "Results": ["Menu_game"]
+                                   "Results": ["Menu_game"],
+                                   "Calibration": ["Menu_game"]
                                    }
 
         # Optional, but prevents a warning message.
@@ -48,8 +51,8 @@ class Xcore(FSM):
 
     def enterMenu_game(self):
         print 'Menu FSM'
-        menu = Menu_game.MainMenu()
-        menu.enterMain()
+        menu = Menu_game.MainMenu(Calibration)
+        menu.enterMain(Calibration)
         #self.demand("Game1")
         pass
 
@@ -76,6 +79,15 @@ class Xcore(FSM):
 
     def exitGame3(self):
         print 'ttt4'
+
+    def enterCalibration(self):
+        print 'lets calibrate'
+        calibration.Calibration().enterMain()
+
+    def exitCalibration(self):
+        print 'bye calibrate'
+        #calibration.Calibration()
+
 
     def enterResults(self):
         print 'ttt5'

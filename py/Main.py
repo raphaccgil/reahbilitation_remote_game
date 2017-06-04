@@ -19,6 +19,7 @@ import time
 from Core import Xcore
 import store_variable as st
 from panda3d.core import *
+from calibration import Calibration
 from direct.gui.DirectGui import *
 
 class Azure(ShowBase):
@@ -45,7 +46,7 @@ class Azure(ShowBase):
         print 'check flag here'
         print st.flag1
 
-        self.main = MainMenu()
+        self.main = MainMenu(Calibration)
 
         # Define transitions
         self.run()

@@ -45,6 +45,23 @@ class BallInMazeDemo:
 
         # import the score and render it
         self.score = loader.loadModel("models/test_basic")
+
+        # variable to register when is possible to play problem music
+        self.play_once = 0
+
+        # import a model that will be an actor on the future
+        self.actor1 = Actor("models/actor1_mov")
+        self.actor1.reparentTo(render)
+        self.actor1.setScale(0.4)
+        self.actor1.setPos(-4.8, -1, 1)
+        self.actor1.setColorScale(0.1, 0.1, 1.5, 0.5)  # blue color
+        self.actor1.setH(self.actor1, -45)
+        self.actor1.setP(self.actor1, -45)
+        self.actor1.setR(self.actor1, -45)
+
+        # read all the joint from actor
+        self.shoulder_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_left_joint")
+
         #self.score = loader.loadModel("models/baisc")
         self.score.setScale(1.2)
         self.score.reparentTo(render)
@@ -179,7 +196,9 @@ class BallInMazeDemo:
         # Create the movement task, but first make sure it is not already
         # running
         taskMgr.remove("rollTask")
+        taskMgr.remove("actorcontrol")
         self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall)
+        self.mainLoop2 = taskMgr.add(self.actorcontrol, "actorcontrol")
         print 'kkkk7'
         return
 
@@ -194,20 +213,6 @@ class BallInMazeDemo:
         self.ball.remove_node()
         self.title.destroy()
         cc.Xcore().request("Results")
-
-        #self.walls.clear()
-        #self.scoreGround.clear()
-        #self.ballRoot.clear()
-        #self.ball.clear()
-        #self.ballSphere.clear()
-        #self.ballGroundRay.destroy()
-        #self.ballGroundCol.clear()
-        #self.ballGroundColNp.clear()
-        #self.cHandler.destroy()
-        #self.cTrav.destroy()
-        #self.ballRoot.destroy()
-        # Reset the accumulator
-        #taskAccumulator = 0
         return
 
     # This function handles the collision between the ray and the ground
@@ -259,6 +264,14 @@ class BallInMazeDemo:
                     colEntry.getInteriorPoint(render))
             newPos = self.ballRoot.getPos() + disp
             self.ballRoot.setPos(newPos)
+
+    def actorcontrol(self, task):
+        self.shoulder_left_actor1.setHpr(30, 30, 30)
+
+        return Task.cont
+
+
+
 
     # This is the task that deals with making everything interactive
     def rollTask(self, task):
@@ -349,21 +362,27 @@ class BallInMazeDemo:
             # This is the moment to register a smile when its is done in a correct way and, in the same time, green
             # color the score.
             # However if the exercise is not done in a very good way, shows up a sad face and red color in the score
+            # variable play_once is only to register only one time when the exervise is done not in the right moment
 
             if self.inclination_x > 2 or self.inclination_y > 2 or self.inclination_x < -2 or self.inclination_y < - 2:
                 self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
                 self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
                 self.imageObject.setImage('images/sad.png')
+                if self.play_once == 0:
+                    self.sound_problem.setVolume(0.04)
+                    self.sound_problem.play()
+                    self.play_once = 1
+
             else:
                 self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
                 self.imageObject.setImage('images/ok.png')
                 var1 = float(self.ballRoot.getX())
                 var2 = float(self.ballRoot.getY())
                 var3 = float(self.ballRoot.getZ())
-
                 self.ballRoot.setX(var1 - var1 * dt)
                 self.ballRoot.setY(var2 - var2 * dt)
                 self.ballRoot.setZ(var3 - self.ballV[2] * dt)
+                self.play_once = 0
             print 'ball position' + str(self.ballRoot.getPos())
             print 'new deslocation' + str(self.ballV)
             # here is the moment to send the data for postgreSQL.
