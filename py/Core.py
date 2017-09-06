@@ -2,69 +2,95 @@
 
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
-from pandac.PandaModules import TextNode
-
 from panda3d.core import *
-from preloader import scenarioPreloader
-from game2_integration import BallInMazeDemo
+import game2_integration
+import calibration
+import Menu_game
+import time
+from calibration import Calibration
+import sys
+import store_variable as st
 
-
-class Core(FSM):
+class Xcore(FSM):
+    """knows Menu, Scenario and Loading."""
     """knows Menu, Scenario and Loading."""
     def __init__(self):
         FSM.__init__(self, "Core Game Control")
 
-        self.defaultTransitions = {"Menu_game": ["Game1", "Game2", "Game3"],
+        self.defaultTransitions = {"Loading": ["Menu_game"],
+                                   "Menu_game": ["Game1", "Game2", "Game3", "Credits", "Calibration"],
+                                   "Credits": ["Menu_game"],
                                    "Game1": ["Results"],
                                    "Game2": ["Results"],
                                    "Game3": ["Results"],
-                                   "Results": ["Menu_game"]
+                                   "Results": ["Menu_game"],
+                                   "Calibration": ["Menu_game"]
                                    }
+
         # Optional, but prevents a warning message.
         # The scenario task chain gives us grouping option.
         # It might get replaced by an own task manager, by chance.
         base.taskMgr.setupTaskChain("scenario", frameBudget=-1)
         print 'hei_core'
 
-    def enterLoading(self, scenario):
+    def enterLoading(self):
+        print 'kkk'
         # TODO: put this into gui package and add a black background
         self.loading = OnscreenText(text="LOADING", pos=(0,0), scale=0.1,
-                               align=TextNode.ACenter, fg=(1,1,1,1))
-        self.preloader = scenarioPreloader(scenario)
+                                    align=TextNode.ACenter, fg=(1, 1, 1, 1))
         base.graphicsEngine.renderFrame()
         base.graphicsEngine.renderFrame()
-        self.preloader.preloadFast()  # depends on the loading screen
-        print 'hei enter'
-        # Other preloader methods would specify a callback that calls
-        # self.demand(scenario), but preloadFast() is executed in one frame, so
-        # we can safely demand that from here. Interactive loading screens
-        # might require special handling.
-        self.demand("Scenario", scenario)
+        #self.preloader.preloadFast()  # depends on the loading screen
+        time.sleep(3)
+        # This moment the software calls menu game of this game
+        self.demand("Menu_game")
 
     def exitLoading(self):
+        print 'llll'
         self.loading.destroy()
-        del self.loading
-        del self.preloader
 
-    #def enterScenario(self, scenario):
-    #    self.scenario = ScenarioProxy(scenario)
-    #    self.scenario.begin()
+    def enterMenu_game(self):
+        print 'Menu FSM'
+        menu = Menu_game.MainMenu(Calibration)
+        menu.enterMain(Calibration)
+        #self.demand("Game1")
+        pass
 
-    #def exitScenario(self):
-    #    self.scenario.destroy()
-    #    del self.scenario
+    def exitMenu_game(self):
+        print 'exit Menu'
+        pass
 
-    def enterMenu(self, menu, *args):
-        print 'ops'
-        self.menu = BallInMazeDemo()
+    def enterGame1(self):
+        # here is the moment to insert the time
+        game2_integration.BallInMazeDemo(1)
+        print 'enter Game1'
 
-    def exitMenu(self):
-        del self.menu
+    def exitGame1(self):
+        print 'exit Game1'
 
-    def game1(self, menu, *args):
-        #self.menu = MenuProxy(menu, *args)
-        import gui
-        self.menu = getattr(gui, menu)()
+    def enterGame2(self):
+        print 'ttt'
 
-    def exitMenu(self):
-        self.menu.destroy()
+    def exitGame2(self):
+        print 'ttt2'
+
+    def enterGame3(self):
+        print 'ttt3'
+
+    def exitGame3(self):
+        print 'ttt4'
+
+    def enterCalibration(self):
+        print 'lets calibrate'
+        calibration.Calibration().enterMain()
+
+    def exitCalibration(self):
+        print 'bye calibrate'
+        #calibration.Calibration()
+
+
+    def enterResults(self):
+        print 'ttt5'
+
+    def exitResults(self):
+        print 'ttt6'

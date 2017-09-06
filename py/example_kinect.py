@@ -76,12 +76,20 @@ def post_frame(frame):
 def draw_skeleton_data(dispInfo, screen, pSkelton, index, positions, width = 4):
     start = pSkelton.SkeletonPositions[positions[0]]
     print 'inicio'
-    print start
+    #print start
     for position in itertools.islice(positions, 1, None):
         next = pSkelton.SkeletonPositions[position.value]
-        print 'fim'
-        print positions
-        print next
+        print pSkelton.SkeletonPositions[position]
+        print position
+        #print 'shoulder left'
+        #print JointId.ShoulderLeft
+        #print 'elbow left'
+        #print JointId.ElbowLeft
+        #print 'wrist left'
+        #print JointId.WristLeft
+        #print 'hand left'
+        #print JointId.HandLeft
+
         curstart = skeleton_to_depth_image(start, dispInfo.current_w, dispInfo.current_h)
         curend = skeleton_to_depth_image(next, dispInfo.current_w, dispInfo.current_h)
 

@@ -10,8 +10,12 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
+from direct.gui.OnscreenImage import OnscreenImage
 from panda3d.core import *
 from direct.task.Task import Task
+import store_variable
+import Core as cc
+
 from direct.actor.Actor import Actor
 import datetime
 import sys
@@ -19,21 +23,46 @@ import sys
 # remember to generate an actor for this game and insert an animation according kinect acquiring
 
 
-class BallInMazeDemo():
+class BallInMazeDemo:
 
-    def __init__(self):
+    def __init__(self, time_val):
 
+        self.minutes_requer = time_val
         # Some constants for the program
-        self.ACCEL = 70         # Acceleration in ft/sec/sec
-        self.MAX_SPEED = 4      # Max speed in ft/sec
+        self.alfa = 0  # buf to register when the task is finished
+        self.ACCEL = 10         # Acceleration in ft/sec/sec
+        self.MAX_SPEED = 5      # Max speed in ft/sec
         self.MAX_SPEED_SQ = self.MAX_SPEED ** 2  # Squared to make it easier to use lengthSquared
 
         # set position of camera
 
         camera.setPosHpr(0, 0, 25, 0, -90, 0)  # Place the camera
 
+        # load the sounds oduring the game
+
+        self.sound_loop_music = base.loader.loadSfx("sounds/325611__shadydave__my-love-piano-loop.mp3")
+        self.sound_problem = base.loader.loadSfx("sounds/NFF-whoa-whoa.wav")
+
         # import the score and render it
-        self.score = loader.loadModel("models/baisc")
+        self.score = loader.loadModel("models/test_basic")
+
+        # variable to register when is possible to play problem music
+        self.play_once = 0
+
+        # import a model that will be an actor on the future
+        self.actor1 = Actor("models/actor1_mov")
+        self.actor1.reparentTo(render)
+        self.actor1.setScale(0.4)
+        self.actor1.setPos(-4.8, -1, 1)
+        self.actor1.setColorScale(0.1, 0.1, 1.5, 0.5)  # blue color
+        self.actor1.setH(self.actor1, -45)
+        self.actor1.setP(self.actor1, -45)
+        self.actor1.setR(self.actor1, -45)
+
+        # read all the joint from actor
+        self.shoulder_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_left_joint")
+
+        #self.score = loader.loadModel("models/baisc")
         self.score.setScale(1.2)
         self.score.reparentTo(render)
 
@@ -50,7 +79,8 @@ class BallInMazeDemo():
         # what height to put the ball at every frame. Since this is not something
         # that we want the ball itself to collide with, it has a different
         # bitmask.
-        self.scoreGround = self.score.find("**/ground")
+        #self.scoreGround = self.score.find("**/polySurface4")
+        self.scoreGround = self.score.find("**/ground4")
         self.scoreGround.node().setIntoCollideMask(BitMask32.bit(1))
 
 
@@ -133,7 +163,7 @@ class BallInMazeDemo():
         self.ball.setMaterial(m, 1)
 
         # Finally, we call start for more initialization
-        self.ballRoot.setPos(1, 0, 0)
+        self.ballRoot.setPos(0, 0, 0)
         self.start(self.cHandler,  self.ballRoot, self.ball, self.score)
 
     def start(self, data_solid, data_ball, ball, score):
@@ -142,6 +172,15 @@ class BallInMazeDemo():
         #startPos = self.score.find("**/start").getPos()
         # Set the ball in the starting position
         #self.ballRoot.setPos(1,0,0)
+
+        # loop music, good option to relax
+
+        self.sound_loop_music.setVolume(0.02)
+        self.sound_loop_music.setLoop(True)
+        self.sound_loop_music.play()
+
+
+        # parameters
         self.ball = ball
         self.cHandler = data_solid
         self.ballRoot = data_ball
@@ -157,7 +196,24 @@ class BallInMazeDemo():
         # Create the movement task, but first make sure it is not already
         # running
         taskMgr.remove("rollTask")
-        self.mainLoop = taskMgr.add(self.rollTask, "rollTask")
+        taskMgr.remove("actorcontrol")
+        self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall)
+        self.mainLoop2 = taskMgr.add(self.actorcontrol, "actorcontrol")
+        print 'kkkk7'
+        return
+
+    def cleanall(self,task):
+        print "end of task"
+        self.sound_loop_music.stop()
+        self.imageObject.destroy()
+        #self.ballGroundRay.
+        #self.actor.delete()
+        #Vehicle.destroy(self)
+        self.score.remove_node()
+        self.ball.remove_node()
+        self.title.destroy()
+        cc.Xcore().request("Results")
+        return
 
     # This function handles the collision between the ray and the ground
     # Information about the interaction is passed in colEntry
@@ -209,6 +265,14 @@ class BallInMazeDemo():
             newPos = self.ballRoot.getPos() + disp
             self.ballRoot.setPos(newPos)
 
+    def actorcontrol(self, task):
+        self.shoulder_left_actor1.setHpr(30, 30, 30)
+
+        return Task.cont
+
+
+
+
     # This is the task that deals with making everything interactive
     def rollTask(self, task):
 
@@ -234,6 +298,15 @@ class BallInMazeDemo():
                                 fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.08,
                                 shadow=(0, 0, 0, 0.5))
 
+            # this is the moment of insertion of images....only for test
+            status_ok = 'problem'
+            self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
+            self.comments = \
+                   OnscreenText(text="Analise dos dados " + str(status_ok),
+                                parent=base.a2dBottomRight, align=TextNode.ARight,
+                                fg=(1, 1, 1, 1), pos=(-0.7, 1.92), scale=.08,
+                                shadow=(0, 0, 0, 0.5))
+
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame
             print dt
@@ -252,7 +325,7 @@ class BallInMazeDemo():
                 name = entry.getIntoNode().getName()
                 if name == "wall_collide":
                     self.wallCollideHandler(entry)
-                elif name == "ground":
+                elif name == "ground4":
                     self.groundCollideHandler(entry)
                 elif name == "loseTrigger":
                     self.loseGame(entry)
@@ -262,6 +335,10 @@ class BallInMazeDemo():
                 mpos = base.mouseWatcherNode.getMouse()  # get the mouse position
                 print mpos
                 # here is the moment to tilt the score effectively.
+                self.inclination_y = mpos.getY() * -10
+                self.inclination_x = mpos.getX() * 10
+
+
                 self.score.setP(mpos.getY() * -10)
                 self.score.setR(mpos.getX() * 10)
 
@@ -269,16 +346,43 @@ class BallInMazeDemo():
             # In this part needs more modification, the ball needs to return when does not have inclination
             # Update the velocity based on acceleration
             self.ballV += self.accelV * dt * self.ACCEL
+
+            # invertion and arrive in the middle position
+
+            self.return_ball = self.ballV
             # Clamp the velocity to the maximum speed
             if self.ballV.lengthSquared() > self.MAX_SPEED_SQ:
                 print self.MAX_SPEED_SQ
                 self.ballV.normalize()
                 self.ballV *= self.MAX_SPEED
-            # Update the position based on the velocity
-            # Here is necessary a modification to understand the new position, if has no inclination the ball
-            #  necessaraly needs to start return on 0 position
+            else:
+                pass
 
-            self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
+            # Update the position based on the velocity
+            # This is the moment to register a smile when its is done in a correct way and, in the same time, green
+            # color the score.
+            # However if the exercise is not done in a very good way, shows up a sad face and red color in the score
+            # variable play_once is only to register only one time when the exervise is done not in the right moment
+
+            if self.inclination_x > 2 or self.inclination_y > 2 or self.inclination_x < -2 or self.inclination_y < - 2:
+                self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
+                self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
+                self.imageObject.setImage('images/sad.png')
+                if self.play_once == 0:
+                    self.sound_problem.setVolume(0.04)
+                    self.sound_problem.play()
+                    self.play_once = 1
+
+            else:
+                self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
+                self.imageObject.setImage('images/ok.png')
+                var1 = float(self.ballRoot.getX())
+                var2 = float(self.ballRoot.getY())
+                var3 = float(self.ballRoot.getZ())
+                self.ballRoot.setX(var1 - var1 * dt)
+                self.ballRoot.setY(var2 - var2 * dt)
+                self.ballRoot.setZ(var3 - self.ballV[2] * dt)
+                self.play_once = 0
             print 'ball position' + str(self.ballRoot.getPos())
             print 'new deslocation' + str(self.ballV)
             # here is the moment to send the data for postgreSQL.
@@ -295,6 +399,7 @@ class BallInMazeDemo():
 
             return Task.cont       # Continue the task indefinitely
         return Task.done
+        #return taskMgr.remove("rollTask")
 
     # If the ball hits a hole trigger, then it should fall in the hole.
     # This is faked rather than dealing with the actual physics of it.
