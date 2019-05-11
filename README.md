@@ -11,3 +11,5 @@ fisioterpia, mesmo que o usuário esteja offline
 
 Verficar requirements.txt
 
+## Python versão
+python 3.6.3
