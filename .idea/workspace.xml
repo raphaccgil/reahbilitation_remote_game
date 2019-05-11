@@ -2,68 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28941b2b-ffc3-4fd6-8fd1-4f85c15ff97d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/test_reah.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/Core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/Main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/Menu_game.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/bluetooth_acquire.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/calibration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/config/config_file.prc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/del_later.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/example_kinect.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/fusion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/fusion_async.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/game2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/game2_integration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/images/ok.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/images/okay.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/images/sad.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/images/think.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/kinect_ex2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/kinect_module.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/actor1.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/actor1_mov.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/baisc.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/ball.egg.pz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/basic_score1.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/box.egg.pz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/eggcube.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/iron05.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/limba.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/maze.egg.pz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/old/score_end1.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/score.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/score_end1.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/test1.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/test_basic.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/models/test_gr.egg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/options.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/register_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/186942__lemoncreme__piano-melody.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/325611__shadydave__my-love-piano-loop.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/NFF-error-blink.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/NFF-glocken-good.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/NFF-menu-05-b.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/NFF-whoa-whoa.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/sounds/NFF-woman-okay.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/store_variable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/Basic_game.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/Example.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/Menu_Model.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/data_extract.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/game1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/mainmenu.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/paralell_code.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/preloader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/py/trash/scenarioproxy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -101,8 +40,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="60">
+              <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -288,8 +227,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="60">
+          <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
         </state>
       </provider>
     </entry>

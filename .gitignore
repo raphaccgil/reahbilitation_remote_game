@@ -2,4 +2,4 @@
 venv/
 
 #Removção de arquivos gerados python
-.pyc
+*.pyc
