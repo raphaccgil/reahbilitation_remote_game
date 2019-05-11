@@ -1,3 +1,5 @@
 #Remoção de virtual enviroment
 venv/
 
+#Removção de arquivos gerados python
+.pyc
