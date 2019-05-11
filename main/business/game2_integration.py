@@ -13,12 +13,11 @@ from direct.interval.FunctionInterval import Func, Wait
 from direct.gui.OnscreenImage import OnscreenImage
 from panda3d.core import *
 from direct.task.Task import Task
-import store_variable
-import Core as cc
+from main.business import Core as cc
 
 from direct.actor.Actor import Actor
 import datetime
-import sys
+
 
 # remember to generate an actor for this game and insert an animation according kinect acquiring
 

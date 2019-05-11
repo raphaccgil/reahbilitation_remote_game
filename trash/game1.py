@@ -4,18 +4,11 @@ Revision: 0
 First game for reahbilitation
 '''
 
-
-
-
-from panda3d.core import CollisionTraverser, CollisionHandlerPusher
-from panda3d.core import CollisionNode, CollisionSphere, CollisionBox
-from panda3d.core import Point3
 from panda3d.core import WindowProperties, TextNode
 from direct.task.TaskManagerGlobal import taskMgr
 from direct.gui.OnscreenText import OnscreenText
 from direct.task import Task
 from direct.showbase.ShowBase import ShowBase
-import kinect_module as kinect_read
 import sys
 
 

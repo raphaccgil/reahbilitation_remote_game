@@ -3,8 +3,7 @@ from direct.gui.DirectGui import *
 from direct.task.Task import Task
 import re
 import socket
-import fusion
-import Core as cc
+from main.business import fusion, Core as cc
 import numpy as np
 import datetime
 

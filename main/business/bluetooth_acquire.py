@@ -4,12 +4,10 @@ Bluetooth using PyBluez (with Python 2).
 """
 
 import socket, os
-import fusion
+from main.business import fusion
 import re
-import string
 import pandas as pd
 import datetime
-import fusion
 
 #UDP_IP = "192.168.1.101"
 UDP_IP = ""
@@ -54,26 +52,16 @@ while az <= 1000:
     date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
     print (date_val)
     if az == 0:
-        print 'diff time == 0'
+        print ('diff time == 0')
         acquir_data.update(acc, gyr, mag, 0)
     else:
-        now_t = (date_time
+        now_t = (date_time)
         diff = int(now_t) - int(last_t)
         diff *= 1000
-        print 'diff time == ' + str(diff)
+        print ('diff time == {}'.format(str(diff)) )
         acquir_data.update(acc, gyr, mag, float(diff))
     last_t = date_time
 
-    '''
-        else:
-        print 'times'
-        print now
-        print last
-        alfa = now - last
-        alfa = alfa.microseconds
-        print alfa
-        acquir_data.update(acc, gyr, mag, float(alfa))
-    '''
     print ("Accx, Accy, Accz: {:7.3f} {:7.3f} {:7.3f}".format(float(accx), float(accy), float(accz)))
     print ("gyrx, gyry, gyrz: {:7.3f} {:7.3f} {:7.3f}".format(float(gyrx), float(gyry), float(gyrz)))
     print ("Heading, Pitch, Roll: {:7.3f} {:7.3f} {:7.3f}".format(acquir_data.heading, acquir_data.pitch, acquir_data.roll))

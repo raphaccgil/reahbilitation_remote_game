@@ -1,14 +1,10 @@
-from panda3d.core import *
-from pandac.PandaModules import loadPrcFile, loadPrcFileData
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 from direct.gui.DirectGui import *
-import Core as cc
-from direct.fsm.FSM import FSM
-from game2 import BallInMazeDemo
+from main.business import Core as cc
+from main.business.game2 import BallInMazeDemo
 import sys
-from calibration import Calibration
-import time
+from main.business.calibration import Calibration
 
 
 class MainMenu(Calibration):

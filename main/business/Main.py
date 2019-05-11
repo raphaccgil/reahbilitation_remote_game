@@ -9,18 +9,12 @@ options and starts the core finite state machine, followed by Panda's task
 manager."""
 
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import loadPrcFile
-from direct.fsm.FSM import FSM
-from direct.gui.OnscreenText import OnscreenText
+from main.business.Menu_game import MainMenu
+from main.business.Core import Xcore
+from main.business import store_variable as st
 from panda3d.core import *
-from game2_integration import BallInMazeDemo
-from Menu_game import MainMenu
-import time
-from Core import Xcore
-import store_variable as st
-from panda3d.core import *
-from calibration import Calibration
-from direct.gui.DirectGui import *
+from main.business.calibration import Calibration
+
 
 class Azure(ShowBase):
 

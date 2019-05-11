@@ -3,13 +3,10 @@
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
-import game2_integration
-import calibration
-import Menu_game
+from main.business import Menu_game, game2_integration, calibration
 import time
-from calibration import Calibration
-import sys
-import store_variable as st
+from main.business.calibration import Calibration
+
 
 class Xcore(FSM):
     """knows Menu, Scenario and Loading."""
