@@ -3,7 +3,6 @@ A simple Python script to receive messages from a client over
 Bluetooth using PyBluez (with Python 2).
 """
 
-import bluetooth
 import socket, os
 import fusion
 import re
@@ -19,7 +18,7 @@ UDP_PORT = 2055
 sock = socket.socket(socket.AF_INET,
                      socket.SOCK_DGRAM)
 
-print sock
+print (sock)
 sock.bind((UDP_IP, UDP_PORT))
 count = 0
 sep = fusion.Fusion()
@@ -53,12 +52,12 @@ while az <= 1000:
     gyr = (float(gyrx), float(gyry), float(gyrz))
     #if az == 0:
     date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
-    print date_val
+    print (date_val)
     if az == 0:
         print 'diff time == 0'
         acquir_data.update(acc, gyr, mag, 0)
     else:
-        now_t = date_time
+        now_t = (date_time
         diff = int(now_t) - int(last_t)
         diff *= 1000
         print 'diff time == ' + str(diff)
