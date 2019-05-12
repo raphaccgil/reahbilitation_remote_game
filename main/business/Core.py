@@ -1,6 +1,7 @@
 """Reahb core FSM."""
 
 from direct.fsm.FSM import FSM
+from direct.showbase.ShowBase import ShowBase
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
 from main.business import Menu_game, game2_integration, calibration
@@ -13,6 +14,7 @@ class Xcore(FSM):
     """knows Menu, Scenario and Loading."""
     def __init__(self):
         FSM.__init__(self, "Core Game Control")
+
 
         self.defaultTransitions = {"Loading": ["Menu_game"],
                                    "Menu_game": ["Game1", "Game2", "Game3", "Credits", "Calibration"],
@@ -27,7 +29,8 @@ class Xcore(FSM):
         # Optional, but prevents a warning message.
         # The scenario task chain gives us grouping option.
         # It might get replaced by an own task manager, by chance.
-        #base.taskMgr.setupTaskChain("scenario", frameBudget=-1)
+        self.base = ShowBase()
+        self.base.taskMgr.setupTaskChain("scenario", frameBudget=-1)
         print ('hei_core')
 
     def enterLoading(self):
@@ -35,8 +38,8 @@ class Xcore(FSM):
         # TODO: put this into gui package and add a black background
         self.loading = OnscreenText(text="LOADING", pos=(0,0), scale=0.1,
                                     align=TextNode.ACenter, fg=(1, 1, 1, 1))
-        #base.graphicsEngine.renderFrame()
-        #base.graphicsEngine.renderFrame()
+        self.base.graphicsEngine.renderFrame()
+        self.base.graphicsEngine.renderFrame()
         #self.preloader.preloadFast()  # depends on the loading screen
         time.sleep(3)
         # This moment the software calls menu game of this game

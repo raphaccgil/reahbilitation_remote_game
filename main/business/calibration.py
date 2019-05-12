@@ -10,7 +10,7 @@ import datetime
 class Calibration:
 
     def __init__(self):
-        print 'test calibration'
+        print ('test calibration')
         self.status_acquis = 0
         self.buffer = 0
         self.checktime = 0
