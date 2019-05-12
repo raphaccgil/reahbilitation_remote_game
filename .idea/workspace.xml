@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="28941b2b-ffc3-4fd6-8fd1-4f85c15ff97d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/main/business/Core.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/Core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/business/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/business/Menu_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/Menu_game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/business/calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/calibration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/business/fusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/fusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/business/game2.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/game2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/business/game2_integration.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/business/game2_integration.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,10 +21,22 @@
       <file leaf-file-name="Core.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/business/Core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="80" column="14" lean-forward="true" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
+            <state relative-caret-position="392">
+              <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
               <folding>
                 <element signature="e#23#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main/business/Main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+              <folding>
+                <element signature="e#257#302#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,8 +78,8 @@
       <file leaf-file-name="calibration.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/business/calibration.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+            <state relative-caret-position="404">
+              <caret line="264" column="26" lean-forward="true" selection-start-line="264" selection-start-column="26" selection-end-line="264" selection-end-column="26" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -72,11 +87,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Menu_game.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="fusion.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main/business/fusion.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="236" column="28" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="game2.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main/business/game2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="355" column="18" selection-start-line="355" selection-start-column="18" selection-end-line="355" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Menu_game.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main/business/Menu_game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="11" selection-end-column="22" />
+            <state relative-caret-position="258">
+              <caret line="47" column="20" lean-forward="true" selection-start-line="47" selection-start-column="20" selection-end-line="47" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="game2_integration.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main/business/game2_integration.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="299">
+              <caret line="424" column="9" lean-forward="true" selection-start-line="424" selection-start-column="9" selection-end-line="424" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -106,8 +148,13 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/main/business/bluetooth_acquire.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/main/business/calibration.py" />
         <option value="$PROJECT_DIR$/main/business/Core.py" />
+        <option value="$PROJECT_DIR$/main/business/Main.py" />
+        <option value="$PROJECT_DIR$/main/business/Menu_game.py" />
+        <option value="$PROJECT_DIR$/main/business/game2_integration.py" />
+        <option value="$PROJECT_DIR$/main/business/calibration.py" />
+        <option value="$PROJECT_DIR$/main/business/fusion.py" />
+        <option value="$PROJECT_DIR$/main/business/game2.py" />
       </list>
     </option>
   </component>
@@ -188,6 +235,26 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="game" type="PythonConfigurationType" factoryName="Python">
+      <module name="reahbilitation_remote_game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/main/business" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main/business/Main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -205,12 +272,12 @@
     <frame x="0" y="23" width="1440" height="830" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32936507" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -283,16 +350,6 @@
       </provider>
       <provider editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/business/Core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="80" column="14" lean-forward="true" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
-          <folding>
-            <element signature="e#23#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -310,20 +367,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/business/calibration.py">
+    <entry file="file://$PROJECT_DIR$/main/business/Core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="30" column="25" lean-forward="true" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+        <state relative-caret-position="392">
+          <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
           <folding>
-            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#23#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/business/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="e#257#302#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/business/Menu_game.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="11" selection-end-column="22" />
+        <state relative-caret-position="258">
+          <caret line="47" column="20" lean-forward="true" selection-start-line="47" selection-start-column="20" selection-end-line="47" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/business/game2_integration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="424" column="9" lean-forward="true" selection-start-line="424" selection-start-column="9" selection-end-line="424" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/business/calibration.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="264" column="26" lean-forward="true" selection-start-line="264" selection-start-column="26" selection-end-line="264" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/business/fusion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="236" column="28" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/business/game2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="355" column="18" selection-start-line="355" selection-start-column="18" selection-end-line="355" selection-end-column="18" />
         </state>
       </provider>
     </entry>

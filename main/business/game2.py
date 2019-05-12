@@ -180,7 +180,7 @@ class BallInMazeDemo(ShowBase):
 
         self.cTrav.addCollider(self.ballSphere, self.cHandler)
         self.cTrav.addCollider(self.ballGroundColNp, self.cHandler)
-        print 'fuck'
+        print ('fuck')
         print(self.cTrav.get_collider(1))
         # Collision traversers have a built in tool to help visualize collisions.
         # Uncomment the next line to see it.
@@ -224,7 +224,7 @@ class BallInMazeDemo(ShowBase):
     # This function handles the collision between the ray and the ground
     # Information about the interaction is passed in colEntry
     def groundCollideHandler(self, colEntry):
-        print 'oi'
+        print ('oi')
         # Set the ball to the appropriate Z value for it to be exactly on the
         # ground
         newZ = colEntry.getSurfacePoint(render).getZ()
@@ -273,29 +273,29 @@ class BallInMazeDemo(ShowBase):
 
     # This is the task that deals with making everything interactive
     def rollTask(self, task):
-        print self.cHandler
-        print task
-        print 'ei'
-        print self.cTrav
+        print(self.cHandler)
+        print(task)
+        print('ei')
+        print(self.cTrav)
         # Standard technique for finding the amount of time since the last
         # frame
         dt = globalClock.getDt()
 
         # If dt is large, then there has been a # hiccup that could cause the ball
         # to leave the field if this functions runs, so ignore the frame
-        print dt
+        print(dt)
         if dt > .2:
-            print 'check'
+            print('check')
             return Task.cont
 
         # The collision handler collects the collisions. We dispatch which function
         # to handle the collision based on the name of what was collided into
-        print 'other'
-        print self.cHandler.getNumEntries()
+        print('other')
+        print(self.cHandler.getNumEntries())
         for i in range(self.cHandler.getNumEntries()):
-            print i
+            print(i)
             entry = self.cHandler.getEntry(i)
-            print entry.getIntoNode().getName()
+            print(entry.getIntoNode().getName())
             name = entry.getIntoNode().getName()
             if name == "wall_collide":
                 self.wallCollideHandler(entry)
@@ -353,7 +353,7 @@ class BallInMazeDemo(ShowBase):
             Func(self.start)).start()
 
 if __name__=="__main__":
-    print 'test'
+    print ('test')
     # Finally, create an instance of our class and start 3d rendering
     demo = BallInMazeDemo()
     wp = WindowProperties()

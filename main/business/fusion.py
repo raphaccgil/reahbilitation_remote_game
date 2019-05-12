@@ -26,11 +26,11 @@ the CPU in a threaded environment. It sets magbias to the mean values of x,y,z
 '''
 
 def elapsed_micros(start_time):
-    print start_time
+    print(start_time)
     now = datetime.datetime.now()
-    print now
+    print(now)
     c = now - start_time
-    print 'elapsed time in us: ' + str(c.microseconds)
+    print('elapsed time in us: {}'.format(str(c.microseconds)))
     return float(c.microseconds)
     #return time.ticks_diff(time.ticks_us(), start_time)
 
@@ -41,7 +41,7 @@ class Fusion(object):
     '''
     declination = 0                         # Optional offset for true north. A +ve value adds to heading
     def __init__(self):
-        print 'tfrsss'
+        print('tfrsss')
         self.magbias = (0, 0, 0)            # local magnetic bias factors: set from calibration
         self.start_time = datetime.datetime(1970, 1, 1, 0, 0 , 0) # register the begin time
         #self.start_time = None              # Time between updates
@@ -72,7 +72,7 @@ class Fusion(object):
 
     @property
     def roll(self):
-        print self.q
+        print (self.q)
         return degrees(atan2(2.0 * (self.q[0] * self.q[1] + self.q[2] * self.q[3]),
             self.q[0] * self.q[0] - self.q[1] * self.q[1] - self.q[2] * self.q[2] + self.q[3] * self.q[3]))
 
@@ -141,7 +141,7 @@ class Fusion(object):
         mx, my, mz = (mag[x] - self.magbias[x] for x in range(3)) # Units irrelevant (normalised)
         ax, ay, az = accel                  # Units irrelevant (normalised)
         gx, gy, gz = (radians(x) for x in gyro)  # Units deg/s
-        print 'new elapsed time in us:' + str(time_loop)
+        print('new elapsed time in us:' + str(time_loop))
         #print time_loop
         if self.start_time == datetime.datetime(1970, 1, 1, 0, 0, 0):
             self.start_time == datetime.datetime.now()
@@ -234,11 +234,11 @@ class Fusion(object):
         #self.start_time = time.ticks_us()
         self.start_time = datetime.datetime.now()
 
-        print 'check calcu'
-        print deltat
-        print q1
+        print('check calcu')
+        print(deltat)
+        print(q1)
         q1 += qDot1 * deltat
-        print q1
+        print(q1)
         q2 += qDot2 * deltat
         q3 += qDot3 * deltat
         q4 += qDot4 * deltat

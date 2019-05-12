@@ -198,11 +198,11 @@ class BallInMazeDemo:
         taskMgr.remove("actorcontrol")
         self.mainLoop = taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall)
         self.mainLoop2 = taskMgr.add(self.actorcontrol, "actorcontrol")
-        print 'kkkk7'
+        print('kkkk7')
         return
 
     def cleanall(self,task):
-        print "end of task"
+        print("end of task")
         self.sound_loop_music.stop()
         self.imageObject.destroy()
         #self.ballGroundRay.
@@ -217,7 +217,7 @@ class BallInMazeDemo:
     # This function handles the collision between the ray and the ground
     # Information about the interaction is passed in colEntry
     def groundCollideHandler(self, colEntry):
-        print 'oi'
+        print('oi')
         # Set the ball to the appropriate Z value for it to be exactly on the
         # ground
         newZ = colEntry.getSurfacePoint(render).getZ()
@@ -308,19 +308,19 @@ class BallInMazeDemo:
 
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame
-            print dt
+            print (dt)
             if dt > .2:
-                print 'check'
+                print('check')
                 return Task.cont
 
             # The collision handler collects the collisions. We dispatch which function
             # to handle the collision based on the name of what was collided into
-            print 'other'
-            print self.cHandler.getNumEntries()
+            print('other')
+            print(self.cHandler.getNumEntries())
             for i in range(self.cHandler.getNumEntries()):
-                print i
+                print(i)
                 entry = self.cHandler.getEntry(i)
-                print entry.getIntoNode().getName()
+                print(entry.getIntoNode().getName())
                 name = entry.getIntoNode().getName()
                 if name == "wall_collide":
                     self.wallCollideHandler(entry)
@@ -332,7 +332,7 @@ class BallInMazeDemo:
             # Read the mouse position and tilt the score accordingly
             if base.mouseWatcherNode.hasMouse():
                 mpos = base.mouseWatcherNode.getMouse()  # get the mouse position
-                print mpos
+                print(mpos)
                 # here is the moment to tilt the score effectively.
                 self.inclination_y = mpos.getY() * -10
                 self.inclination_x = mpos.getX() * 10
@@ -351,7 +351,7 @@ class BallInMazeDemo:
             self.return_ball = self.ballV
             # Clamp the velocity to the maximum speed
             if self.ballV.lengthSquared() > self.MAX_SPEED_SQ:
-                print self.MAX_SPEED_SQ
+                print(self.MAX_SPEED_SQ)
                 self.ballV.normalize()
                 self.ballV *= self.MAX_SPEED
             else:
@@ -382,8 +382,8 @@ class BallInMazeDemo:
                 self.ballRoot.setY(var2 - var2 * dt)
                 self.ballRoot.setZ(var3 - self.ballV[2] * dt)
                 self.play_once = 0
-            print 'ball position' + str(self.ballRoot.getPos())
-            print 'new deslocation' + str(self.ballV)
+            print('ball position' + str(self.ballRoot.getPos()))
+            print('new deslocation' + str(self.ballV))
             # here is the moment to send the data for postgreSQL.
 
 
@@ -422,7 +422,7 @@ class BallInMazeDemo:
             Func(self.start)).start()
 
 if __name__=="__main__":
-    print 'test'
+    print('test')
     # Finally, create an instance of our class and start 3d rendering
     demo = BallInMazeDemo()
     wp = WindowProperties()

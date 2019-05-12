@@ -68,7 +68,7 @@ class Calibration:
 
 
     def cleanall(self,task):
-        print "end of task"
+        print("end of task")
         self.sound_back.stop()
         self.texthead.destroy()
         self.textpitch.destroy()
@@ -124,9 +124,9 @@ class Calibration:
             self.checktime = 1
             alfa = 0
         elif self.notactivate == 0:
-            print 'all times acquired'
-            print self.now
-            print self.last
+            print('all times acquired')
+            print(self.now)
+            print(self.last)
             self.textframe2.destroy()
             alfa = self.now - self.last
             alfa = alfa.microseconds
@@ -145,13 +145,13 @@ class Calibration:
         self.mag = (float(magx), float(magy), float(magz))
         self.gyr = (float(gyrx), float(gyry), float(gyrz))
         if self.flagtime == 0:
-            print 'diff time == 0'
+            print('diff time == 0')
             self.acquir_data.update(self.acc, self.gyr, self.mag, 0)
         else:
             self.now_t = date_time
             diff = int(self.now_t) - int(self.last_t)
             diff *= 1000
-            print 'diff time == ' + str(diff)
+            print('diff time == {}'.format(str(diff)))
             self.acquir_data.update(self.acc, self.gyr, self.mag, float(diff))
         self.last_t = date_time
         if hasattr(self, 'texthead'):

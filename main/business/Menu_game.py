@@ -11,7 +11,7 @@ class MainMenu(Calibration):
 
     def __init__(self, Calibration):
         Calibration.__init__(self)
-        print 'test menu'
+        print('test menu')
 
     def enterMain(self, Calibration):
         self.sound_back = base.loader.loadSfx("sounds/186942__lemoncreme__piano-melody.wav")
@@ -38,8 +38,8 @@ class MainMenu(Calibration):
                             pos=(0.0, 0.1), fg=(1, 1, 1, 1), scale=.05,
                             shadow=(0, 0, 0, 0.5))
         if hasattr(Calibration, 'calhead'):
-            print 'verify'
-            print Calibration.calhead
+            print('verify')
+            print(Calibration.calhead)
 
         #self.accept("escape", sys.exit)  # Escape quits
 
@@ -48,15 +48,15 @@ class MainMenu(Calibration):
         self.request
 
     def exitMain(self):
-        print "exit called"
+        print("exit called")
         self.button.destroy()
 
     def quit(self):
-       print "Leaving the system"
+       print("Leaving the system")
        sys.exit()
 
     def test(self):
-       print "test clicked"
+       print("test clicked")
        self.sound_back.stop()
        self.button.destroy()
        self.button1.destroy()
@@ -70,7 +70,7 @@ class MainMenu(Calibration):
        cc.Xcore().request("Game1")
 
     def cal_rot(self):
-       print 'call calibration'
+       print('call calibration')
        self.sound_back.stop()
        self.button.destroy()
        self.button1.destroy()

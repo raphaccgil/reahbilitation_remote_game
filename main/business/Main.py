@@ -1,7 +1,14 @@
 ''' Created on Tue June 20 21:00:00 2016
 @author: Raphael Gil
-Revision: 0.1
+Revision: 0.2
 Creation of a game interface
+R0.1 - Initial Version
+
+R0.2 - Adaptation for:
+* Python 3
+* Remove Kinect
+* Universal module (could be used in Any S))
+
 '''
 
 """Reahb main file. This module handles a few command line
@@ -37,8 +44,8 @@ class Azure(ShowBase):
         self.core = Xcore()
         self.core.request("Loading")
         # change state is here?
-        print 'check flag here'
-        print st.flag1
+        print('check flag here')
+        print(st.flag1)
 
         self.main = MainMenu(Calibration)
 
