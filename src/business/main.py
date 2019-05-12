@@ -16,11 +16,11 @@ options and starts the core finite state machine, followed by Panda's task
 manager."""
 
 from direct.showbase.ShowBase import ShowBase
-from main.business.Menu_game import MainMenu
-from main.business.Core import Xcore
-from main.business import store_variable as st
+from src.business.menu_game import MainMenu
+from src.business.core import Xcore
+from src.util import store_variable as st
 from panda3d.core import *
-from main.business.calibration import Calibration
+from src.business.calibration import Calibration
 
 
 class Azure(ShowBase):
@@ -199,8 +199,6 @@ class MainMenu:
        self.game_version.destroy()
        Xcore("Core Game Control").request('Game1')
 '''
-
-
 
 if __name__ == "__main__":
     Azure()

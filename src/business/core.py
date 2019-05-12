@@ -4,9 +4,9 @@ from direct.fsm.FSM import FSM
 from direct.showbase.ShowBase import ShowBase
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
-from main.business import Menu_game, game2_integration, calibration
+from src.business import menu_game, game2_integration, calibration
 import time
-from main.business.calibration import Calibration
+from src.business.calibration import Calibration
 
 
 class Xcore(FSM):
@@ -50,7 +50,7 @@ class Xcore(FSM):
 
     def enterMenu_game(self):
         print ('Menu FSM')
-        menu = Menu_game.MainMenu(Calibration)
+        menu = menu_game.MainMenu(Calibration)
         menu.enterMain(Calibration)
         #self.demand("Game1")
         pass

@@ -1,10 +1,10 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 from direct.gui.DirectGui import *
-from main.business import Core as cc
-from main.business.game2 import BallInMazeDemo
+from src.business import core as cc
+from src.business.game2 import BallInMazeDemo
 import sys
-from main.business.calibration import Calibration
+from src.business.calibration import Calibration
 
 
 class MainMenu(Calibration):

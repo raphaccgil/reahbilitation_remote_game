@@ -4,7 +4,7 @@ Bluetooth using PyBluez (with Python 2).
 """
 
 import socket, os
-from main.business import fusion
+from main.util import fusion
 import re
 import pandas as pd
 import datetime

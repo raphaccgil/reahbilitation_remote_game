@@ -3,14 +3,15 @@ from direct.gui.DirectGui import *
 from direct.task.Task import Task
 import re
 import socket
-from main.business import fusion, Core as cc
+from src.business import core as cc
+from src.util import fusion
 import numpy as np
 import datetime
 
 class Calibration:
 
     def __init__(self):
-        print ('test calibration')
+        print('test calibration')
         self.status_acquis = 0
         self.buffer = 0
         self.checktime = 0

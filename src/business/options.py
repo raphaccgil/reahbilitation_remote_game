@@ -18,4 +18,4 @@ options, args = parser.parse_args()
 
 # Test
 if __name__ == "__main__":
-    print options, args
+    print(options, args)
