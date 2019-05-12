@@ -105,45 +105,5 @@ path = 'C:\\Users\\Raphael\\Documents\\GitHub\\master_tel_remote\\presentation\\
 mag_var.to_csv(os.path.join(path, r'some_test.csv'), encoding='utf-8')
 
 
-### mac adress from pc
-hostMACAddress = '40:b8:9a:ff:f0:c6' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters.
-
-## mac adress XPERIA Z3
-#hostMACAddress = '44:74:6C:7D:E3:0F' # The MAC address of a Bluetooth adapter on the server. The server might have multiple Bluetooth adapters.
-'''
-serverMACAddress = '44:74:6C:7D:E3:0F'
-port = 3
-s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-s.connect((serverMACAddress, port))
-while 1:
-    print 'oi'
-    text = raw_input() # Note change to the old (Python 2) raw_input
-    if text == "quit":
-        break
-    s.send(text)
-sock.close()
-'''
 
 
-port = 3
-backlog = 1
-size = 1024
-s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-s.bind((hostMACAddress, port))
-print s.bind
-s.listen(backlog)
-try:
-    print 'check'
-    client, clientInfo = s.accept()
-    print client
-    print clientInfo
-    while 1:
-        print 'kkk'
-        data = client.recv(size)
-        if data:
-            print(data)
-            client.send(data) # Echo back to client
-except:
-    print("Closing socket")
-    client.close()
-    s.close()
