@@ -16,8 +16,8 @@ options and starts the core finite state machine, followed by Panda's task
 manager."""
 
 from direct.showbase.ShowBase import ShowBase
-from src.business.menu_game import MainMenu
-from src.business.core import Xcore
+from src.service.menu_game import MainMenu
+from src.service.core import Xcore
 from src.util import store_variable as st
 from panda3d.core import *
 from src.business.calibration import Calibration

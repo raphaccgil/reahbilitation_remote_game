@@ -13,7 +13,7 @@ from direct.interval.FunctionInterval import Func, Wait
 from direct.gui.OnscreenImage import OnscreenImage
 from panda3d.core import *
 from direct.task.Task import Task
-from src.business import core as cc
+from src.service import core as cc
 
 from direct.actor.Actor import Actor
 import datetime
