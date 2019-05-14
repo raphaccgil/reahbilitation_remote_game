@@ -82,7 +82,7 @@ class LocalDb:
              """
         )
         cont_val = self.cursor.fetchall()
-        if int(cont_val[0]) > 0:
+        if int(cont_val[0][0]) > 0:
             return 1
         else:
             return 0
