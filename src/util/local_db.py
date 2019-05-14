@@ -1,50 +1,113 @@
-'''
+"""
 Routine to collect the information and save on sqllite
-'''
+"""
 
-class SaveDb:
+import sqlite3
+from src.util.mongo_conn import MongoConn
+
+class LocalDb:
+
+    def __init__(self):
+
+        """
+        Create the connection
+        """
+        self.conn = sqlite3.connect('buff_sensor_data.db')
+        self.cursor = self.conn.cursor()
 
     def create_db(self):
-        '''
+
+        """
         :return: Create database if not exists
-        '''
+        """
+        try:
+            self.cursor.execute("""
+                           CREATE TABLE DADOS_BUFF(
+                           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                           time_collect timestamp,
+                           pitch DOUBLE,
+                           median_pitch DOUBLE,
+                           yam DOUBLE,
+                           median_yam DOUBLE,
+                           roll DOUBLE,
+                           median_roll DOUBLE) 
+                       """)
+            self.conn.close()
+            return 1
+        except:
+            return 0
 
-        pass
-
-    def insert_db(self):
-        '''
-
+    def insert_db(self, list_val):
+        """
         :return: The information that database was inserted
-        '''
+        """
+        valid_data = [len(list_val[0]), 0, 0]
+        for cont, val in enumerate(list_val[0]):
+            try:
+                self.cursor.execute(
+                    """
+                    INSERT INTO DADOS_BUFF 
+                        (time_collect,
+                         pitch,
+                         median_pitch,
+                         yam, 
+                         median_yam,
+                         roll,
+                         median_roll)
+                      VALUES  (?, ?, ?, ?, ?, ?, ?)
+                      """, (list_val[0][cont],
+                            list_val[1][cont],
+                            list_val[2][cont],
+                            list_val[3][cont],
+                            list_val[4][cont],
+                            list_val[5][cont],
+                            list_val[6][cont]))
+                self.conn.commit()
+                valid_data[1] += 1
+            except:
+                valid_data[2] += 1
 
-        pass
+        self.conn.close()
+        return valid_data
 
-class Check_db:
+    def verify_data(self):
+        """
+                :return: The information that database was inserted
+                """
+
+
+class CheckDb:
+
 
     def check_data(self):
-        '''
+        """
 
         :return: Verify if have data to send to mongoDB
-        '''
-        pass
+        """
 
     def check_conn(self):
-        '''
-
+        """
         :return: Verify if is possible to connect on mongoDB
-        '''
-        pass
+        """
+        conn_mongo = MongoConn().\
+            mongodb_conn('reahbilitation_db',
+                         'sensor_coll',
+                         'mongodb://localhost:27017/')
+
+        if conn_mongo == "error":
+            return 0
+        else:
+            return 1
 
     def send_data(self):
-        '''
-
+        """
         :return: Send data to database
-        '''
+        """
         pass
 
     def clean_data(self):
-        '''
-
+        """
         :return: If the data was sent, we need to clean the local database
-        '''
+        """
+
         pass
