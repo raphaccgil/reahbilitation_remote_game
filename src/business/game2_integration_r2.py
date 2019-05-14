@@ -34,7 +34,10 @@ from pykinect.nui import JointId
 class BallInMazeDemo:
 
     def __init__(self, time_val):
+        """
 
+        :param time_val:
+        """
         # list of joints on the actor
 
         self.listjoint = [JointId.HipCenter, JointId.Spine, JointId.ShoulderCenter,
@@ -235,13 +238,22 @@ class BallInMazeDemo:
         self.start(self.cHandler,  self.ballRoot, self.ball, self.score)
 
     def start(self, data_solid, data_ball, ball, score):
-        # The maze model also has a locator in it for where to start the ball
-        # To access it we use the find command
+        """
+        The maze model also has a locator in it for where to start the ball
+        To access it we use the find command
+
+        loop music, good option to relax
+
+        :param data_solid:
+        :param data_ball:
+        :param ball:
+        :param score:
+        :return:
+        """
         #startPos = self.score.find("**/start").getPos()
         # Set the ball in the starting position
         #self.ballRoot.setPos(1,0,0)
 
-        # loop music, good option to relax
 
         self.sound_loop_music.setVolume(0.02)
         self.sound_loop_music.setLoop(True)
@@ -273,10 +285,16 @@ class BallInMazeDemo:
         taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall, taskChain='chain2')
         taskMgr.add(self.actorcontrol, "actorcontrol", taskChain='chain3')
         self.del_lat = 0
-        print 'kkkk7'
+        print('kkkk7')
         return
 
     def quaternion2euler(self, var1):
+        """
+
+        :param var1:
+        :return:
+        """
+
         q = var1
         qx2 = q.x * q.x
         qy2 = q.y * q.y
@@ -284,11 +302,11 @@ class BallInMazeDemo:
 
         test = q.x*q.y + q.z*q.w
 
-        if (test > 0.499):
+        if test > 0.499:
             roll = math.radians(360/math.pi*math.atan2(q.x,q.w))
             pitch = math.pi/2
             yaw = 0
-        elif (test < -0.499):
+        elif test < -0.499:
             roll = math.radians(-360/math.pi*math.atan2(q.x,q.w))
             pitch = -math.pi/2
             yaw = 0
@@ -374,11 +392,11 @@ class BallInMazeDemo:
         self.rpitch = self.acquir_data.pitch
         self.rroll = self.acquir_data.roll
 
-        print 'all data acquired'
-        print self.acc
-        print self.rhead
-        print self.rpitch
-        print self.rroll
+        print('all data acquired')
+        print(self.acc)
+        print(self.rhead)
+        print(self.rpitch)
+        print(self.rroll)
 
         self.postg.sql_con("127.0.0.1", "postgres", "ra2730ar", "log_iot_acquire", "5432")
         self.rdt1, self.rdt2, self.rmed_head, self.rmed_pitch, self.rmed_roll = self.postg.read_sensor_game2()
@@ -640,8 +658,14 @@ class BallInMazeDemo:
     # If the ball hits a hole trigger, then it should fall in the hole.
     # This is faked rather than dealing with the actual physics of it.
     def loseGame(self, entry):
-        # The triggers are set up so that the center of the ball should move to the
-        # collision point to be in the hole
+        """
+        The triggers are set up so that the center of the ball should move to the
+        collision point to be in the hole
+
+        :param entry:
+        :return:
+        """
+
         toPos = entry.getInteriorPoint(render)
         taskMgr.remove('rollTask')  # Stop the maze task
 

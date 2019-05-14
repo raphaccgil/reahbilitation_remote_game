@@ -4,7 +4,7 @@ Bluetooth using PyBluez (with Python 2).
 """
 
 import socket, os
-from main.util import fusion
+from src.util.fusion import Fusion
 import re
 import pandas as pd
 import datetime
@@ -19,7 +19,7 @@ sock = socket.socket(socket.AF_INET,
 print (sock)
 sock.bind((UDP_IP, UDP_PORT))
 count = 0
-sep = fusion.Fusion()
+sep = Fusion()
 a = []
 list_variables = [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
 x_incr = 3
@@ -27,7 +27,7 @@ y_incr = 3
 az = 0
 ax = 0
 stop_action = 0
-acquir_data = fusion.Fusion()
+acquir_data = Fusion()
 '''
 while ax <= 1000 or stop_action == 0:
     print 'read' + str(ax)
