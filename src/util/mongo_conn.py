@@ -30,6 +30,17 @@ class MongoConn:
         except errors.ConnectionFailure:
             return "error"
 
+    def insert_data(self, sample):
+        """
+        :param sample: json list with data
+        :return: status of insertion
+        """
+        try:
+            self.album.insert_many(sample)
+            return "ok"
+        except errors.ConnectionFailure:
+            return "error"
+
     def collect_partial(self):
         """
         :return: Return collect data

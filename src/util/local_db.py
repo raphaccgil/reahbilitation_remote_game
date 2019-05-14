@@ -5,6 +5,7 @@ Routine to collect the information and save on sqllite
 import sqlite3
 from src.util.mongo_conn import MongoConn
 
+
 class LocalDb:
 
     def __init__(self):
@@ -72,18 +73,39 @@ class LocalDb:
 
     def verify_data(self):
         """
-                :return: The information that database was inserted
-                """
+        :return: The information that database was inserted
+        """
+        self.cursor.execute(
+            """
+             SELECT count(*)
+             FROM DADOS_BUFF
+             """
+        )
+        cont_val = self.cursor.fetchall()
+        if int(cont_val[0]) > 0:
+            return 1
+        else:
+            return 0
+
+    def clean_data(self):
+        """
+        :return: If the data was sent, we need to clean the local database
+        """
+
+        pass
 
 
 class CheckDb:
 
+    def __init__(self):
+        self.check = 0
 
     def check_data(self):
         """
-
         :return: Verify if have data to send to mongoDB
         """
+        value_data = LocalDb().verify_data()
+        return value_data
 
     def check_conn(self):
         """
@@ -93,21 +115,25 @@ class CheckDb:
             mongodb_conn('reahbilitation_db',
                          'sensor_coll',
                          'mongodb://localhost:27017/')
-
         if conn_mongo == "error":
             return 0
         else:
             return 1
 
-    def send_data(self):
+    def send_data(self, list_json):
         """
         :return: Send data to database
         """
-        pass
+        status = ""
+        while self.check < 5 and status != "ok":
+            conn_mongo = MongoConn()
+            conn_mongo.mongodb_conn('reahbilitation_db',
+                             'sensor_coll',
+                             'mongodb://localhost:27017/')
+            status = conn_mongo.insert_data(list_json)
+            self.check += 1
 
-    def clean_data(self):
-        """
-        :return: If the data was sent, we need to clean the local database
-        """
-
-        pass
+        if self.check < 5:
+            return 0
+        else:
+            return 1
