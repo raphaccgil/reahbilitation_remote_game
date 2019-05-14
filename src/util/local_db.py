@@ -87,12 +87,26 @@ class LocalDb:
         else:
             return 0
 
-    def clean_data(self):
+    def clean_data(self, list_clean):
         """
         :return: If the data was sent, we need to clean the local database
         """
+        error_data = []
+        for a in list_clean:
+            try:
+                self.cursor.execute(
+                    """
+                     DELETE
+                     FROM DADOS_BUFF
+                     where id = (?)
+                     """,(a)
+                )
+                self.conn.commit()
+            except:
+                print("Error cleaning")
+                error_data.append(a)
 
-        pass
+        return error_data
 
 
 class CheckDb:
