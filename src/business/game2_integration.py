@@ -14,9 +14,10 @@ from direct.gui.OnscreenImage import OnscreenImage
 from panda3d.core import *
 from direct.task.Task import Task
 from src.service import core as cc
-
+from src.util.dirpath_gen import PathGen
 from direct.actor.Actor import Actor
 import datetime
+import os
 
 
 # remember to generate an actor for this game and insert an animation according kinect acquiring
@@ -38,18 +39,20 @@ class BallInMazeDemo:
         camera.setPosHpr(0, 0, 25, 0, -90, 0)  # Place the camera
 
         # load the sounds oduring the game
+        path_now = os.path.dirname(os.getcwd())
+        self.files_path = PathGen().path_gen(path_now)
 
-        self.sound_loop_music = base.loader.loadSfx("sounds/325611__shadydave__my-love-piano-loop.mp3")
-        self.sound_problem = base.loader.loadSfx("sounds/NFF-whoa-whoa.wav")
+        self.sound_loop_music = base.loader.loadSfx(self.files_path[0])
+        self.sound_problem = base.loader.loadSfx(self.files_path[1])
 
         # import the score and render it
-        self.score = loader.loadModel("models/test_basic")
+        self.score = loader.loadModel(self.files_path[2])
 
         # variable to register when is possible to play problem music
         self.play_once = 0
 
         # import a model that will be an actor on the future
-        self.actor1 = Actor("models/actor1_mov")
+        self.actor1 = Actor(self.files_path[3])
         self.actor1.reparentTo(render)
         self.actor1.setScale(0.4)
         self.actor1.setPos(-4.8, -1, 1)
@@ -87,7 +90,7 @@ class BallInMazeDemo:
         # It is on a root dummy node so that we can rotate the ball itself without
         # rotating the ray that will be attached to it
         self.ballRoot = render.attachNewNode("ballRoot")
-        self.ball = loader.loadModel("models/ball")
+        self.ball = loader.loadModel(self.files_path[4])
         self.ball.reparentTo(self.ballRoot)
 
         # Find the collison sphere for the ball which was created in the egg file
@@ -299,7 +302,7 @@ class BallInMazeDemo:
 
             # this is the moment of insertion of images....only for test
             status_ok = 'problem'
-            self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
+            self.imageObject = OnscreenImage(image=self.files_path[5], pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
             self.comments = \
                    OnscreenText(text="Analise dos dados " + str(status_ok),
                                 parent=base.a2dBottomRight, align=TextNode.ARight,
@@ -366,7 +369,7 @@ class BallInMazeDemo:
             if self.inclination_x > 2 or self.inclination_y > 2 or self.inclination_x < -2 or self.inclination_y < - 2:
                 self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
                 self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
-                self.imageObject.setImage('images/sad.png')
+                self.imageObject.setImage(self.files_path[6])
                 if self.play_once == 0:
                     self.sound_problem.setVolume(0.04)
                     self.sound_problem.play()
@@ -374,7 +377,7 @@ class BallInMazeDemo:
 
             else:
                 self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
-                self.imageObject.setImage('images/ok.png')
+                self.imageObject.setImage(self.files_path[5])
                 var1 = float(self.ballRoot.getX())
                 var2 = float(self.ballRoot.getY())
                 var3 = float(self.ballRoot.getZ())
