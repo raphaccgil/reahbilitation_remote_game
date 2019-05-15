@@ -117,6 +117,31 @@ class BallInMazeDemo:
         self.shoulder_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_left_joint")
         self.shoulder_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_right_joint")
 
+        self.shoulder_head_actor1 = self.actor1.controlJoint(None, "modelRoot", "head_joint")
+
+        self.knee_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_left_joint")
+        self.knee_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_left_joint")
+
+        self.spine_joint_actor1 = self.actor1.controlJoint(None, "modelRoot", "spine_joint")
+
+        self.hip_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_right_joint")
+        self.hip_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_left_joint")
+
+        self.ankle_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_right_joint")
+        self.ankle_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_left_joint")
+
+        self.foot_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_left_joint")
+        self.foot_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_right_joint")
+
+        self.hand_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_left_joint")
+        self.hand_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_right_joint")
+
+        self.wrist_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_left_joint")
+        self.wrist_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_right_joint")
+
+        self.elbow_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_left_joint")
+        self.elbow_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_right_joint")
+
         # read all the joint from actor2
         self.shoulder_left_actor2 = self.actor2.controlJoint(None, "modelRoot", "shoulder_left_joint")
         self.shoulder_right_actor2 = self.actor2.controlJoint(None, "modelRoot", "shoulder_right_joint")
@@ -321,7 +346,7 @@ class BallInMazeDemo:
         print [roll, pitch, yaw]
         return [roll, pitch, yaw]
 
-    '''
+
     def actorcontrol (self, task):
         # define position of actor using kinect sensor
         self.del_lat += 1
@@ -353,7 +378,7 @@ class BallInMazeDemo:
                                 var1r = self.quaternion2euler(var1)
                                 self.shoulder_right_actor1.setHpr(var1r[2], var1r[1], var1r[0])
         return task.cont
-    '''
+
 
     def database (self, task):
         """
