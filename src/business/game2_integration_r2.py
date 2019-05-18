@@ -16,7 +16,6 @@ from panda3d.core import *
 from direct.task.Task import Task
 import src.util.store_variable
 import src.business.core as cc
-import src.util.postgresql_request as postg
 import socket
 from direct.actor.Actor import Actor
 from src.util.dirpath_gen import PathGen
@@ -25,18 +24,20 @@ import re
 import sys
 import math
 import os
+# REMOVER BIBLIOTECAS PYKINECT
 from pykinect import nui
 from pykinect.nui import JointId
 
-# remember to generate an actor for this game and insert an animation according kinect acquiring
-
-
 class BallInMazeDemo:
+    """
+    Remember to generate an actor for this game and insert an animation according kinect acquiring
+
+    """
 
     def __init__(self, time_val):
         """
-
-        :param time_val:
+        Initial conditions before start game
+        :param time_val: ???
         """
         # list of joints on the actor
 
