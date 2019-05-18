@@ -46,9 +46,6 @@ class Azure(ShowBase):
         # Start our Core Finite State Machine
         self.core = Xcore()
         self.core.request("Loading")
-        # change state is here?
-        print('check flag here')
-        print(st.flag1)
 
         self.main = MainMenu(Calibration)
 

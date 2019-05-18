@@ -8,13 +8,26 @@ from src.business.calibration import Calibration
 from src.util.dirpath_gen import PathGenMenu
 import os
 
+
 class MainMenu(Calibration):
+    """
+    Menu for Calibration
+    """
 
     def __init__(self, Calibration):
+        """
+
+        :param Calibration:
+        """
         Calibration.__init__(self)
         print('test menu')
 
     def enterMain(self, Calibration):
+        """
+
+        :param Calibration:
+        :return:
+        """
         path_now = os.path.dirname(os.getcwd())
         self.files_path_menu = PathGenMenu().path_gen_menu(path_now)
         self.sound_back = base.loader.loadSfx(self.files_path_menu[0])
@@ -36,7 +49,7 @@ class MainMenu(Calibration):
                             pos=(0.05, -0.08), fg=(1, 1, 1, 1), scale=.06,
                             shadow=(0, 0, 0, 0.5))
         self.game_version = \
-               OnscreenText(text="Version 0.2",
+               OnscreenText(text="Version 0.3",
                             parent=base.a2dBottomLeft, align=TextNode.ALeft,
                             pos=(0.0, 0.1), fg=(1, 1, 1, 1), scale=.05,
                             shadow=(0, 0, 0, 0.5))

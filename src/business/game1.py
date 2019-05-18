@@ -1,37 +1,34 @@
 #!/usr/bin/env python
 
-# Author: Raphael Castilho Gil
-# Last Updated: 2017-04-04
-#
-# This is the first game to adapt the reahbilitation
+"""
+ Author: Raphael Castilho Gil
+ Last Updated: 2019-05-18
 
+ This is the first game to adapt the reahbilitation
+"""
 
 from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
-from direct.gui.OnscreenImage import OnscreenImage
 from src.util.fusion import Fusion
 from panda3d.core import *
 from direct.task.Task import Task
-import src.util.store_variable
 from src.service import core as cc
 import socket
 from direct.actor.Actor import Actor
 from src.util.dirpath_gen import PathGen
 import datetime
 import re
-import sys
-import math
 import os
+from src.service.body_support_game import Game1Mov
 # REMOVER BIBLIOTECAS PYKINECT
 #from pykinect import nui
 #from pykinect.nui import JointId
 
 class BallInMazeDemo:
     """
-    Remember to generate an actor for this game and insert an animation according kinect acquiring
-
+    Remember to generate an actor for this game
     """
 
     def __init__(self, time_val):
@@ -39,17 +36,11 @@ class BallInMazeDemo:
         Initial conditions before start game
         :param time_val: ???
         """
-        # list of joints on the actor
 
-        '''
-        self.listjoint = [JointId.HipCenter, JointId.Spine, JointId.ShoulderCenter,
-             JointId.Head, JointId.ShoulderLeft, JointId.ElbowLeft,
-             JointId.WristLeft, JointId.HandLeft, JointId.ShoulderRight,
-             JointId.ElbowRight, JointId.WristRight, JointId.HandRight,
-             JointId.HipLeft, JointId.KneeLeft, JointId.AnkleLeft,
-             JointId.FootLeft, JointId.HipRight, JointId.KneeRight,
-             JointId.AnkleRight, JointId.FootRight]
-        '''
+        self.rhead = 0
+        self.rpitch = 0
+        self.rroll = 0
+
         # variables for beginning reading
         self.x_var = 0
         self.y_var = 0
@@ -93,60 +84,42 @@ class BallInMazeDemo:
         # variable to register when is possible to play problem music
         self.play_once = 0
 
-        # import a model that will be an actor on the future
+        # import a model to create a position on the system where the people need to follow
         self.actor1 = Actor(self.files_path[3])
         self.actor1.reparentTo(render)
         self.actor1.setScale(0.5)
-        self.actor1.setPos(-4.8, -1, 1)
-        self.actor1.setColorScale(0.1, 0.1, 1.5, 0.5)  # blue color
+        self.actor1.setPos(6, -1, 1)
+        self.actor1.setColorScale(1.5, 0.1, 0.1, 0.5)  # red color
         self.actor1.setH(self.actor1, -45)
         self.actor1.setP(self.actor1, -45)
         self.actor1.setR(self.actor1, -45)
 
-        # import a second model to create a position on the system where the people need to follow
-
-        self.actor2 = Actor(self.files_path[3])
-        self.actor2.reparentTo(render)
-        self.actor2.setScale(0.5)
-        self.actor2.setPos(6, -1, 1)
-        self.actor2.setColorScale(1.5, 0.1, 0.1, 0.5)  # red color
-        self.actor2.setH(self.actor2, -45)
-        self.actor2.setP(self.actor2, -45)
-        self.actor2.setR(self.actor2, -45)
-
         # read all the joint from actor1
         self.shoulder_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_left_joint")
         self.shoulder_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_right_joint")
-
         self.shoulder_head_actor1 = self.actor1.controlJoint(None, "modelRoot", "head_joint")
-
         self.knee_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_left_joint")
-        self.knee_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_left_joint")
-
+        self.knee_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_right_joint")
         self.spine_joint_actor1 = self.actor1.controlJoint(None, "modelRoot", "spine_joint")
-
         self.hip_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_right_joint")
         self.hip_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_left_joint")
-
         self.ankle_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_right_joint")
         self.ankle_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_left_joint")
-
         self.foot_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_left_joint")
         self.foot_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_right_joint")
-
         self.hand_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_left_joint")
-        self.hand_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_right_joint")
-
+        #self.hand_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_right_joint")
         self.wrist_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_left_joint")
         self.wrist_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_right_joint")
-
         self.elbow_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_left_joint")
         self.elbow_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_right_joint")
 
-        # read all the joint from actor2
-        self.shoulder_left_actor2 = self.actor2.controlJoint(None, "modelRoot", "shoulder_left_joint")
-        self.shoulder_right_actor2 = self.actor2.controlJoint(None, "modelRoot", "shoulder_right_joint")
-
+        # verification of change of legs
+        self.legs_change = 0
+        self.time_change = 10
+        self.time_exerc_now = datetime.datetime.now()
+        self.time_exerc_past = datetime.datetime.now()
+        self.leg_angle = 0
 
         # cont times of repetion
         self.repetion = 0
@@ -162,7 +135,6 @@ class BallInMazeDemo:
         # line to see the collision walls
         # self.walls.show()
 
-
         # Ground_collide is a single polygon on the same plane as the ground in the
         # maze. We will use a ray to collide with it so that we will know exactly
         # what height to put the ball at every frame. Since this is not something
@@ -171,8 +143,6 @@ class BallInMazeDemo:
         #self.scoreGround = self.score.find("**/polySurface4")
         self.scoreGround = self.score.find("**/ground4")
         self.scoreGround.node().setIntoCollideMask(BitMask32.bit(1))
-
-
 
         # Load the ball and attach it to the scene
         # It is on a root dummy node so that we can rotate the ball itself without
@@ -236,7 +206,6 @@ class BallInMazeDemo:
         # Uncomment the next line to see it.
         # self.cTrav.showCollisions(render)
 
-
         # This section deals with lighting for the ball. Only the ball was lit
         # because the maze has static lighting pregenerated by the modeler
         ambientLight = AmbientLight("ambientLight")
@@ -263,6 +232,14 @@ class BallInMazeDemo:
         self.ballRoot.setPos(0, 0, 0)
         self.start(self.cHandler,  self.ballRoot, self.ball, self.score)
 
+        # Insert doctor message
+        self.text_doctor = TextNode('TestConnection')
+        self.text_doctor.setText("Sem recomendações do fisioterapeuta")
+        self.textNodePathDoctor = aspect2d.attachNewNode(self.text_doctor)
+        self.textNodePathDoctor.setScale(0.07)
+        self.textNodePathDoctor.reparentTo(base.a2dBottomLeft)
+        self.textNodePathDoctor.setPos(0, 0, 0.1)
+
     def start(self, data_solid, data_ball, ball, score):
         """
         The maze model also has a locator in it for where to start the ball
@@ -276,15 +253,13 @@ class BallInMazeDemo:
         :param score:
         :return:
         """
-        #startPos = self.score.find("**/start").getPos()
+        # startPos = self.score.find("**/start").getPos()
         # Set the ball in the starting position
-        #self.ballRoot.setPos(1,0,0)
-
+        # self.ballRoot.setPos(1,0,0)
 
         self.sound_loop_music.setVolume(0.02)
         self.sound_loop_music.setLoop(True)
         self.sound_loop_music.play()
-
 
         # parameters
         self.ball = ball
@@ -310,84 +285,71 @@ class BallInMazeDemo:
         taskMgr.add(self.database, "database", taskChain='chain1')
         taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall, taskChain='chain2')
         taskMgr.add(self.actorcontrol, "actorcontrol", taskChain='chain3')
-        self.del_lat = 0
-        print('kkkk7')
+
         return
 
-    def quaternion2euler(self, var1):
+    def actorcontrol(self, task):
         """
+        Control the position of legs during the game
 
-        :param var1:
-        :return:
+        :param task: Task to modify actor
+        :return: New status of actor
         """
+        self.time_exerc_past = self.time_exerc_now
+        self.time_exerc_now = datetime.datetime.now()
 
-        q = var1
-        qx2 = q.x * q.x
-        qy2 = q.y * q.y
-        qz2 = q.z * q.z
+        diff_time = self.time_exerc_now - self.time_exerc_past
+        diff_time = float(diff_time.microseconds)/1000000
 
-        test = q.x*q.y + q.z*q.w
+        if self.legs_change == 0:
+            values = Game1Mov().\
+                legs_movimentation_pos0_3(self.legs_change,
+                                          self.leg_angle)
+            self.legs_change = values[0]
+            self.leg_angle = values[1]
+            self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
 
-        if test > 0.499:
-            roll = math.radians(360/math.pi*math.atan2(q.x,q.w))
-            pitch = math.pi/2
-            yaw = 0
-        elif test < -0.499:
-            roll = math.radians(-360/math.pi*math.atan2(q.x,q.w))
-            pitch = -math.pi/2
-            yaw = 0
+        elif self.legs_change == 1 or \
+                self.legs_change == 4:
+            values = Game1Mov(). \
+                legs_wait_pos2_4(self.legs_change,
+                                 self.time_change,
+                                 diff_time)
 
-        else:
-            roll = math.atan2(2 * q.y * q.w - 2 * q.x * q.z, 1 - 2 * qy2 - 2 * qz2)
-            pitch = math.asin(2*q.x*q.y+2*q.z*q.w)
-            yaw = math.atan2(2*q.x*q.w-2*q.y*q.z, 1-2*qx2-2*qz2)
-        roll = math.degrees(roll)
-        pitch = math.degrees(pitch)
-        yaw = math.degrees(yaw)
-        print [roll, pitch, yaw]
-        return [roll, pitch, yaw]
+            self.time_change = values[0]
+            self.legs_change = values[1]
 
+        elif self.legs_change == 2:
+            values = Game1Mov().\
+                legs_movimentation_pos0_3(self.legs_change,
+                                          self.leg_angle)
+            self.legs_change = values[0]
+            self.leg_angle = values[1]
+            self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
 
-    def actorcontrol (self, task):
-        # define position of actor using kinect sensor
-        self.del_lat += 1
-        if self.del_lat > 100:
-            self.del_lat = 0
-        self.shoulder_left_actor1.setHpr(self.del_lat, 30, 30)
-        self.a = 0
-        '''
-        with nui.Runtime() as kinect:
-            print 'test2'
-            kinect.skeleton_engine.enabled = True
-            while self.a == 0:
-                frame = kinect.skeleton_engine.get_next_frame()
-                for cont, skeleton in enumerate(frame.SkeletonData):
-                    print nui.SkeletonTrackingState.TRACKED
-                    print skeleton.eTrackingState
-                    if skeleton.eTrackingState == nui.SkeletonTrackingState.TRACKED:
-                        self.a = 1
-                        print 'oi'
-                        for cont2, posjoint in enumerate(self.listjoint):
-                            print str(posjoint) + ' ' + str(cont2)
-                            if cont2 == 9:
-                                print posjoint
-                                print 'test'
-                                print skeleton.calculate_bone_orientations()[JointId.ShoulderRight].absolute_rotation
-                                var2 = skeleton.calculate_bone_orientations()[JointId.ShoulderRight].absolute_rotation.rotation_quaternion
-                                var2r = self.quaternion2euler(var2)
-                                print skeleton.calculate_bone_orientations()[JointId.ShoulderRight].hierarchical_rotation.rotation_quaternion
-                                var1 = skeleton.calculate_bone_orientations()[JointId.ShoulderRight].hierarchical_rotation.rotation_quaternion
-                                var1r = self.quaternion2euler(var1)
-                                self.shoulder_right_actor1.setHpr(var1r[2], var1r[1], var1r[0])
-        '''
+        elif self.legs_change == 3:
+            values = Game1Mov().\
+                legs_movimentation_pos0_3(self.legs_change,
+                                          self.leg_angle)
+            self.legs_change = values[0]
+            self.leg_angle = values[1]
+            self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
+
+        elif self.legs_change == 5:
+            values = Game1Mov(). \
+                legs_movimentation_pos0_3(self.legs_change,
+                                          self.leg_angle)
+            self.legs_change = values[0]
+            self.leg_angle = values[1]
+            self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
+
         return task.cont
 
 
-    def database (self, task):
+    def database(self, task):
         """
 
-
-        :param task: Routine of pandas3d to collect data from sendor
+        :param task: Routine of pandas3d to collect data from sensor
         :return:
         """
 
@@ -444,16 +406,23 @@ class BallInMazeDemo:
         # all the acc and kinect data
         return task.cont
 
-    def cleanall(self,task):
-        print("end of task")
+    def cleanall(self, task):
+
+        """
+        Clean all nodes of this game
+        :param task:
+        :return:
+        """
+
         self.sound_loop_music.stop()
         #self.imageObject.destroy()
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
-        self.actor1.remove_node()
+        self.actor1.cleanup()
         self.score.remove_node()
         self.ball.remove_node()
         self.title.destroy()
+        self.textNodePathDoctor.removeNode()
         cc.Xcore().request("Results")
         return
 
@@ -547,11 +516,11 @@ class BallInMazeDemo:
             # frame - this technique shows up the frames per second
             dt = globalClock.getDt()
             self.title = \
-                   OnscreenText(text=" Tempo para o fim do exercicio: " + str(check),
+                   OnscreenText(text=" Fim do exercicio em: {}s".format(str(check)),
                                 parent=base.a2dBottomRight, align=TextNode.ARight,
-                                fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.08,
+                                fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.06,
                                 shadow=(0, 0, 0, 0.5))
-
+            self.text_doctor.setText("{}".format(str(check)))
             # this is the moment of insertion of images....only for test
             #status_ok = 'problem'
             #self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
@@ -607,12 +576,12 @@ class BallInMazeDemo:
             self.score.setR(self.inclination_x)
             if hasattr(self, 'rroll'):
                 self.comments = \
-               OnscreenText(text="Analise dos dados roll " + str(self.rroll),
+               OnscreenText(text="Analise dos dados roll {}".format(str(self.rroll)) ,
                             parent=base.a2dBottomRight, align=TextNode.ARight,
                             fg=(1, 1, 1, 1), pos=(-0.1, 0.4), scale=.08,
                             shadow=(0, 0, 0, 0.5))
                 self.comments2 = \
-               OnscreenText(text="Analise dos dados pitchl " + str(self.rpitch),
+               OnscreenText(text="Analise dos dados pitchl {}".format(str(self.rpitch)),
                             parent=base.a2dBottomRight, align=TextNode.ARight,
                             fg=(1, 1, 1, 1), pos=(-0.1, 0.6), scale=.08,
                             shadow=(0, 0, 0, 0.5))
