@@ -15,7 +15,7 @@ from src.util.fusion import Fusion
 from panda3d.core import *
 from direct.task.Task import Task
 import src.util.store_variable
-import src.business.core as cc
+from src.service import core as cc
 import socket
 from direct.actor.Actor import Actor
 from src.util.dirpath_gen import PathGen
@@ -25,8 +25,8 @@ import sys
 import math
 import os
 # REMOVER BIBLIOTECAS PYKINECT
-from pykinect import nui
-from pykinect.nui import JointId
+#from pykinect import nui
+#from pykinect.nui import JointId
 
 class BallInMazeDemo:
     """
@@ -41,6 +41,7 @@ class BallInMazeDemo:
         """
         # list of joints on the actor
 
+        '''
         self.listjoint = [JointId.HipCenter, JointId.Spine, JointId.ShoulderCenter,
              JointId.Head, JointId.ShoulderLeft, JointId.ElbowLeft,
              JointId.WristLeft, JointId.HandLeft, JointId.ShoulderRight,
@@ -48,7 +49,7 @@ class BallInMazeDemo:
              JointId.HipLeft, JointId.KneeLeft, JointId.AnkleLeft,
              JointId.FootLeft, JointId.HipRight, JointId.KneeRight,
              JointId.AnkleRight, JointId.FootRight]
-
+        '''
         # variables for beginning reading
         self.x_var = 0
         self.y_var = 0
@@ -61,7 +62,8 @@ class BallInMazeDemo:
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
 
         # creating connection with database postgrSQL
-        self.postg = postg.PostgreSQL()
+
+        #self.postg = postg.PostgreSQL()
         self.flagtime = 0
         # definition of time during exercise
         self.minutes_requer = time_val
@@ -82,19 +84,17 @@ class BallInMazeDemo:
         path_now = os.path.dirname(os.getcwd())
         self.files_path = PathGen().path_gen(path_now)
 
-        # load the sounds oduring the game
-
-        self.sound_loop_music = base.loader.loadSfx("sounds/325611__shadydave__my-love-piano-loop.mp3")
-        self.sound_problem = base.loader.loadSfx("sounds/NFF-whoa-whoa.wav")
+        self.sound_loop_music = base.loader.loadSfx(self.files_path[0])
+        self.sound_problem = base.loader.loadSfx(self.files_path[1])
 
         # import the score and render it
-        self.score = loader.loadModel("models/test_basic")
+        self.score = loader.loadModel(self.files_path[2])
 
         # variable to register when is possible to play problem music
         self.play_once = 0
 
         # import a model that will be an actor on the future
-        self.actor1 = Actor("models/actor1_mov")
+        self.actor1 = Actor(self.files_path[3])
         self.actor1.reparentTo(render)
         self.actor1.setScale(0.5)
         self.actor1.setPos(-4.8, -1, 1)
@@ -105,7 +105,7 @@ class BallInMazeDemo:
 
         # import a second model to create a position on the system where the people need to follow
 
-        self.actor2 = Actor("models/actor1_mov")
+        self.actor2 = Actor(self.files_path[3])
         self.actor2.reparentTo(render)
         self.actor2.setScale(0.5)
         self.actor2.setPos(6, -1, 1)
@@ -178,7 +178,7 @@ class BallInMazeDemo:
         # It is on a root dummy node so that we can rotate the ball itself without
         # rotating the ray that will be attached to it
         self.ballRoot = render.attachNewNode("ballRoot")
-        self.ball = loader.loadModel("models/ball")
+        self.ball = loader.loadModel(self.files_path[4])
         self.ball.reparentTo(self.ballRoot)
 
         # Find the collison sphere for the ball which was created in the egg file
@@ -355,6 +355,7 @@ class BallInMazeDemo:
             self.del_lat = 0
         self.shoulder_left_actor1.setHpr(self.del_lat, 30, 30)
         self.a = 0
+        '''
         with nui.Runtime() as kinect:
             print 'test2'
             kinect.skeleton_engine.enabled = True
@@ -378,6 +379,7 @@ class BallInMazeDemo:
                                 var1 = skeleton.calculate_bone_orientations()[JointId.ShoulderRight].hierarchical_rotation.rotation_quaternion
                                 var1r = self.quaternion2euler(var1)
                                 self.shoulder_right_actor1.setHpr(var1r[2], var1r[1], var1r[0])
+        '''
         return task.cont
 
 
@@ -424,9 +426,15 @@ class BallInMazeDemo:
         print(self.rpitch)
         print(self.rroll)
 
-        self.postg.sql_con("127.0.0.1", "postgres", "ra2730ar", "log_iot_acquire", "5432")
-        self.rdt1, self.rdt2, self.rmed_head, self.rmed_pitch, self.rmed_roll = self.postg.read_sensor_game2()
-        self.postg.post_close_connection()
+        '''
+        Inserir aqui conexão com o mongo e leitura de rede
+        Os dados enviados são os 6 dos sensores, mais o tipo do jogo
+        Remover conexão com o postgresql
+        '''
+
+        #self.postg.sql_con("127.0.0.1", "postgres", "ra2730ar", "log_iot_acquire", "5432")
+        #self.rdt1, self.rdt2, self.rmed_head, self.rmed_pitch, self.rmed_roll = self.postg.read_sensor_game2()
+        #self.postg.post_close_connection()
 
         # here is the moment to analyze the absolute variation between the median and the
         self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)

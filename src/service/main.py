@@ -21,7 +21,8 @@ from src.service.core import Xcore
 from src.util import store_variable as st
 from panda3d.core import *
 from src.business.calibration import Calibration
-
+from src.util.dirpath_gen import PathGenMain
+import os
 
 class Azure(ShowBase):
 
@@ -29,7 +30,9 @@ class Azure(ShowBase):
         """Program entry point."""
 
         # call standard config
-        loadPrcFile("config/config_file.prc")
+        path_now = os.path.dirname(os.getcwd())
+        self.files_path_main = PathGenMain().path_gen_menu(path_now)
+        loadPrcFile(self.files_path_main[0])
 
         # This basically sets up our rendering node-tree, some builtins and
         # the master loop (which iterates each frame).

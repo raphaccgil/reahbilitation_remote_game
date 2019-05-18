@@ -3,7 +3,7 @@
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
-from src.business import game2_integration, calibration
+from src.business import calibration, game1
 from src.service import menu_game
 import time
 from src.business.calibration import Calibration
@@ -103,22 +103,22 @@ class Xcore(FSM):
 
     def enterGame1(self):
         # here is the moment to insert the time
-        game2_integration.BallInMazeDemo(1)
+        game1.BallInMazeDemo(1)
 
     def exitGame1(self):
         print('exit Game1')
 
     def enterGame2(self):
-        print ('ttt')
+        print('ttt')
 
     def exitGame2(self):
-        print ('ttt2')
+        print('ttt2')
 
     def enterGame3(self):
-        print ('ttt3')
+        print('ttt3')
 
     def exitGame3(self):
-        print ('ttt4')
+        print('ttt4')
 
     def enterCalibration(self):
         print('lets calibrate')

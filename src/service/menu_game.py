@@ -2,10 +2,11 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 from direct.gui.DirectGui import *
 from src.service import core as cc
-from src.business.game2 import BallInMazeDemo
+from trash.game2 import BallInMazeDemo
 import sys
 from src.business.calibration import Calibration
-
+from src.util.dirpath_gen import PathGenMenu
+import os
 
 class MainMenu(Calibration):
 
@@ -14,7 +15,9 @@ class MainMenu(Calibration):
         print('test menu')
 
     def enterMain(self, Calibration):
-        self.sound_back = base.loader.loadSfx("sounds/186942__lemoncreme__piano-melody.wav")
+        path_now = os.path.dirname(os.getcwd())
+        self.files_path_menu = PathGenMenu().path_gen_menu(path_now)
+        self.sound_back = base.loader.loadSfx(self.files_path_menu[0])
         self.sound_back.setVolume(0.02)
         self.sound_back.setLoop(True)
         self.sound_back.play()

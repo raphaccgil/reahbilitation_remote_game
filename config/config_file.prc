@@ -1,7 +1,7 @@
 window-title Reahbilitation
 
-fullscreen TRUE
+fullscreen FALSE
 
-win-size 1280 720
+win-size 1080 720
 
 win-origin 100 100
