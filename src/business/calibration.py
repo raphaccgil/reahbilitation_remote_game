@@ -85,6 +85,10 @@ class Calibration:
         self.button2.destroy()
         self.button3.destroy()
         self.sock.close()
+        self.textframe2.destroy()
+        self.instructions.destroy()
+        self.game_version.destroy()
+        self.title.destroy()
         cc.Xcore().request("Menu_game")
         return
 

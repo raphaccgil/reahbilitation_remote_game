@@ -59,10 +59,6 @@ class MainMenu(Calibration):
 
         #self.accept("escape", sys.exit)  # Escape quits
 
-    def enterMain2(self):
-        self.button = DirectButton(text="Call Game", scale=0.05, pos=(0.5, 0, 0))
-        self.request
-
     def exitMain(self):
         print("exit called")
         self.button.destroy()
@@ -72,32 +68,32 @@ class MainMenu(Calibration):
        sys.exit()
 
     def test(self):
-       print("test clicked")
-       self.sound_back.stop()
-       self.button.destroy()
-       self.button1.destroy()
-       self.button2.destroy()
-       self.button3.destroy()
-       self.button4.destroy()
-       self.button5.destroy()
-       self.title.destroy()
-       self.instructions.destroy()
-       self.game_version.destroy()
-       cc.Xcore().request("Game1")
+        print("test clicked")
+        self.sound_back.stop()
+        self.button.destroy()
+        self.button1.destroy()
+        self.button2.destroy()
+        self.button3.destroy()
+        self.button4.destroy()
+        self.button5.destroy()
+        self.title.destroy()
+        self.instructions.destroy()
+        self.game_version.destroy()
+        cc.Xcore().request("Game1")
 
     def cal_rot(self):
-       print('call calibration')
-       self.sound_back.stop()
-       self.button.destroy()
-       self.button1.destroy()
-       self.button2.destroy()
-       self.button3.destroy()
-       self.button4.destroy()
-       self.button5.destroy()
-       self.title.destroy()
-       self.instructions.destroy()
-       self.game_version.destroy()
-       cc.Xcore().request("Calibration")
+        print('call calibration')
+        self.sound_back.stop()
+        self.button.destroy()
+        self.button1.destroy()
+        self.button2.destroy()
+        self.button3.destroy()
+        self.button4.destroy()
+        self.button5.destroy()
+        self.title.destroy()
+        self.instructions.destroy()
+        self.game_version.destroy()
+        cc.Xcore().request("Calibration")
 
 if __name__=="__main__":
 
