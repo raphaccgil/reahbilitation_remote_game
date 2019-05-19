@@ -219,7 +219,18 @@ class Calibration:
             self.calhead = np.median(self.acq_list[0])
             self.calpitch = np.median(self.acq_list[1])
             self.calroll = np.median(self.acq_list[2])
+
+            values_median = [self.calhead, self.calpitch, self.calroll]
+            path_now = os.path.dirname(os.getcwd())
+            files_path_calibration = re.sub("/src", "", path_now)
+
             # save on sqlite the median, but certify if the table is empyt
+
+            buff_median = LocalDb()
+            buff_median.conn_db(files_path_calibration)
+            buff_median.clean_data_calibration()
+            buff_median.conn_db(files_path_calibration)
+            buff_median.insert_tbl_calibration(values_median)
 
             self.caldone = 1
             self.waittxt.destroy()

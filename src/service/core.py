@@ -67,6 +67,10 @@ class Xcore(FSM):
         conn_temp_database = LocalDb()
         conn_temp_database.conn_db(files_path_core)
         conn_temp_database.create_db()
+        conn_temp_database.conn_db(files_path_core)
+        conn_temp_database.create_tbl_calibration()
+
+        conn_temp_database.conn_db(files_path_core)
         results_local = conn_temp_database.verify_data()
         print(status)
         if status is True:

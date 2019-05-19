@@ -12,6 +12,7 @@ from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
 from src.util.fusion_2 import Fusion
+from src.util.local_db import LocalDb
 from panda3d.core import *
 from direct.task.Task import Task
 from src.service import core as cc
@@ -394,6 +395,15 @@ class BallInMazeDemo:
         #self.postg.sql_con("127.0.0.1", "postgres", "ra2730ar", "log_iot_acquire", "5432")
         #self.rdt1, self.rdt2, self.rmed_head, self.rmed_pitch, self.rmed_roll = self.postg.read_sensor_game2()
         #self.postg.post_close_connection()
+
+        path_now = os.path.dirname(os.getcwd())
+        files_path_game = re.sub("/src", "", path_now)
+
+        buff_game = LocalDb()
+        buff_game.conn_db(files_path_game)
+        data_collect = buff_game.verify_data_calibration()
+        self.rmed_pitch = data_collect[1]
+        self.rmed_roll = data_collect[2]
 
         # here is the moment to analyze the absolute variation between the median and the
         self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)

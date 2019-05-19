@@ -19,6 +19,7 @@ class LocalDb:
     def conn_db(self, path):
 
         new_path = "{}/files/database/buff_sensor_data.db".format(path)
+        print(new_path)
         self.conn = sqlite3.connect(new_path)
         self.cursor = self.conn.cursor()
 
@@ -29,7 +30,7 @@ class LocalDb:
         """
         try:
             self.cursor.execute("""
-                           CREATE TABLE DADOS_BUFF(
+                           CREATE TABLE IF NOT EXISTS DADOS_BUFF(
                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                            time_collect timestamp,
                            pitch DOUBLE,
@@ -51,16 +52,16 @@ class LocalDb:
         """
         try:
             self.cursor.execute("""
-                           CREATE TABLE CALIBR_REG(
+                           CREATE TABLE IF NOT EXISTS CALIBR_REG(
                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                            median_yam DOUBLE,
-                           median_rol DOUBLE,
+                           median_roll DOUBLE,
                            median_pitch DOUBLE) 
                        """)
             self.conn.close()
-            return 1
-        except:
             return 0
+        except:
+            return 1
 
 
     def insert_db(self, list_val):
@@ -96,7 +97,7 @@ class LocalDb:
         self.conn.close()
         return valid_data
 
-    def insert_db(self, list_val):
+    def insert_tbl_calibration(self, list_val):
         """
         :return: The information that database was inserted
         """
@@ -112,9 +113,11 @@ class LocalDb:
                         list_val[1],
                         list_val[2]))
             self.conn.commit()
+            self.conn.close()
             return 0
         except:
             print("Error inserting median")
+            self.conn.close()
             return 1
 
     def verify_data(self):
@@ -129,9 +132,34 @@ class LocalDb:
         )
         cont_val = self.cursor.fetchall()
         if int(cont_val[0][0]) > 0:
+            self.conn.close()
             return 1
         else:
+            self.conn.close()
             return 0
+
+    def verify_data_calibration(self):
+        """
+        :return: The information of calibration
+        """
+        median_list = []
+        try:
+            self.cursor.execute(
+                """
+                 SELECT 
+                 median_yam,
+                 median_pitch,
+                 median_roll
+                 FROM CALIBR_REG
+                 LIMIT 1
+                 """)
+            cont_val = self.cursor.fetchall()
+            for cont, val in enumerate(cont_val[0]):
+                median_list.append(val)
+        except:
+            print ("Erro seleção")
+        self.conn.close()
+        return median_list
 
     def clean_data(self, list_clean):
         """
@@ -151,7 +179,7 @@ class LocalDb:
             except:
                 print("Error cleaning")
                 error_data.append(a)
-
+        self.conn.close()
         return error_data
 
     def clean_data_calibration(self):
@@ -166,9 +194,11 @@ class LocalDb:
                  """
             )
             self.conn.commit()
+            self.conn.close()
             return 0
         except:
             print("Error cleaning")
+            self.conn.close()
             return 1
 
 
