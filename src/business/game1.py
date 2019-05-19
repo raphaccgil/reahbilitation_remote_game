@@ -11,7 +11,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
-from src.util.fusion_2 import Fusion
+from src.util.fusion import Fusion
 from src.util.local_db import LocalDb
 from panda3d.core import *
 from direct.task.Task import Task
@@ -23,9 +23,7 @@ import datetime
 import re
 import os
 from src.service.body_support_game import Game1Mov
-# REMOVER BIBLIOTECAS PYKINECT
-#from pykinect import nui
-#from pykinect.nui import JointId
+
 
 class BallInMazeDemo:
     """
@@ -90,7 +88,7 @@ class BallInMazeDemo:
         self.actor1.reparentTo(render)
         self.actor1.setScale(0.5)
         self.actor1.setPos(6, -1, 1)
-        self.actor1.setColorScale(1.5, 0.1, 0.1, 0.5)  # red color
+        self.actor1.setColorScale(2.6, 0.1, 0.1, 0.6)  # red color
         self.actor1.setH(self.actor1, -45)
         self.actor1.setP(self.actor1, -45)
         self.actor1.setR(self.actor1, -45)
@@ -114,6 +112,12 @@ class BallInMazeDemo:
         self.wrist_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_right_joint")
         self.elbow_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_left_joint")
         self.elbow_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_right_joint")
+
+        # set shoulder to be in normla position
+        self.shoulder_left_actor1.setHpr(180, 55, 290)
+        self.shoulder_right_actor1.setHpr(0, 0, -15)
+
+        #self.shoulder_right_actor1.setHpr(0, 0, 0)
 
         # verification of change of legs
         self.legs_change = 0
@@ -241,6 +245,14 @@ class BallInMazeDemo:
         self.textNodePathDoctor.reparentTo(base.a2dBottomLeft)
         self.textNodePathDoctor.setPos(0, 0, 0.1)
 
+        # Insert doctor message
+        self.text_advice = TextNode('TestConnection')
+        self.text_advice.setText("Comece o exercício")
+        self.textNodePathAdvice = aspect2d.attachNewNode(self.text_advice)
+        self.textNodePathAdvice.setScale(0.07)
+        self.textNodePathAdvice.reparentTo(base.a2dTopLeft)
+        self.textNodePathAdvice.setPos(0, 0, -0.2)
+
     def start(self, data_solid, data_ball, ball, score):
         """
         The maze model also has a locator in it for where to start the ball
@@ -309,6 +321,8 @@ class BallInMazeDemo:
             self.legs_change = values[0]
             self.leg_angle = values[1]
             self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
+            #self.shoulder_left_actor1.setHpr(self.leg_angle*2, 60, 290)
+            self.text_advice.setText("Levante a perna esquerda...")
 
         elif self.legs_change == 1 or \
                 self.legs_change == 4:
@@ -319,6 +333,8 @@ class BallInMazeDemo:
 
             self.time_change = values[0]
             self.legs_change = values[1]
+            self.text_advice.setText("Segure a perna levantada...")
+
 
         elif self.legs_change == 2:
             values = Game1Mov().\
@@ -327,6 +343,8 @@ class BallInMazeDemo:
             self.legs_change = values[0]
             self.leg_angle = values[1]
             self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
+            self.text_advice.setText("Troque a perna...")
+
 
         elif self.legs_change == 3:
             values = Game1Mov().\
@@ -335,6 +353,7 @@ class BallInMazeDemo:
             self.legs_change = values[0]
             self.leg_angle = values[1]
             self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
+            self.text_advice.setText("Levante a perna direita...")
 
         elif self.legs_change == 5:
             values = Game1Mov(). \
@@ -343,6 +362,7 @@ class BallInMazeDemo:
             self.legs_change = values[0]
             self.leg_angle = values[1]
             self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
+            self.text_advice.setText("Troque a perna...")
 
         return task.cont
 
@@ -433,6 +453,7 @@ class BallInMazeDemo:
         self.title.destroy()
         self.exercice_com.destroy()
         self.textNodePathDoctor.removeNode()
+        self.textNodePathAdvice.removeNode()
         cc.Xcore().request("Results")
         return
 

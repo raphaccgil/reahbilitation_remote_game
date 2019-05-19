@@ -9,7 +9,7 @@
 
 import datetime
 from math import sqrt, atan2, asin, degrees, radians
-'''
+"""
 Supports 6 and 9 degrees of freedom sensors. Tested with InvenSense MPU-9150 9DOF sensor.
 Source https://github.com/xioTechnologies/Open-Source-AHRS-With-x-IMU.git
 also https://github.com/kriswiner/MPU-9250.git
@@ -23,12 +23,10 @@ getxyz must return current magnetometer (x, y, z) tuple from the sensor
 stopfunc (responding to time or user input) tells it to stop
 waitfunc provides an optional delay between readings to accommodate hardware or to avoid hogging
 the CPU in a threaded environment. It sets magbias to the mean values of x,y,z
-'''
+"""
 
 def elapsed_micros(start_time):
-    print(start_time)
     now = datetime.datetime.now()
-    print(now)
     c = now - start_time
     print('elapsed time in us: {}'.format(str(c.microseconds)))
     return float(c.microseconds)
@@ -41,7 +39,6 @@ class Fusion(object):
     """
     declination = 0                         # Optional offset for true north. A +ve value adds to heading
     def __init__(self):
-        print('tfrsss')
         self.magbias = (0, 0, 0)            # local magnetic bias factors: set from calibration
         self.start_time = datetime.datetime(1970, 1, 1, 0, 0 , 0) # register the begin time
         #self.start_time = None              # Time between updates
@@ -72,11 +69,10 @@ class Fusion(object):
 
     @property
     def roll(self):
-        print (self.q)
         return degrees(atan2(2.0 * (self.q[0] * self.q[1] + self.q[2] * self.q[3]),
             self.q[0] * self.q[0] - self.q[1] * self.q[1] - self.q[2] * self.q[2] + self.q[3] * self.q[3]))
 
-    def update_nomag(self, accel, gyro):    # 3-tuples (x, y, z) for accel, gyro
+    def update_nomag(self, accel, gyro, time_loop):    # 3-tuples (x, y, z) for accel, gyro
         ax, ay, az = accel                  # Units G (but later normalised)
         gx, gy, gz = (radians(x) for x in gyro) # Units deg/s
         if self.start_time == datetime.datetime(1970, 1, 1,0,0,0):
@@ -126,7 +122,8 @@ class Fusion(object):
 
         # Integrate to yield quaternion
         #deltat = elapsed_micros(self.start_time) / 1000000
-        deltat = self.start_time
+        #deltat = self.start_time
+        deltat = time_loop / 1000000
         #self.start_time = datetime.datetime.now()
         #self.start_time = time.ticks_us()
 
@@ -141,7 +138,7 @@ class Fusion(object):
         mx, my, mz = (mag[x] - self.magbias[x] for x in range(3)) # Units irrelevant (normalised)
         ax, ay, az = accel                  # Units irrelevant (normalised)
         gx, gy, gz = (radians(x) for x in gyro)  # Units deg/s
-        print('new elapsed time in us:' + str(time_loop))
+        print ('new elapsed time in us: {}'.format(str(time_loop)))
         #print time_loop
         if self.start_time == datetime.datetime(1970, 1, 1, 0, 0, 0):
             self.start_time == datetime.datetime.now()
@@ -234,11 +231,7 @@ class Fusion(object):
         #self.start_time = time.ticks_us()
         self.start_time = datetime.datetime.now()
 
-        print('check calcu')
-        print(deltat)
-        print(q1)
         q1 += qDot1 * deltat
-        print(q1)
         q2 += qDot2 * deltat
         q3 += qDot3 * deltat
         q4 += qDot4 * deltat
