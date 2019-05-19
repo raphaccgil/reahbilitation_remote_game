@@ -11,7 +11,7 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
-from src.util.fusion import Fusion
+from src.util.fusion_2 import Fusion
 from panda3d.core import *
 from direct.task.Task import Task
 from src.service import core as cc
@@ -358,11 +358,8 @@ class BallInMazeDemo:
         ## modification during 15/06/2017, try to test without magnometer sensor
         #date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data)
         #date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
-        date_time, accx, accy, accz, gyrx, gyry, gyrz,  = re.split(',', data)
+        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data.decode('utf-8'))
         date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
-        magx = 0
-        magy = 0
-        magz = 0
         gyrz = str(gyrz)
         gyrz = float(gyrz.replace("#", ""))
         self.acc = (float(accx), float(accy), float(accz))

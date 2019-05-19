@@ -7,7 +7,10 @@ from src.service import core as cc
 from src.util import fusion
 import numpy as np
 import datetime
-from  src.util.dirpath_gen import PathGenCalibration
+from src.util.dirpath_gen import PathGenCalibration
+from src.util.local_db import LocalDb
+import os
+
 
 class Calibration:
 
@@ -35,7 +38,10 @@ class Calibration:
         return self.calhead, self.calpitch, self.calroll
 
     def enterMain(self):
-        self.sound_back = base.loader.loadSfx("sounds/186942__lemoncreme__piano-melody.wav")
+        path_now = os.path.dirname(os.getcwd())
+        self.files_path = PathGenCalibration().path_gen_calibration(path_now)
+
+        self.sound_back = base.loader.loadSfx(self.files_path[0])
         self.sound_back.setVolume(0.02)
         self.sound_back.setLoop(True)
         self.sound_back.play()
@@ -51,7 +57,7 @@ class Calibration:
                             pos=(0.05, -0.08), fg=(1, 1, 1, 1), scale=.06,
                             shadow=(0, 0, 0, 0.5))
         self.game_version = \
-               OnscreenText(text="Version 0.2",
+               OnscreenText(text="Version 0.3",
                             parent=base.a2dBottomLeft, align=TextNode.ALeft,
                             pos=(0.0, 0.1), fg=(1, 1, 1, 1), scale=.05,
                             shadow=(0, 0, 0, 0.5))
@@ -140,7 +146,8 @@ class Calibration:
         dt = globalClock.getDt()
         self.buffer += dt
         data, addr = self.sock.recvfrom(1024)
-        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data)
+        print(data)
+        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data.decode('utf-8'))
         gyrz = str(gyrz)
         gyrz = float(gyrz.replace("#", ""))
         self.acc = (float(accx), float(accy), float(accz))
@@ -212,6 +219,8 @@ class Calibration:
             self.calhead = np.median(self.acq_list[0])
             self.calpitch = np.median(self.acq_list[1])
             self.calroll = np.median(self.acq_list[2])
+            # save on sqlite the median, but certify if the table is empyt
+
             self.caldone = 1
             self.waittxt.destroy()
             self.onlyonetime = 1

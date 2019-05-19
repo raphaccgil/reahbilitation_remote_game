@@ -10,6 +10,9 @@ from src.business.calibration import Calibration
 from src.util.check_conn import CheckConn
 from src.util.local_db import LocalDb, CheckDb
 import sys
+import os
+import re
+
 
 class Xcore(FSM):
     """knows Menu, Scenario and Loading."""
@@ -34,6 +37,8 @@ class Xcore(FSM):
         base.taskMgr.setupTaskChain("scenario", frameBudget=-1)
         print('hei_core')
 
+        self.files_path_core = ""
+
     def enterLoading(self):
         """
         In this moment, verify if has internet connection and try to send
@@ -55,9 +60,14 @@ class Xcore(FSM):
         #self.preloader.preloadFast()  # depends on the loading screen
         time.sleep(2)
         status = CheckConn().internet_on()
-        conn_temp = LocalDb()
-        conn_temp.create_db()
-        results_local = conn_temp.verify_data()
+
+        path_now = os.path.dirname(os.getcwd())
+        files_path_core = re.sub("/src", "", path_now)
+
+        conn_temp_database = LocalDb()
+        conn_temp_database.conn_db(files_path_core)
+        conn_temp_database.create_db()
+        results_local = conn_temp_database.verify_data()
         print(status)
         if status is True:
             self.text.setText("Conexão com Internet, verificando dados armazenados...")

@@ -9,7 +9,7 @@
 
 import datetime
 from math import sqrt, atan2, asin, degrees, radians
-'''
+"""
 Supports 6 and 9 degrees of freedom sensors. Tested with InvenSense MPU-9150 9DOF sensor.
 Source https://github.com/xioTechnologies/Open-Source-AHRS-With-x-IMU.git
 also https://github.com/kriswiner/MPU-9250.git
@@ -23,22 +23,20 @@ getxyz must return current magnetometer (x, y, z) tuple from the sensor
 stopfunc (responding to time or user input) tells it to stop
 waitfunc provides an optional delay between readings to accommodate hardware or to avoid hogging
 the CPU in a threaded environment. It sets magbias to the mean values of x,y,z
-'''
+"""
 
 def elapsed_micros(start_time):
-    print start_time
     now = datetime.datetime.now()
-    print now
     c = now - start_time
-    print 'elapsed time in us: ' + str(c.microseconds)
+    print('elapsed time in us: {}'.format(str(c.microseconds)))
     return float(c.microseconds)
     #return time.ticks_diff(time.ticks_us(), start_time)
 
 class Fusion(object):
-    '''
+    """
     Class provides sensor fusion allowing heading, pitch and roll to be extracted. This uses the Madgwick algorithm.
     The update method must be called peiodically. The calculations take 1.6mS on the Pyboard.
-    '''
+    """
     declination = 0                         # Optional offset for true north. A +ve value adds to heading
     def __init__(self):
         self.magbias = (0, 0, 0)            # local magnetic bias factors: set from calibration
@@ -140,7 +138,7 @@ class Fusion(object):
         mx, my, mz = (mag[x] - self.magbias[x] for x in range(3)) # Units irrelevant (normalised)
         ax, ay, az = accel                  # Units irrelevant (normalised)
         gx, gy, gz = (radians(x) for x in gyro)  # Units deg/s
-        print 'new elapsed time in us:' + str(time_loop)
+        print ('new elapsed time in us: {}'.format(str(time_loop)))
         #print time_loop
         if self.start_time == datetime.datetime(1970, 1, 1, 0, 0, 0):
             self.start_time == datetime.datetime.now()

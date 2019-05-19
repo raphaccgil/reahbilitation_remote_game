@@ -13,7 +13,13 @@ class LocalDb:
         """
         Create the connection
         """
-        self.conn = sqlite3.connect('buff_sensor_data.db')
+        self.conn = ""
+        self.cursor = ""
+
+    def conn_db(self, path):
+
+        new_path = "{}/files/database/buff_sensor_data.db".format(path)
+        self.conn = sqlite3.connect(new_path)
         self.cursor = self.conn.cursor()
 
     def create_db(self):
@@ -37,6 +43,25 @@ class LocalDb:
             return 1
         except:
             return 0
+
+    def create_tbl_calibration(self):
+
+        """
+        :return: Create database if not exists
+        """
+        try:
+            self.cursor.execute("""
+                           CREATE TABLE CALIBR_REG(
+                           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                           median_yam DOUBLE,
+                           median_rol DOUBLE,
+                           median_pitch DOUBLE) 
+                       """)
+            self.conn.close()
+            return 1
+        except:
+            return 0
+
 
     def insert_db(self, list_val):
         """
@@ -70,6 +95,27 @@ class LocalDb:
 
         self.conn.close()
         return valid_data
+
+    def insert_db(self, list_val):
+        """
+        :return: The information that database was inserted
+        """
+        try:
+            self.cursor.execute(
+                """
+                INSERT INTO CALIBR_REG 
+                    (median_yam,
+                     median_pitch,
+                     median_roll)
+                  VALUES  (?, ?, ?)
+                  """, (list_val[0],
+                        list_val[1],
+                        list_val[2]))
+            self.conn.commit()
+            return 0
+        except:
+            print("Error inserting median")
+            return 1
 
     def verify_data(self):
         """
@@ -107,6 +153,23 @@ class LocalDb:
                 error_data.append(a)
 
         return error_data
+
+    def clean_data_calibration(self):
+        """
+        :return: If the data was sent, we need to clean the local database
+        """
+        try:
+            self.cursor.execute(
+                """
+                 DELETE
+                 FROM CALIBR_REG
+                 """
+            )
+            self.conn.commit()
+            return 0
+        except:
+            print("Error cleaning")
+            return 1
 
 
 class CheckDb:
