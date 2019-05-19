@@ -28,6 +28,14 @@ class Calibration:
         self.calhead = 0
         self.calpitch = 0
         self.calroll = 0
+        self.files_path = ""
+        self.sound_back = ""
+        self.button = ""
+        self.button2 = ""
+        self.button3 = ""
+        self.title = ""
+        self.instructions = ""
+        self.game_version = ""
 
         self.acq_list = [[], [], []]
 
@@ -38,6 +46,10 @@ class Calibration:
         return self.calhead, self.calpitch, self.calroll
 
     def enterMain(self):
+        """
+        Start screen for calibration
+        :return:
+        """
         path_now = os.path.dirname(os.getcwd())
         self.files_path = PathGenCalibration().path_gen_calibration(path_now)
 

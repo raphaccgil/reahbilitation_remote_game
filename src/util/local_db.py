@@ -7,6 +7,9 @@ from src.util.mongo_conn import MongoConn
 
 
 class LocalDb:
+    """
+    Manipulate local database
+    """
 
     def __init__(self):
 
@@ -18,6 +21,12 @@ class LocalDb:
 
     def conn_db(self, path):
 
+        """
+        Define database connection
+
+        :param path:
+        :return:
+        """
         new_path = "{}/files/database/buff_sensor_data.db".format(path)
         print(new_path)
         self.conn = sqlite3.connect(new_path)
@@ -26,6 +35,7 @@ class LocalDb:
     def create_db(self):
 
         """
+        Create table for not collected data
         :return: Create database if not exists
         """
         try:
@@ -48,6 +58,7 @@ class LocalDb:
     def create_tbl_calibration(self):
 
         """
+        Collect data after calibration
         :return: Create database if not exists
         """
         try:
@@ -66,6 +77,8 @@ class LocalDb:
 
     def insert_db(self, list_val):
         """
+        Insert collect data from sensors
+
         :return: The information that database was inserted
         """
         valid_data = [len(list_val[0]), 0, 0]
@@ -99,6 +112,8 @@ class LocalDb:
 
     def insert_tbl_calibration(self, list_val):
         """
+        Insert data after calibration
+
         :return: The information that database was inserted
         """
         try:
@@ -122,6 +137,8 @@ class LocalDb:
 
     def verify_data(self):
         """
+        Verify if has data on table from sensors
+
         :return: The information that database was inserted
         """
         self.cursor.execute(
@@ -140,6 +157,8 @@ class LocalDb:
 
     def verify_data_calibration(self):
         """
+        Collect data from calibration
+
         :return: The information of calibration
         """
         median_list = []
@@ -163,6 +182,8 @@ class LocalDb:
 
     def clean_data(self, list_clean):
         """
+        Clean table of sensors after send to mongoDB
+
         :return: If the data was sent, we need to clean the local database
         """
         error_data = []
@@ -184,6 +205,8 @@ class LocalDb:
 
     def clean_data_calibration(self):
         """
+        Clean data from calibration
+
         :return: If the data was sent, we need to clean the local database
         """
         try:

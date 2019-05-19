@@ -9,6 +9,7 @@ import time
 from src.business.calibration import Calibration
 from src.util.check_conn import CheckConn
 from src.util.local_db import LocalDb, CheckDb
+from src.service.results import Results
 import sys
 import os
 import re
@@ -108,7 +109,6 @@ class Xcore(FSM):
     def enterMenu_game(self):
         menu = menu_game.MainMenu(Calibration)
         menu.enterMain(Calibration)
-        #self.demand("Game1")
         pass
 
     def exitMenu_game(self):
@@ -139,12 +139,12 @@ class Xcore(FSM):
         calibration.Calibration().enterMain()
 
     def exitCalibration(self):
-        print('bye calibrate')
-        #calibration.Calibration()
-
+        pass
 
     def enterResults(self):
         print('ttt5')
+        Results().show()
+
 
     def exitResults(self):
         print ('ttt6')

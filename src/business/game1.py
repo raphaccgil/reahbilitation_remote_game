@@ -349,6 +349,7 @@ class BallInMazeDemo:
 
     def database(self, task):
         """
+        Routine to save on remote database according with available communication
 
         :param task: Routine of pandas3d to collect data from sensor
         :return:
@@ -423,12 +424,14 @@ class BallInMazeDemo:
 
         self.sound_loop_music.stop()
         #self.imageObject.destroy()
+        taskMgr.remove("rollTask")
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
         self.actor1.cleanup()
         self.score.remove_node()
         self.ball.remove_node()
         self.title.destroy()
+        self.exercice_com.destroy()
         self.textNodePathDoctor.removeNode()
         cc.Xcore().request("Results")
         return
@@ -548,18 +551,6 @@ class BallInMazeDemo:
                     self.groundCollideHandler(entry)
                 elif name == "loseTrigger":
                     self.loseGame(entry)
-            # Read the mouse position and tilt the score accordingly
-            # modified to use the sensor
-            '''
-            if base.mouseWatcherNode.hasMouse():
-                mpos = base.mouseWatcherNode.getMouse()  # get the mouse position
-                print mpos
-                # here is the moment to tilt the score effectively.
-                self.inclination_y = mpos.getY() * -10
-                self.inclination_x = mpos.getX() * 10
-                self.score.setP(mpos.getY() * -10)
-                self.score.setR(mpos.getX() * 10)
-                '''
 
             if self.y_var < 0:
                 self.inclination_y = self.y_var + 4
@@ -581,19 +572,6 @@ class BallInMazeDemo:
                 pass
             self.score.setP(self.inclination_y)
             self.score.setR(self.inclination_x)
-            if hasattr(self, 'rroll'):
-                self.comments = \
-               OnscreenText(text="Analise dos dados roll {}".format(str(self.rroll)) ,
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.1, 0.4), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
-                self.comments2 = \
-               OnscreenText(text="Analise dos dados pitchl {}".format(str(self.rpitch)),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.1, 0.6), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
-            else:
-                pass
 
             # Finally, we move the ball
             # In this part needs more modification, the ball needs to return when does not have inclination
@@ -691,13 +669,3 @@ class BallInMazeDemo:
                          toData=self.ballRoot.getZ() - .9, duration=.2)),
             Wait(1),
             Func(self.start)).start()
-
-if __name__=="__main__":
-    # Finally, create an instance of our class and start 3d rendering
-    demo = BallInMazeDemo()
-    wp = WindowProperties()
-    # create full screen game
-    wp.setSize(1024, 768)  # there will be more resolutions
-    wp.setFullscreen(True)
-    base.win.requestProperties(wp)
-    demo.run()
