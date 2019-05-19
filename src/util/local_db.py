@@ -176,7 +176,7 @@ class LocalDb:
             for cont, val in enumerate(cont_val[0]):
                 median_list.append(val)
         except:
-            print ("Erro seleção")
+            print("Erro seleção")
         self.conn.close()
         return median_list
 
@@ -194,7 +194,7 @@ class LocalDb:
                      DELETE
                      FROM DADOS_BUFF
                      where id = (?)
-                     """,(a)
+                     """, (a)
                 )
                 self.conn.commit()
             except:
@@ -258,8 +258,8 @@ class CheckDb:
         while self.check < 5 and status != "ok":
             conn_mongo = MongoConn()
             conn_mongo.mongodb_conn('reahbilitation_db',
-                             'sensor_coll',
-                             'mongodb://localhost:27017/')
+                                    'sensor_coll',
+                                    'mongodb://localhost:27017/')
             status = conn_mongo.insert_data(list_json)
             self.check += 1
 

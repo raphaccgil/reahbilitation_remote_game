@@ -321,7 +321,6 @@ class BallInMazeDemo:
             self.legs_change = values[0]
             self.leg_angle = values[1]
             self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
-            #self.shoulder_left_actor1.setHpr(self.leg_angle*2, 60, 290)
             self.text_advice.setText("Levante a perna esquerda...")
 
         elif self.legs_change == 1 or \

@@ -6,6 +6,9 @@ from pymongo import MongoClient, errors
 
 
 class MongoConn:
+    """
+    Prepare to collect mongoDB info
+    """
 
     def __init__(self):
         """

@@ -4,7 +4,9 @@ subroutine to prepare json to be sent or read from mongodb
 
 
 class JsonPrepare:
-
+    """
+    Prepare Json to different scenario
+    """
 
     def local_to_mongo(self, local_list):
         """
@@ -14,7 +16,7 @@ class JsonPrepare:
         json_collect = []
         for cont, val in enumerate(local_list[0]):
             json_collect.append({})
-            json_collect[-1]['time_coll'] = local_list[0][cont]
+            json_collect[-1]['time_coll'] = val
             json_collect[-1]['pitch'] = local_list[1][cont]
             json_collect[-1]['pitch_median'] = local_list[2][cont]
             json_collect[-1]['roll'] = local_list[3][cont]
