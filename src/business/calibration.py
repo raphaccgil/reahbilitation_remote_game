@@ -4,7 +4,7 @@ from direct.task.Task import Task
 import re
 import socket
 from src.service import core as cc
-from trash import fusion
+from src.util.fusion import Fusion
 import numpy as np
 import datetime
 from src.util.dirpath_gen import PathGenCalibration
@@ -83,7 +83,7 @@ class Calibration:
         self.sock = socket.socket(socket.AF_INET,
                      socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
-        self.acquir_data = fusion.Fusion()
+        self.acquir_data = Fusion()
         self.mainLoop = taskMgr.add(self.roll_acquire_task, "accel_acquire", uponDeath=self.cleanall)
 
 

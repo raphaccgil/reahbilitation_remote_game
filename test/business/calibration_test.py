@@ -5,6 +5,7 @@ Routine to test socket connection
 import pytest
 import socket
 import re
+from datetime import datetime
 #from src.business.calibration import Calibration
 
 class TestConnection:
@@ -30,10 +31,11 @@ class TestConnection:
         while self.cont < 100000:
             self.cont += 1
             msg, cliente = udp.recvfrom(1024)
-            #print(msg.decode('utf-8'))
             date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz, = re.split(',', msg.decode('utf-8'))
-            #ok, ok, ok, ok,
-            print("magx: {}, magy: {}, magz: {}".format(str(magx), str(magy), str(magz)))
+            print(date_time)
+            print(datetime.fromtimestamp(
+                float(date_time) / 1000.0
+            ).strftime('%Y-%m-%d %H:%M:%S.%f'))
 
         udp.close()
 

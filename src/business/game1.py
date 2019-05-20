@@ -13,16 +13,18 @@ from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
 from src.util.fusion import Fusion
 from src.util.local_db import LocalDb
+from src.util.check_conn import CheckConn
 from panda3d.core import *
 from direct.task.Task import Task
 from src.service import core as cc
 import socket
 from direct.actor.Actor import Actor
 from src.util.dirpath_gen import PathGen
+from src.service.body_support_game import Game1Mov
 import datetime
 import re
 import os
-from src.service.body_support_game import Game1Mov
+
 
 
 class BallInMazeDemo:
@@ -33,12 +35,32 @@ class BallInMazeDemo:
     def __init__(self, time_val):
         """
         Initial conditions before start game
-        :param time_val: ???
+        :param time_val: period of exercise
         """
+        # check if is available internnet during the game
+        self.status_connection = CheckConn().internet_on()
+
+        # parameters collected
+        self.acc = 0.0
+        self.gyr = 0.0
+        self.mag = 0.0
 
         self.rhead = 0
         self.rpitch = 0
         self.rroll = 0
+
+        self.now_t = 0
+
+        # collect info of median on local database
+        self.path_now_game1 = os.path.dirname(os.getcwd())
+        self.files_path_game1 = re.sub("/src", "", self.path_now_game1)
+
+        self.buff_game = LocalDb()
+        self.buff_game.conn_db(self.files_path_game1)
+        self.data_collect = self.buff_game.verify_data_calibration()
+        self.rmed_yam = self.data_collect[0]
+        self.rmed_pitch = self.data_collect[1]
+        self.rmed_roll = self.data_collect[2]
 
         # variables for beginning reading
         self.x_var = 0
@@ -47,13 +69,9 @@ class BallInMazeDemo:
         # creating connection to acquire data on real time
         self.UDP_IP = ""
         self.UDP_PORT = 2055
-        self.sock = socket.socket(socket.AF_INET,
-                     socket.SOCK_DGRAM)
+        self.sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
 
-        # creating connection with database postgrSQL
-
-        #self.postg = postg.PostgreSQL()
         self.flagtime = 0
         # definition of time during exercise
         self.minutes_requer = time_val
@@ -94,26 +112,57 @@ class BallInMazeDemo:
         self.actor1.setR(self.actor1, -45)
 
         # read all the joint from actor1
-        self.shoulder_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_left_joint")
-        self.shoulder_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "shoulder_right_joint")
-        self.shoulder_head_actor1 = self.actor1.controlJoint(None, "modelRoot", "head_joint")
-        self.knee_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_left_joint")
-        self.knee_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "knee_right_joint")
-        self.spine_joint_actor1 = self.actor1.controlJoint(None, "modelRoot", "spine_joint")
-        self.hip_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_right_joint")
-        self.hip_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hip_left_joint")
-        self.ankle_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_right_joint")
-        self.ankle_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "ankle_left_joint")
-        self.foot_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_left_joint")
-        self.foot_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "foot_right_joint")
-        self.hand_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_left_joint")
-        #self.hand_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "hand_right_joint")
-        self.wrist_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_left_joint")
-        self.wrist_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "wrist_right_joint")
-        self.elbow_left_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_left_joint")
-        self.elbow_right_actor1 = self.actor1.controlJoint(None, "modelRoot", "elbow_right_joint")
+        self.shoulder_left_actor1 = self.actor1.controlJoint(None,
+                                                             "modelRoot",
+                                                             "shoulder_left_joint")
+        self.shoulder_right_actor1 = self.actor1.controlJoint(None,
+                                                              "modelRoot",
+                                                              "shoulder_right_joint")
+        self.shoulder_head_actor1 = self.actor1.controlJoint(None,
+                                                             "modelRoot",
+                                                             "head_joint")
+        self.knee_left_actor1 = self.actor1.controlJoint(None,
+                                                         "modelRoot",
+                                                         "knee_left_joint")
+        self.knee_right_actor1 = self.actor1.controlJoint(None,
+                                                          "modelRoot",
+                                                          "knee_right_joint")
+        self.spine_joint_actor1 = self.actor1.controlJoint(None,
+                                                           "modelRoot",
+                                                           "spine_joint")
+        self.hip_right_actor1 = self.actor1.controlJoint(None,
+                                                         "modelRoot",
+                                                         "hip_right_joint")
+        self.hip_left_actor1 = self.actor1.controlJoint(None,
+                                                        "modelRoot",
+                                                        "hip_left_joint")
+        self.ankle_right_actor1 = self.actor1.controlJoint(None,
+                                                           "modelRoot",
+                                                           "ankle_right_joint")
+        self.ankle_left_actor1 = self.actor1.controlJoint(None,
+                                                          "modelRoot",
+                                                          "ankle_left_joint")
+        self.foot_left_actor1 = self.actor1.controlJoint(None,
+                                                         "modelRoot",
+                                                         "foot_left_joint")
+        self.foot_right_actor1 = self.actor1.controlJoint(None,
+                                                          "modelRoot",
+                                                          "foot_right_joint")
+        self.wrist_left_actor1 = self.actor1.controlJoint(None,
+                                                          "modelRoot",
+                                                          "wrist_left_joint")
+        self.wrist_right_actor1 = self.actor1.controlJoint(None,
+                                                           "modelRoot",
+                                                           "wrist_right_joint")
+        self.elbow_left_actor1 = self.actor1.controlJoint(None,
+                                                          "modelRoot",
+                                                          "elbow_left_joint")
+        self.elbow_right_actor1 = self.actor1.controlJoint(None,
+                                                           "modelRoot",
+                                                           "elbow_right_joint")
 
         # set shoulder to be in normla position
+
         self.shoulder_left_actor1.setHpr(180, 55, 290)
         self.shoulder_right_actor1.setHpr(0, 0, -15)
 
@@ -235,7 +284,7 @@ class BallInMazeDemo:
 
         # Finally, we call start for more initialization
         self.ballRoot.setPos(0, 0, 0)
-        self.start(self.cHandler,  self.ballRoot, self.ball, self.score)
+        self.start(self.cHandler, self.ballRoot, self.ball, self.score)
 
         # Insert doctor message
         self.text_doctor = TextNode('TestConnection')
@@ -299,7 +348,6 @@ class BallInMazeDemo:
         taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall, taskChain='chain2')
         taskMgr.add(self.actorcontrol, "actorcontrol", taskChain='chain3')
 
-        return
 
     def actorcontrol(self, task):
         """
@@ -373,38 +421,47 @@ class BallInMazeDemo:
         :param task: Routine of pandas3d to collect data from sensor
         :return:
         """
-
+        no_connection = []
         # acquire the data from acceloremeter, the most important data is pithc and roll for sensor
         data, addr = self.sock.recvfrom(1024)
-        ## modification during 15/06/2017, try to test without magnometer sensor
-        #date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data)
-        #date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
-        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data.decode('utf-8'))
-        date_val = datetime.datetime.fromtimestamp(float(date_time)/1000).strftime('%Y-%m-%d %H:%M:%S.%f')
-        gyrz = str(gyrz)
-        gyrz = float(gyrz.replace("#", ""))
+        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz = re.split(',', data.decode('utf-8'))
         self.acc = (float(accx), float(accy), float(accz))
         self.mag = (float(magx), float(magy), float(magz))
         self.gyr = (float(gyrx), float(gyry), float(gyrz))
         if self.flagtime == 0:
-            self.acquir_data.update_nomag(self.acc, self.gyr, 0)
+            self.acquir_data.update(self.acc, self.gyr, self.mag, 0)
             self.flagtime = 1
         else:
             self.now_t = date_time
             diff = int(self.now_t) - int(self.last_t)
             diff *= 1000
-            self.acquir_data.update_nomag(self.acc, self.gyr, float(diff))
+            self.acquir_data.update(self.acc, self.gyr, self.mag, float(diff))
         self.last_t = date_time
 
         self.rhead = self.acquir_data.heading
         self.rpitch = self.acquir_data.pitch
         self.rroll = self.acquir_data.roll
 
-        print('all data acquired')
-        print(self.acc)
-        print(self.rhead)
-        print(self.rpitch)
-        print(self.rroll)
+        if self.status_connection is False:
+            """
+            Nesse caso possui internet, mas qual a qualidade
+            """
+        else:
+            """
+            Sem internet, gravar no sqlite 
+            """
+            clean_list = []
+            date_time = datetime.datetime.fromtimestamp(float(date_time) / 1000.0)\
+                .strftime('%Y-%m-%d %H:%M:%S.%f')
+            clean_list.append(date_time)
+            clean_list.append(self.acquir_data.pitch)
+            clean_list.append(self.rmed_pitch)
+            clean_list.append(self.acquir_data.heading)
+            clean_list.append(self.rmed_yam)
+            clean_list.append(self.acquir_data.roll)
+            clean_list.append(self.rmed_roll)
+            self.buff_game.conn_db(self.files_path_game1)
+            self.buff_game.insert_tbl_sep(clean_list)
 
         '''
         Inserir aqui conexão com o mongo e leitura de rede
@@ -412,25 +469,12 @@ class BallInMazeDemo:
         Remover conexão com o postgresql
         '''
 
-        #self.postg.sql_con("127.0.0.1", "postgres", "ra2730ar", "log_iot_acquire", "5432")
-        #self.rdt1, self.rdt2, self.rmed_head, self.rmed_pitch, self.rmed_roll = self.postg.read_sensor_game2()
-        #self.postg.post_close_connection()
-
-        path_now = os.path.dirname(os.getcwd())
-        files_path_game = re.sub("/src", "", path_now)
-
-        buff_game = LocalDb()
-        buff_game.conn_db(files_path_game)
-        data_collect = buff_game.verify_data_calibration()
-        self.rmed_pitch = data_collect[1]
-        self.rmed_roll = data_collect[2]
 
         # here is the moment to analyze the absolute variation between the median and the
         self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)
         self.x_var = abs(self.rmed_roll - self.acquir_data.roll)
 
-        # write on cloud database
-        # all the acc and kinect data
+
         return task.cont
 
     def cleanall(self, task):

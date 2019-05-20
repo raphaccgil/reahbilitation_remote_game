@@ -9,7 +9,8 @@ from datetime import datetime
 import os
 import re
 
-class Test_saveDb:
+
+class TestSaveDb:
 
     def test_create_db(self):
         '''
@@ -116,6 +117,10 @@ class Test_saveDb:
         test_connection.clean_data_calibration()
         values = test_connection.verify_data_calibration()
         assert len(values) == 0
+
+    def test_mongodb_conn(self):
+
+        MongoConn
 
 if __name__ == "__main__":
     Test_saveDb().test_clean_data_calibration()

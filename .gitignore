@@ -9,3 +9,6 @@ __pycache__/
 
 # Remover pacotes IDE
 *.idea/
+
+# Quality code analysis
+pylint-report.txt

@@ -29,9 +29,9 @@ class MongoConn:
             self.cliente = MongoClient(stringconn)
             self.banco = self.cliente[base]
             self.album = self.banco[collection]
-            return self
+            return 0
         except errors.ConnectionFailure:
-            return "error"
+            return 1
 
     def insert_data(self, sample):
         """
@@ -39,12 +39,28 @@ class MongoConn:
         :return: status of insertion
         """
         try:
-            self.album.insert_many(sample)
-            return "ok"
-        except errors.ConnectionFailure:
-            return "error"
+            self.album.insert_one(sample)
+            self.cliente.close()
+            return 0
+        except:
+            self.cliente.close()
+            return 1
+
+    def insert_data_many(self, sample_all):
+        """
+        :param sample: json list with data
+        :return: status of insertion
+        """
+        try:
+            self.album.insert_many(sample_all)
+            self.cliente.close()
+            return 0
+        except:
+            self.cliente.close()
+            return 1
 
     def collect_partial(self):
         """
+
         :return: Return collect data
         """

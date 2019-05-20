@@ -74,6 +74,40 @@ class LocalDb:
         except:
             return 1
 
+    def insert_tbl_sep(self, list_val):
+        """
+        Insert collect data from sensors
+
+        :return: The information that database was inserted
+        """
+        #try:
+        self.cursor.execute(
+            """
+            INSERT INTO DADOS_BUFF 
+                (time_collect,
+                 pitch,
+                 median_pitch,
+                 yam, 
+                 median_yam,
+                 roll,
+                 median_roll)
+              VALUES  (?, ?, ?, ?, ?, ?, ?)
+              """, (list_val[0],
+                    str(list_val[1]),
+                    str(list_val[2]),
+                    str(list_val[3]),
+                    str(list_val[4]),
+                    str(list_val[5]),
+                    str(list_val[6])))
+        self.conn.commit()
+        self.conn.close()
+        return 0
+        #except:
+        #    self.conn.close()
+        #    return 1
+
+
+
 
     def insert_db(self, list_val):
         """
@@ -83,29 +117,29 @@ class LocalDb:
         """
         valid_data = [len(list_val[0]), 0, 0]
         for cont, val in enumerate(list_val[0]):
-            try:
-                self.cursor.execute(
-                    """
-                    INSERT INTO DADOS_BUFF 
-                        (time_collect,
-                         pitch,
-                         median_pitch,
-                         yam, 
-                         median_yam,
-                         roll,
-                         median_roll)
-                      VALUES  (?, ?, ?, ?, ?, ?, ?)
-                      """, (list_val[0][cont],
-                            list_val[1][cont],
-                            list_val[2][cont],
-                            list_val[3][cont],
-                            list_val[4][cont],
-                            list_val[5][cont],
-                            list_val[6][cont]))
-                self.conn.commit()
-                valid_data[1] += 1
-            except:
-                valid_data[2] += 1
+ #           try:
+            self.cursor.execute(
+                """
+                INSERT INTO DADOS_BUFF 
+                    (time_collect,
+                     pitch,
+                     median_pitch,
+                     yam, 
+                     median_yam,
+                     roll,
+                     median_roll)
+                  VALUES  (?, ?, ?, ?, ?, ?, ?)
+                  """, (list_val[0][cont],
+                        str(list_val[1][cont]),
+                        str(list_val[2][cont]),
+                        str(list_val[3][cont]),
+                        str(list_val[4][cont]),
+                        str(list_val[5][cont]),
+                        str(list_val[6][cont])))
+            self.conn.commit()
+            valid_data[1] += 1
+#            except:
+#                valid_data[2] += 1
 
         self.conn.close()
         return valid_data
