@@ -12,3 +12,6 @@ __pycache__/
 
 # Quality code analysis
 pylint-report.txt
+
+# Ignore initial database
+*.db
