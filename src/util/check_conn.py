@@ -21,3 +21,4 @@ class CheckConn:
             return True
         except:
             return False
+

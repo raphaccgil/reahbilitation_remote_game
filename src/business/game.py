@@ -12,7 +12,7 @@ from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
 from direct.interval.FunctionInterval import Func, Wait
 from src.util.fusion import Fusion
-from src.util.local_db import LocalDb
+from src.util.local_db import LocalDb, MongoConn
 from src.util.check_conn import CheckConn
 from panda3d.core import *
 from direct.task.Task import Task
@@ -351,13 +351,35 @@ class BallInMazeDemo:
         taskMgr.remove("rollTask")
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
+        taskMgr.remove("status_doctor")
         taskMgr.setupTaskChain('chain1', numThreads=1, threadPriority=TPUrgent, frameSync=True)
         taskMgr.setupTaskChain('chain2', numThreads=1, threadPriority=TPHigh, frameSync=True)
         taskMgr.setupTaskChain('chain3', numThreads=1, threadPriority=TPHigh, frameSync=True)
+        taskMgr.setupTaskChain('chain4', numThreads=1, threadPriority=TPHigh, frameSync=True)
         taskMgr.add(self.database, "database", taskChain='chain1')
         taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall, taskChain='chain2')
         taskMgr.add(self.actorcontrol, "actorcontrol", taskChain='chain3')
+        taskMgr.add(self.status_doctor, "status_doctor", taskChain='chain4')
 
+    def status_doctor(self, task):
+        """
+        :param task: Loop of new message from doctor
+        :return:
+        """
+
+        if self.status_connection is True:
+            try:
+                test_conn = MongoConn()
+                test_conn.mongodb_conn('reahbilitation_db',
+                                       'doctor_coll',
+                                       'mongodb://localhost:27017/')
+                self.text_doctor.setText("Mensagem Médica: {}".format(str(test_conn.collect_partial_doctor())))
+            except:
+                self.text_doctor.setText("Erro em conectar a base de dadost")
+        else:
+            self.text_doctor.setText("Messagem Médica: Sem conexão com internet")
+
+        return task.cont
 
     def actorcontrol(self, task):
         """
@@ -480,6 +502,7 @@ class BallInMazeDemo:
         taskMgr.remove("rollTask")
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
+        taskMgr.remove("status_doctor")
         self.actor1.cleanup()
         self.score.remove_node()
         self.ball.remove_node()
@@ -584,7 +607,6 @@ class BallInMazeDemo:
                                 parent=base.a2dBottomRight, align=TextNode.ARight,
                                 fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.06,
                                 shadow=(0, 0, 0, 0.5))
-            self.text_doctor.setText("{}".format(str(check)))
             # this is the moment of insertion of images....only for test
             #status_ok = 'problem'
             #self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))

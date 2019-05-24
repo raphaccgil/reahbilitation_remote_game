@@ -2,7 +2,7 @@
 Routine to manipulate from mongoDB
 '''
 
-from pymongo import MongoClient, errors
+from pymongo import MongoClient, errors, DESCENDING
 
 
 class MongoConn:
@@ -59,8 +59,15 @@ class MongoConn:
             self.cliente.close()
             return 1
 
-    def collect_partial(self):
+    def collect_partial_doctor(self):
         """
-
+        Check on mongoDB if has a doctor message
         :return: Return collect data
         """
+        try:
+            latest_doc = self.album.find().sort("datetime", DESCENDING).limit(1)
+            self.cliente.close()
+            return latest_doc[0]['doctor_message']
+        except:
+            self.cliente.close()
+            return 1

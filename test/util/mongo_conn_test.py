@@ -68,5 +68,28 @@ class TestMongoConn:
 
         assert flag == 0
 
+    def collect_partial_doctor_test(self):
+        """
+        Check on mongoDB if has a doctor message
+        :return: Return collect data
+        """
+        test_conn = MongoConn()
+        test_conn.mongodb_conn('reahbilitation_db',
+                               'doctor_coll',
+                               'mongodb://localhost:27017/')
+
+        values = {}
+        values['datetime'] = datetime.now()
+        values['doctor_message'] = 'Nova Mensagem'
+        test_conn.insert_data(values)
+
+        test_conn = MongoConn()
+        test_conn.mongodb_conn('reahbilitation_db',
+                               'doctor_coll',
+                               'mongodb://localhost:27017/')
+
+        flag = test_conn.collect_partial_doctor()
+        assert flag == 'Nova Mensagem'
+
 if __name__ == "__main__":
-    TestMongoConn().insert_data_many_test()
+    TestMongoConn().collect_partial_doctor_test()
