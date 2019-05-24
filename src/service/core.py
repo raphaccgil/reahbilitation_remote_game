@@ -3,7 +3,7 @@
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
-from src.business import calibration, game1
+from src.business import calibration, game
 from src.service import menu_game
 import time
 from src.business.calibration import Calibration
@@ -107,44 +107,61 @@ class Xcore(FSM):
         self.textNodePath.removeNode()
 
     def enterMenu_game(self):
+        """
+        Enter game menu
+        :return:
+        """
         menu = menu_game.MainMenu(Calibration)
         menu.enterMain(Calibration)
-        pass
 
     def exitMenu_game(self):
+        """
+        Exit game
+        :return:
+        """
         print('exit Menu')
-        pass
+
 
     def enterGame1(self):
-        # here is the moment to insert the time
-        game1.BallInMazeDemo(1)
+        """
+        Enter game1
+        :return:
+        """
+        game.BallInMazeDemo(1, "game1", 10101, "Carlos")
 
     def exitGame1(self):
         print('exit Game1')
 
     def enterGame2(self):
+        """
+        Enter game1
+        :return:
+        """
+        game.BallInMazeDemo(1, "game2", 10101, "Carlos")
         print('ttt')
 
     def exitGame2(self):
-        print('ttt2')
+        print('exit Game2')
 
     def enterGame3(self):
-        print('ttt3')
+        """
+        Enter game1
+        :return:
+        """
+        game.BallInMazeDemo(1, "game3", 10101, "Carlos")
 
     def exitGame3(self):
-        print('ttt4')
+        print('exit Game3')
 
     def enterCalibration(self):
         print('lets calibrate')
         calibration.Calibration().enterMain()
 
     def exitCalibration(self):
-        pass
+        print('exit calibration')
 
     def enterResults(self):
-        print('ttt5')
         Results().show()
-
 
     def exitResults(self):
         print ('ttt6')

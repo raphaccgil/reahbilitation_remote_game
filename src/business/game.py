@@ -20,11 +20,11 @@ from src.service import core as cc
 import socket
 from direct.actor.Actor import Actor
 from src.util.dirpath_gen import PathGen
-from src.service.body_support_game import Game1Mov
+from src.business.actor_moviment import *
 import datetime
 import re
 import os
-
+import sys
 
 
 class BallInMazeDemo:
@@ -32,11 +32,20 @@ class BallInMazeDemo:
     Remember to generate an actor for this game
     """
 
-    def __init__(self, time_val):
+    def __init__(self, time_val, exercise_mode, patient_id, patient_name):
         """
-        Initial conditions before start game
+
         :param time_val: period of exercise
+        :param exercise_mode: choosen game
+        :param patient_id: id of patient
+        :param patient_name: name of patient
         """
+
+        # data from patient
+        self.exercise = exercise_mode
+        self.patient_id = patient_id
+        self.patient_name = patient_name
+
         # check if is available internnet during the game
         self.status_connection = CheckConn().internet_on()
 
@@ -173,7 +182,8 @@ class BallInMazeDemo:
         self.time_change = 10
         self.time_exerc_now = datetime.datetime.now()
         self.time_exerc_past = datetime.datetime.now()
-        self.leg_angle = 0
+        self.leg_angle1 = 0
+        self.leg_angle2 = 0
 
         # cont times of repetion
         self.repetion = 0
@@ -356,60 +366,40 @@ class BallInMazeDemo:
         :param task: Task to modify actor
         :return: New status of actor
         """
-        self.time_exerc_past = self.time_exerc_now
-        self.time_exerc_now = datetime.datetime.now()
+        return_values = []
 
-        diff_time = self.time_exerc_now - self.time_exerc_past
-        diff_time = float(diff_time.microseconds)/1000000
+        if self.exercise == 'game1':
+            return_values = ActorMov1().game1(self.time_exerc_past,
+                                              self.legs_change,
+                                              self.leg_angle1,
+                                              self.leg_angle2,
+                                              self.text_advice,
+                                              self.time_change)
+        elif self.exercise == 'game2':
+            return_values = ActorMov1().game1(self.time_exerc_past,
+                                              self.legs_change,
+                                              self.leg_angle1,
+                                              self.leg_angle2,
+                                              self.text_advice,
+                                              self.time_change)
+        elif self.exercise == 'game3':
+            return_values = ActorMov1().game1(self.time_exerc_past,
+                                              self.legs_change,
+                                              self.leg_angle1,
+                                              self.leg_angle2,
+                                              self.text_advice,
+                                              self.time_change)
+        else:
+            sys.exit(1)
 
-        if self.legs_change == 0:
-            values = Game1Mov().\
-                legs_movimentation_pos0_3(self.legs_change,
-                                          self.leg_angle)
-            self.legs_change = values[0]
-            self.leg_angle = values[1]
-            self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
-            self.text_advice.setText("Levante a perna esquerda...")
-
-        elif self.legs_change == 1 or \
-                self.legs_change == 4:
-            values = Game1Mov(). \
-                legs_wait_pos2_4(self.legs_change,
-                                 self.time_change,
-                                 diff_time)
-
-            self.time_change = values[0]
-            self.legs_change = values[1]
-            self.text_advice.setText("Segure a perna levantada...")
-
-
-        elif self.legs_change == 2:
-            values = Game1Mov().\
-                legs_movimentation_pos0_3(self.legs_change,
-                                          self.leg_angle)
-            self.legs_change = values[0]
-            self.leg_angle = values[1]
-            self.knee_left_actor1.setHpr(self.leg_angle, 0, 0)
-            self.text_advice.setText("Troque a perna...")
-
-
-        elif self.legs_change == 3:
-            values = Game1Mov().\
-                legs_movimentation_pos0_3(self.legs_change,
-                                          self.leg_angle)
-            self.legs_change = values[0]
-            self.leg_angle = values[1]
-            self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
-            self.text_advice.setText("Levante a perna direita...")
-
-        elif self.legs_change == 5:
-            values = Game1Mov(). \
-                legs_movimentation_pos0_3(self.legs_change,
-                                          self.leg_angle)
-            self.legs_change = values[0]
-            self.leg_angle = values[1]
-            self.knee_right_actor1.setHpr(self.leg_angle, 0, 0)
-            self.text_advice.setText("Troque a perna...")
+        self.time_exerc_past = return_values[0]
+        self.legs_change = return_values[1]
+        self.leg_angle1 = return_values[2]
+        self.leg_angle2 = return_values[3]
+        self.knee_left_actor1.setHpr(self.leg_angle1, 0, 0)
+        self.knee_right_actor1.setHpr(self.leg_angle2, 0, 0)
+        self.text_advice = return_values[4]
+        self.time_change = return_values[5]
 
         return task.cont
 
