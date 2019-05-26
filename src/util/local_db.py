@@ -42,6 +42,7 @@ class LocalDb:
             self.cursor.execute("""
                            CREATE TABLE IF NOT EXISTS DADOS_BUFF(
                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                           time_collect_int int,
                            time_collect timestamp,
                            pitch DOUBLE,
                            median_pitch DOUBLE,
@@ -80,31 +81,34 @@ class LocalDb:
 
         :return: The information that database was inserted
         """
-        #try:
-        self.cursor.execute(
-            """
-            INSERT INTO DADOS_BUFF 
-                (time_collect,
-                 pitch,
-                 median_pitch,
-                 yam, 
-                 median_yam,
-                 roll,
-                 median_roll)
-              VALUES  (?, ?, ?, ?, ?, ?, ?)
-              """, (list_val[0],
-                    str(list_val[1]),
-                    str(list_val[2]),
-                    str(list_val[3]),
-                    str(list_val[4]),
-                    str(list_val[5]),
-                    str(list_val[6])))
-        self.conn.commit()
-        self.conn.close()
-        return 0
-        #except:
-        #    self.conn.close()
-        #    return 1
+        try:
+            self.cursor.execute(
+                """
+                INSERT INTO DADOS_BUFF 
+                    (
+                     time_collect_int,
+                     time_collect,
+                     pitch,
+                     median_pitch,
+                     yam, 
+                     median_yam,
+                     roll,
+                     median_roll)
+                  VALUES  (?, ?, ?, ?, ?, ?, ?, ?)
+                  """, (int(list_val[0]),
+                        list_val[1],
+                        str(list_val[2]),
+                        str(list_val[3]),
+                        str(list_val[4]),
+                        str(list_val[5]),
+                        str(list_val[6]),
+                        str(list_val[7])))
+            self.conn.commit()
+            self.conn.close()
+            return 0
+        except:
+            self.conn.close()
+            return 1
 
 
 

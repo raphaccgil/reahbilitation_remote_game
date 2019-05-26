@@ -67,9 +67,13 @@ class BallInMazeDemo:
         self.buff_game = LocalDb()
         self.buff_game.conn_db(self.files_path_game1)
         self.data_collect = self.buff_game.verify_data_calibration()
-        self.rmed_yam = self.data_collect[0]
-        self.rmed_pitch = self.data_collect[1]
-        self.rmed_roll = self.data_collect[2]
+        print(self.data_collect)
+        if len(self.data_collect) == 0:
+            sys.exit(1)
+        else:
+            self.rmed_yam = self.data_collect[0]
+            self.rmed_pitch = self.data_collect[1]
+            self.rmed_roll = self.data_collect[2]
 
         # variables for beginning reading
         self.x_var = 0
@@ -463,9 +467,10 @@ class BallInMazeDemo:
             Sem internet, gravar no sqlite 
             """
             clean_list = []
-            date_time = datetime.datetime.fromtimestamp(float(date_time) / 1000.0)\
+            date_time_prep = datetime.datetime.fromtimestamp(float(date_time) / 1000.0)\
                 .strftime('%Y-%m-%d %H:%M:%S.%f')
             clean_list.append(date_time)
+            clean_list.append(date_time_prep)
             clean_list.append(self.acquir_data.pitch)
             clean_list.append(self.rmed_pitch)
             clean_list.append(self.acquir_data.heading)

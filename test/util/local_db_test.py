@@ -13,10 +13,10 @@ import re
 class TestSaveDb:
 
     def test_create_db(self):
-        '''
+        """
 
         :return: Verify if return a database after creation
-        '''
+        """
 
         path_now = os.path.dirname(os.getcwd())
         files_path_test = re.sub("/test", "", path_now)
@@ -31,10 +31,10 @@ class TestSaveDb:
 
 
     def test_create_calibration(self):
-        '''
+        """
 
         :return: Verify if return a table created
-        '''
+        """
 
         path_now = os.path.dirname(os.getcwd())
         files_path_test = re.sub("/test", "", path_now)

@@ -33,6 +33,25 @@ class MongoConn:
         except errors.ConnectionFailure:
             return 1
 
+    def mongo_create_index_sensor(self):
+        """
+        Create index for sensor
+        :return:
+        """
+
+        index_name1 = 'datetime_int'
+        index_name2 = 'id_patient'
+        try:
+            if index_name1 not in self.album.index_information():
+                self.album.create_index(index_name1, unique=True)
+            if index_name2 not in self.album.index_information():
+                self.album.create_index(index_name2, unique=True)
+            self.cliente.close()
+            return 0
+        except:
+            self.cliente.close()
+            return 1
+
     def insert_data(self, sample):
         """
         :param sample: json list with data
