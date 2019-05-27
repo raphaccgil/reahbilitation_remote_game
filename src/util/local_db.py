@@ -79,6 +79,26 @@ class LocalDb:
         except:
             return 1
 
+    def create_tbl_conn_speed(self):
+
+        """
+        Buff connection speed
+        :return: Create database if not exists
+        """
+        try:
+            self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS SPEEDTEST(
+                           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                           datetime timestamp,
+                           down_kbps DOUBLE,
+                           upl_kbps DOUBLE,
+                           ping DOUBLE) 
+                       """)
+            self.conn.close()
+            return 0
+        except:
+            return 1
+
     def insert_tbl_sep(self, list_val):
         """
         Insert collect data from sensors

@@ -11,13 +11,13 @@ R0.2 - Adaptation for:
 * Universal module (could be used in Any S))
 """
 
+import os
+from panda3d.core import *
 from direct.showbase.ShowBase import ShowBase
 from src.service.menu_game import MainMenu
 from src.service.core import Xcore
-from panda3d.core import *
 from src.business.calibration import Calibration
 from src.util.dirpath_gen import PathGenMain
-import os
 
 
 class Azure(ShowBase):
@@ -43,7 +43,7 @@ class Azure(ShowBase):
 
         # Turn off Panda3D's standard camera handling.
         self.disableMouse()
-        #self.setBackgroundColor(0.2, 0.2, 0.2)
+        # self.setBackgroundColor(0.2, 0.2, 0.2)
         self.setBackgroundColor(0, 0, 0)
 
         # Start our Core Finite State Machine

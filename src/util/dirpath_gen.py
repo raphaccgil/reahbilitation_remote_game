@@ -59,7 +59,6 @@ class PathGenCalibration:
         """
         self.music = "/files/sounds/325611__shadydave__my-love-piano-loop.mp3"
 
-
     def path_gen_calibration(self, actual_path):
         """
         :param actual_path: path where the file is running
@@ -96,6 +95,7 @@ class PathGenMenu:
         list_paths.append(os.path.abspath(new_path1))
 
         return list_paths
+
 
 class PathGenMain:
     """

@@ -2,9 +2,7 @@
 Test Routine to collect the information and save on sqllite
 '''
 
-from src.util.local_db import CheckDb, LocalDb
-import pytest
-import sqlite3
+from src.util.local_db import LocalDb
 from datetime import datetime
 import os
 import re
@@ -46,14 +44,6 @@ class TestSaveDb:
         print(flag)
 
         assert flag == 0
-
-    def test_insert_db1(self):
-        '''
-
-        :return: Verify if data was sent on local database
-        '''
-
-        LocalDb().insert_db()
 
     def test_insert_db2(self):
         '''
@@ -118,9 +108,22 @@ class TestSaveDb:
         values = test_connection.verify_data_calibration()
         assert len(values) == 0
 
-    def test_mongodb_conn(self):
+    def test_create_tbl_conn_speed(self):
 
-        MongoConn
+        """
+        Buff connection speed
+        :return: Create database if not exists
+        """
+        path_now = os.path.dirname(os.getcwd())
+        files_path_test = re.sub("/test", "", path_now)
+
+        test_connection = LocalDb()
+        test_connection.conn_db(files_path_test)
+
+        flag = test_connection.create_tbl_conn_speed()
+        print(flag)
+
+        assert flag == 0
 
 if __name__ == "__main__":
-    Test_saveDb().test_clean_data_calibration()
+    TestSaveDb().create_tbl_conn_speed_test()

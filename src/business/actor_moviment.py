@@ -15,8 +15,8 @@ class ActorMov1:
     According selected game, choose move
     """
     def __int__(self):
-        self.time_exerc_past = ''
-        self.time_exerc_now = ''
+        self.time_exerc_past = ""
+        self.time_exerc_now = ""
 
     def game1(self, past_time, legs_change, leg_angle1, leg_angle2,
               text_advice, time_change):
@@ -50,14 +50,12 @@ class ActorMov1:
             legs_change = values[1]
             text_advice.setText("Segure a perna levantada...")
 
-
         elif legs_change == 2:
             values = Game1Mov(). \
                 legs_movimentation_pos0_3(legs_change, leg_angle1)
             legs_change = values[0]
             leg_angle1 = values[1]
             text_advice.setText("Troque a perna...")
-
 
         elif legs_change == 3:
             values = Game1Mov(). \

@@ -37,12 +37,20 @@ class Calibration:
         self.instructions = ""
         self.game_version = ""
 
+        # create UDP connection for cellphone
+        self.UDP_IP = ""
+        self.UDP_PORT = 2055
+        self.sock = ""
+        self.acquir_data = ""
+        self.mainLoop = ""
+
         self.acq_list = [[], [], []]
 
     def ret_variables(self):
-        self.calhead = self.calhead
-        self.calpitch = self.calpitch
-        self.calroll = self.calroll
+        """
+        Return variables called
+        :return:
+        """
         return self.calhead, self.calpitch, self.calroll
 
     def enterMain(self):
@@ -61,8 +69,8 @@ class Calibration:
         self.button2 = DirectButton(text="Stop acquisition", command=self.cal_rot_stop, scale=0.1, pos=(-1, 0.0, -0.2))
         self.button3 = DirectButton(text="Return", command=self.nostop, scale=0.1, pos=(-1, 0.0, -0.4))
         self.title = OnscreenText(text="Reahbilitation Game: Sensor acquisition", parent=base.a2dBottomRight,
-                                 align=TextNode.ARight,fg=(1, 1, 1, 1), pos=(-0.1, 0.1),
-                                 scale=.06,shadow=(0, 0, 0, 0.5))
+                                  align=TextNode.ARight,fg=(1, 1, 1, 1), pos=(-0.1, 0.1),
+                                  scale=.06,shadow=(0, 0, 0, 0.5))
         self.instructions = \
                OnscreenText(text="Game for reahbilitation",
                             parent=base.a2dTopLeft, align=TextNode.ALeft,
@@ -78,8 +86,7 @@ class Calibration:
         # start acquisition from cell phone
         # the cell phone is going to have a fixed Ip sending
         taskMgr.remove("accel_acquire")
-        self.UDP_IP = ""
-        self.UDP_PORT = 2055
+
         self.sock = socket.socket(socket.AF_INET,
                      socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
@@ -135,7 +142,6 @@ class Calibration:
         self.notactivate = 1
 
         cc.Xcore().request("Menu_game")
-
 
     def roll_acquire_task(self, task):
         self.now = datetime.datetime.now()
@@ -257,20 +263,20 @@ class Calibration:
                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
                             shadow=(0, 0, 0, 0.5))
             self.calheadtxt=\
-            OnscreenText(text="Mediana Head: {:7.3f}".format(self.calhead),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.3), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Head: {:7.3f}".format(self.calhead),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.3), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
             self.calpitchtxt=\
-            OnscreenText(text="Mediana Pitch: {:7.3f}".format(self.calpitch),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.5), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Pitch: {:7.3f}".format(self.calpitch),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.5), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
             self.calrolltxt=\
-            OnscreenText(text="Mediana Roll: {:7.3f}".format(self.calroll),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.7), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Roll: {:7.3f}".format(self.calroll),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.7), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
         elif self.buffer > 10 and self.onlyonetime == 1 and self.notactivate == 0:
             self.calhead = self.calhead
             self.calpitch = self.calpitch
@@ -280,31 +286,31 @@ class Calibration:
             else:
                 pass
             self.cal=\
-            OnscreenText(text="Calibracao finalizada",
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Calibracao finalizada",
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
             self.calheadtxt=\
-            OnscreenText(text="Mediana Head: {:7.3f}".format(self.calhead),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.3), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Head: {:7.3f}".format(self.calhead),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.3), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
             self.calpitchtxt=\
-            OnscreenText(text="Mediana Pitch: {:7.3f}".format(self.calpitch),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.5), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Pitch: {:7.3f}".format(self.calpitch),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.5), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
             self.calrolltxt=\
-            OnscreenText(text="Mediana Roll: {:7.3f}".format(self.calroll),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 0.7), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Mediana Roll: {:7.3f}".format(self.calroll),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 0.7), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
         elif self.notactivate == 0:
             self.waittxt=\
-            OnscreenText(text="Espere para calibrar",
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
+                OnscreenText(text="Espere para calibrar",
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
 
         self.last = datetime.datetime.now()
         self.flagtime = 1

@@ -398,7 +398,6 @@ class BallInMazeDemo:
         :param task: Task to modify actor
         :return: New status of actor
         """
-        return_values = []
 
         if self.exercise == 'game1':
             return_values = ActorMov1().game1(self.time_exerc_past,

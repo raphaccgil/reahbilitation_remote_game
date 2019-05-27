@@ -17,13 +17,8 @@ class CheckConnQuality:
         """
         :return: Values of ping, download and upload
         """
-        alfa = datetime.now()
         s = speedtest.Speedtest()
-
         down = round(s.download()/1000.0, 2)
         upl = round(s.upload()/1000.0, 2)
         ping = s.results.ping
-        beta = datetime.now()
-        diff = (beta - alfa).total_seconds()
-        print(ping)
-        print('Download {}Kbps Upload {}Kbps analisado em {}s'.format(down, upl, diff))
+        return [ping, down, upl]

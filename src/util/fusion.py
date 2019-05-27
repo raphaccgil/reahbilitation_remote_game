@@ -38,10 +38,11 @@ class Fusion(object):
     The update method must be called peiodically. The calculations take 1.6mS on the Pyboard.
     """
     declination = 0                         # Optional offset for true north. A +ve value adds to heading
+
     def __init__(self):
         self.magbias = (0, 0, 0)            # local magnetic bias factors: set from calibration
         self.start_time = datetime.datetime(1970, 1, 1, 0, 0 , 0) # register the begin time
-        #self.start_time = None              # Time between updates
+        # self.start_time = None              # Time between updates
         self.q = [1.0, 0.0, 0.0, 0.0]       # vector to hold quaternion
         GyroMeasError = radians(40)         # Original code indicates this leads to a 2 sec response time
         self.beta = sqrt(3.0 / 4.0) * GyroMeasError  # compute beta (see README)
@@ -77,7 +78,7 @@ class Fusion(object):
         gx, gy, gz = (radians(x) for x in gyro) # Units deg/s
         if self.start_time == datetime.datetime(1970, 1, 1,0,0,0):
             self.start_time = time_loop
-            #self.start_time = time.ticks_us()  # First run
+            # self.start_time = time.ticks_us()  # First run
         q1, q2, q3, q4 = (self.q[x] for x in range(4))   # short name local variable for readability
         # Auxiliary variables to avoid repeated arithmetic
         _2q1 = 2 * q1
@@ -96,7 +97,7 @@ class Fusion(object):
 
         # Normalise accelerometer measurement
         norm = sqrt(ax * ax + ay * ay + az * az)
-        if (norm == 0):
+        if norm == 0:
             return # handle NaN
         norm = 1 / norm        # use reciprocal for division
         ax *= norm
@@ -121,11 +122,11 @@ class Fusion(object):
         qDot4 = 0.5 * (q1 * gz + q2 * gy - q3 * gx) - self.beta * s4
 
         # Integrate to yield quaternion
-        #deltat = elapsed_micros(self.start_time) / 1000000
-        #deltat = self.start_time
+        # deltat = elapsed_micros(self.start_time) / 1000000
+        # deltat = self.start_time
         deltat = time_loop / 1000000
-        #self.start_time = datetime.datetime.now()
-        #self.start_time = time.ticks_us()
+        # self.start_time = datetime.datetime.now()
+        # self.start_time = time.ticks_us()
 
         q1 += qDot1 * deltat
         q2 += qDot2 * deltat
@@ -139,10 +140,9 @@ class Fusion(object):
         ax, ay, az = accel                  # Units irrelevant (normalised)
         gx, gy, gz = (radians(x) for x in gyro)  # Units deg/s
         print ('new elapsed time in us: {}'.format(str(time_loop)))
-        #print time_loop
         if self.start_time == datetime.datetime(1970, 1, 1, 0, 0, 0):
             self.start_time == datetime.datetime.now()
-            #self.start_time = time.ticks_us()  # First run
+            # self.start_time = time.ticks_us()  # First run
         q1, q2, q3, q4 = (self.q[x] for x in range(4))   # short name local variable for readability
         # Auxiliary variables to avoid repeated arithmetic
         _2q1 = 2 * q1
@@ -165,7 +165,7 @@ class Fusion(object):
         # Normalise accelerometer measurement
         norm = sqrt(ax * ax + ay * ay + az * az)
         if (norm == 0):
-            return # handle NaN
+            return  # handle NaN
         norm = 1 / norm                     # use reciprocal for division
         ax *= norm
         ay *= norm
@@ -226,12 +226,10 @@ class Fusion(object):
         qDot4 = 0.5 * (q1 * gz + q2 * gy - q3 * gx) - self.beta * s4
 
         # Integrate to yield quaternion
-        #deltat = time_loop / 1000000
 
-        #deltat = time_loop / 1000000
         deltat = elapsed_micros(self.start_time) / 1000000
         deltat = time_loop / 1000000
-        #self.start_time = time.ticks_us()
+        # self.start_time = time.ticks_us()
         self.start_time = datetime.datetime.now()
 
         q1 += qDot1 * deltat

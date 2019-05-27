@@ -7,7 +7,6 @@ class Results:
     This is a simple screen to show results and return to main page
     """
 
-
     def __init__(self):
         """
         Collect initial values
