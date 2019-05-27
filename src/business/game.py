@@ -14,6 +14,7 @@ from direct.interval.FunctionInterval import Func, Wait
 from src.util.fusion import Fusion
 from src.util.local_db import LocalDb, MongoConn
 from src.util.check_conn import CheckConn
+from src.util.check_conn_quality import CheckConnQuality
 from panda3d.core import *
 from direct.task.Task import Task
 from src.service import core as cc
@@ -85,7 +86,12 @@ class BallInMazeDemo:
         self.sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
 
+        # check if its first time to collect data from fusion
         self.flagtime = 0
+
+        # time elapsed for each cycle of logic
+        self.time_cycle = 0
+
         # definition of time during exercise
         self.minutes_requer = time_val
         # Some constants for the program
@@ -429,7 +435,6 @@ class BallInMazeDemo:
 
         return task.cont
 
-
     def database(self, task):
         """
         Routine to save on remote database according with available communication
@@ -437,7 +442,6 @@ class BallInMazeDemo:
         :param task: Routine of pandas3d to collect data from sensor
         :return:
         """
-        no_connection = []
         # acquire the data from acceloremeter, the most important data is pithc and roll for sensor
         data, addr = self.sock.recvfrom(1024)
         date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz = re.split(',', data.decode('utf-8'))
@@ -459,9 +463,11 @@ class BallInMazeDemo:
         self.rroll = self.acquir_data.roll
 
         if self.status_connection is False:
+
             """
             Nesse caso possui internet, mas qual a qualidade
             """
+            CheckConnQuality().internet_quality()
         else:
             """
             Sem internet, gravar no sqlite 
@@ -477,6 +483,10 @@ class BallInMazeDemo:
             clean_list.append(self.rmed_yam)
             clean_list.append(self.acquir_data.roll)
             clean_list.append(self.rmed_roll)
+            clean_list.append(self.exercise)
+            clean_list.append(self.patient_id)
+            clean_list.append(self.patient_name)
+
             self.buff_game.conn_db(self.files_path_game1)
             self.buff_game.insert_tbl_sep(clean_list)
 
@@ -486,11 +496,9 @@ class BallInMazeDemo:
         Remover conexão com o postgresql
         '''
 
-
         # here is the moment to analyze the absolute variation between the median and the
         self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)
         self.x_var = abs(self.rmed_roll - self.acquir_data.roll)
-
 
         return task.cont
 

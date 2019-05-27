@@ -49,7 +49,11 @@ class LocalDb:
                            yam DOUBLE,
                            median_yam DOUBLE,
                            roll DOUBLE,
-                           median_roll DOUBLE) 
+                           median_roll DOUBLE,
+                           game STRING,
+                           patient_id INT,
+                           patient_name STRING
+                           ) 
                        """)
             self.conn.close()
             return 1
@@ -93,8 +97,12 @@ class LocalDb:
                      yam, 
                      median_yam,
                      roll,
-                     median_roll)
-                  VALUES  (?, ?, ?, ?, ?, ?, ?, ?)
+                     median_roll,
+                     game,
+                     patient_id,
+                     patient_name 
+                     )
+                  VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                   """, (int(list_val[0]),
                         list_val[1],
                         str(list_val[2]),
@@ -102,16 +110,17 @@ class LocalDb:
                         str(list_val[4]),
                         str(list_val[5]),
                         str(list_val[6]),
-                        str(list_val[7])))
+                        str(list_val[7]),
+                        str(list_val[8]),
+                        int(list_val[9]),
+                        str(list_val[10]),
+                        ))
             self.conn.commit()
             self.conn.close()
             return 0
         except:
             self.conn.close()
             return 1
-
-
-
 
     def insert_db(self, list_val):
         """
@@ -121,29 +130,38 @@ class LocalDb:
         """
         valid_data = [len(list_val[0]), 0, 0]
         for cont, val in enumerate(list_val[0]):
- #           try:
-            self.cursor.execute(
+            try:
+                self.cursor.execute(
                 """
                 INSERT INTO DADOS_BUFF 
-                    (time_collect,
+                    (time_collect_int
+                     time_collect,
                      pitch,
                      median_pitch,
                      yam, 
                      median_yam,
                      roll,
-                     median_roll)
-                  VALUES  (?, ?, ?, ?, ?, ?, ?)
-                  """, (list_val[0][cont],
-                        str(list_val[1][cont]),
+                     median_roll
+                     game,
+                     patient_id,
+                     patient_name 
+                     )
+                  VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                  """, (int(list_val[0][cont]),
+                        list_val[1][cont],
                         str(list_val[2][cont]),
                         str(list_val[3][cont]),
                         str(list_val[4][cont]),
                         str(list_val[5][cont]),
-                        str(list_val[6][cont])))
-            self.conn.commit()
-            valid_data[1] += 1
-#            except:
-#                valid_data[2] += 1
+                        str(list_val[6][cont]),
+                        str(list_val[7][cont]),
+                        str(list_val[8][cont]),
+                        int(list_val[9][cont]),
+                        str(list_val[10][cont])))
+                self.conn.commit()
+                valid_data[1] += 1
+            except:
+                valid_data[2] += 1
 
         self.conn.close()
         return valid_data
