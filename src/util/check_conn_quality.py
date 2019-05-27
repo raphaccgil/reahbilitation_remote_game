@@ -20,5 +20,5 @@ class CheckConnQuality:
         s = speedtest.Speedtest()
         down = round(s.download()/1000.0, 2)
         upl = round(s.upload()/1000.0, 2)
-        ping = s.results.ping
+        ping = round(s.results.ping, 2)
         return [ping, down, upl]

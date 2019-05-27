@@ -142,6 +142,34 @@ class LocalDb:
             self.conn.close()
             return 1
 
+    def insert_tbl_conn_speed(self, list_val):
+        """
+        Insert data from conn speed
+
+        :return: The information that database was inserted
+        """
+        try:
+            self.cursor.execute(
+                """
+                INSERT INTO SPEEDTEST 
+                    (
+                     datetime,
+                     down_kbps,
+                     upl_kbps,
+                     ping
+                     )
+                  VALUES  (?, ?, ?, ?)
+                  """, (list_val[0],
+                list_val[1],
+                list_val[2],
+                list_val[3]))
+            self.conn.commit()
+            self.conn.close()
+            return 0
+        except:
+            self.conn.close()
+            return 1
+
     def insert_db(self, list_val):
         """
         Insert collect data from sensors

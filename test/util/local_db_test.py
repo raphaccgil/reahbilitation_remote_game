@@ -125,5 +125,21 @@ class TestSaveDb:
 
         assert flag == 0
 
+    def test_insert_tbl_conn_speed(self):
+        """
+
+        :return:
+        """
+        path_now = os.path.dirname(os.getcwd())
+        files_path_test = re.sub("/test", "", path_now)
+
+        test_connection = LocalDb()
+        test_connection.conn_db(files_path_test)
+
+        val = [datetime.now(), 10.0, 10.0, 25]
+
+        flag = test_connection.insert_tbl_conn_speed(val)
+        assert flag == 0
+
 if __name__ == "__main__":
-    TestSaveDb().create_tbl_conn_speed_test()
+    TestSaveDb().test_insert_tbl_conn_speed()
