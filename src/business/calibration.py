@@ -91,11 +91,13 @@ class Calibration:
                      socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
         self.acquir_data = Fusion()
-        self.mainLoop = taskMgr.add(self.roll_acquire_task, "accel_acquire", uponDeath=self.cleanall)
+        taskMgr.add(self.roll_acquire_task, "accel_acquire", uponDeath=self.cleanall)
+        taskMgr.add(self.speed_test_task, "speed_test")
 
 
     def cleanall(self,task):
-        print("end of task")
+        taskMgr.remove("accel_acquire")
+        taskMgr.remove("speed_test")
         self.sound_back.stop()
         self.texthead.destroy()
         self.textpitch.destroy()
@@ -104,21 +106,18 @@ class Calibration:
         self.button2.destroy()
         self.button3.destroy()
         self.sock.close()
-        self.textframe2.destroy()
         self.instructions.destroy()
         self.game_version.destroy()
         self.title.destroy()
         cc.Xcore().request("Menu_game")
-        return
 
     def cal_rot_stop(self):
         taskMgr.remove("accel_acquire")
+        taskMgr.remove("speed_test")
         if hasattr(self, 'texthead'):
             self.texthead.destroy()
             self.textpitch.destroy()
             self.textroll.destroy()
-            self.textframe.destroy()
-            self.textframe2.destroy()
         if hasattr(self, 'calheadtxt'):
             self.cal.destroy()
             self.calheadtxt.destroy()
@@ -138,33 +137,18 @@ class Calibration:
         self.button.destroy()
         self.button2.destroy()
         self.button3.destroy()
-        self.textframe2.destroy()
+        self.cal.destroy()
         self.notactivate = 1
 
         cc.Xcore().request("Menu_game")
 
+    def speed_test_task(self, task):
+        print('Rodando')
+
+        return Task.cont
+
     def roll_acquire_task(self, task):
         self.now = datetime.datetime.now()
-        if self.checktime == 0 and self.notactivate == 0:
-            self.textframe2 = \
-               OnscreenText(text="Frame2: {:7.3f}".format(0),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.1, 1.3), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
-            self.checktime = 1
-            alfa = 0
-        elif self.notactivate == 0:
-            print('all times acquired')
-            print(self.now)
-            print(self.last)
-            self.textframe2.destroy()
-            alfa = self.now - self.last
-            alfa = alfa.microseconds
-            self.textframe2 = \
-               OnscreenText(text="Frame2: {:7.3f}".format(alfa),
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.1, 1.3), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
         dt = globalClock.getDt()
         self.buffer += dt
         data, addr = self.sock.recvfrom(1024)
@@ -189,15 +173,7 @@ class Calibration:
             self.texthead.destroy()
             self.textpitch.destroy()
             self.textroll.destroy()
-            self.textframe.destroy()
-        else:
-            pass
-        if hasattr(self, 'waittxt'):
-            self.waittxt.destroy()
-        else:
-            pass
         if hasattr(self, 'calheadtxt'):
-            self.cal.destroy()
             self.calheadtxt.destroy()
             self.calpitchtxt.destroy()
             self.calrolltxt.destroy()
@@ -207,6 +183,22 @@ class Calibration:
             # frame - this technique shows up the frames per second
         self.dt = globalClock.getDt()
         # start acqusition after stabilization
+
+        if hasattr(self, 'cal'):
+            self.cal.destroy()
+        if self.buffer < 20:
+            reg = str(round(self.buffer*100/20))
+            self.cal = \
+                OnscreenText(text="Esperando para calibrar {}%".format(reg),
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
+        else:
+            self.cal = \
+                OnscreenText(text="Calibracao finalizada",
+                             parent=base.a2dBottomRight, align=TextNode.ARight,
+                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
+                             shadow=(0, 0, 0, 0.5))
         if self.buffer > 10:
             self.acq_list[0].append(self.acquir_data.heading)
             self.acq_list[1].append(self.acquir_data.pitch)
@@ -214,12 +206,6 @@ class Calibration:
         else:
             pass
         if self.notactivate == 0:
-            self.textframe = \
-                   OnscreenText(text="Frame: {:7.3f}".format(self.dt),
-                                parent=base.a2dBottomRight, align=TextNode.ARight,
-                                fg=(1, 1, 1, 1), pos=(-0.1, 0.9), scale=.08,
-                                shadow=(0, 0, 0, 0.5))
-
             self.texthead = \
                    OnscreenText(text="Heading: {:7.3f}".format(self.acquir_data.heading),
                                 parent=base.a2dBottomRight, align=TextNode.ARight,
@@ -255,13 +241,7 @@ class Calibration:
             buff_median.insert_tbl_calibration(values_median)
 
             self.caldone = 1
-            self.waittxt.destroy()
             self.onlyonetime = 1
-            self.cal=\
-            OnscreenText(text="Calibracao finalizada",
-                            parent=base.a2dBottomRight, align=TextNode.ARight,
-                            fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
-                            shadow=(0, 0, 0, 0.5))
             self.calheadtxt=\
                 OnscreenText(text="Mediana Head: {:7.3f}".format(self.calhead),
                              parent=base.a2dBottomRight, align=TextNode.ARight,
@@ -281,8 +261,8 @@ class Calibration:
             self.calhead = self.calhead
             self.calpitch = self.calpitch
             self.calroll = self.calroll
-            if hasattr(self, 'waittxt'):
-                self.waittxt.destroy()
+            if hasattr(self, 'cal'):
+                self.cal.destroy()
             else:
                 pass
             self.cal=\
@@ -305,13 +285,6 @@ class Calibration:
                              parent=base.a2dBottomRight, align=TextNode.ARight,
                              fg=(1, 1, 1, 1), pos=(-0.7, 0.7), scale=.08,
                              shadow=(0, 0, 0, 0.5))
-        elif self.notactivate == 0:
-            self.waittxt=\
-                OnscreenText(text="Espere para calibrar",
-                             parent=base.a2dBottomRight, align=TextNode.ARight,
-                             fg=(1, 1, 1, 1), pos=(-0.7, 1.1), scale=.08,
-                             shadow=(0, 0, 0, 0.5))
-
         self.last = datetime.datetime.now()
         self.flagtime = 1
         return Task.cont

@@ -6,26 +6,25 @@
 
  This is the first game to adapt the reahbilitation
 """
-
-from direct.gui.OnscreenText import OnscreenText
-from direct.interval.MetaInterval import Sequence, Parallel
-from direct.interval.LerpInterval import LerpFunc
-from direct.interval.FunctionInterval import Func, Wait
-from src.util.fusion import Fusion
-from src.util.local_db import LocalDb, MongoConn
-from src.util.check_conn import CheckConn
-from src.util.check_conn_quality import CheckConnQuality
-from panda3d.core import *
-from direct.task.Task import Task
-from src.service import core as cc
-import socket
-from direct.actor.Actor import Actor
-from src.util.dirpath_gen import PathGen
-from src.business.actor_moviment import *
 import datetime
 import re
 import os
 import sys
+import socket
+from direct.gui.OnscreenText import OnscreenText
+from direct.interval.MetaInterval import Sequence, Parallel
+from direct.interval.LerpInterval import LerpFunc
+from direct.interval.FunctionInterval import Func, Wait
+from direct.task.Task import Task
+from direct.actor.Actor import Actor
+from panda3d.core import *
+from src.util.dirpath_gen import PathGen
+from src.business.actor_moviment import *
+from src.service import core as cc
+from src.util.fusion import Fusion
+from src.util.local_db import LocalDb, MongoConn
+from src.util.check_conn import CheckConn
+from src.util.check_conn_quality import CheckConnQuality
 
 
 class BallInMazeDemo:
@@ -383,7 +382,8 @@ class BallInMazeDemo:
                 test_conn.mongodb_conn('reahbilitation_db',
                                        'doctor_coll',
                                        'mongodb://localhost:27017/')
-                self.text_doctor.setText("Mensagem Médica: {}".format(str(test_conn.collect_partial_doctor())))
+                self.text_doctor.setText("Mensagem Médica: {}".
+                                         format(str(test_conn.collect_partial_doctor())))
             except:
                 self.text_doctor.setText("Erro em conectar a base de dadost")
         else:
@@ -596,7 +596,7 @@ class BallInMazeDemo:
 
         self.cTrav.traverse(render)
         if task.time < self.time_required:
-            #base.graphicsEngine.renderFrame()
+            # base.graphicsEngine.renderFrame()
             if hasattr(self, 'comments'):
                 self.comments.destroy()
                 self.comments2.destroy()
@@ -620,8 +620,8 @@ class BallInMazeDemo:
                                 fg=(1, 1, 1, 1), pos=(-0.1, 0.1), scale=.06,
                                 shadow=(0, 0, 0, 0.5))
             # this is the moment of insertion of images....only for test
-            #status_ok = 'problem'
-            #self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
+            # status_ok = 'problem'
+            # self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame
             print('delay value: {}'.format(str(dt)))
@@ -679,11 +679,14 @@ class BallInMazeDemo:
             # However if the exercise is not done in a very good way, shows up a sad face and red color in the score
             # variable play_once is only to register only one time when the exervise is done not in the right moment
 
-            if self.inclination_x > 4 or self.inclination_y > 4 or self.inclination_x < -4 or self.inclination_y < - 4:
+            if self.inclination_x > 4 \
+                    or self.inclination_y > 4 \
+                    or self.inclination_x < -4 \
+                    or self.inclination_y < - 4:
                 self.ballRoot.setPos(self.ballRoot.getPos() + (self.ballV * dt))
                 self.score.setColorScale(0.8, 0.1, 0.1, 1.0)  # red color
                 # put as comment because i still do not hve sure about smile/sad face
-                #self.imageObject.setImage('images/sad.png')
+                # self.imageObject.setImage('images/sad.png')
                 if self.play_once == 0:
                     self.sound_problem.setVolume(0.04)
                     self.sound_problem.play()
@@ -694,24 +697,22 @@ class BallInMazeDemo:
                 self.repetion += dt
                 self.score.setColorScale(0.1, 0.8, 0.1, 1.0)  # green color
                 # put as comment because i still do not hve sure about smile/sad face
-                #self.imageObject.setImage('images/ok.png')
+                # self.imageObject.setImage('images/ok.png')
                 var1 = float(self.ballRoot.getX())
                 var2 = float(self.ballRoot.getY())
                 var3 = float(self.ballRoot.getZ())
                 if self.repetion > 5:
                     self.ballRoot.setX(self.ballRoot.getX())
                     self.ballRoot.setY(self.ballRoot.getY())
-                    #self.ballRoot.setZ(self.ballRoot.getZ())
+                    # self.ballRoot.setZ(self.ballRoot.getZ())
 
                 else:
                     self.ballRoot.setX(var1 - var1 * dt)
                     self.ballRoot.setY(var2 - var2 * dt)
-                    #self.ballRoot.setZ(var3 - self.ballV[2] * dt)
+                    # self.ballRoot.setZ(var3 - self.ballV[2] * dt)
                     self.play_once = 0
-            #print 'ball position' + str(self.ballRoot.getPos())
-            #print 'new deslocation' + str(self.ballV)
-            # here is the moment to send the data for postgreSQL.
 
+            # here is the moment to send the data for postgreSQL.
 
             # This block of code rotates the ball. It uses something called a quaternion
             # to rotate the ball around an arbitrary axis. That axis perpendicular to
@@ -729,7 +730,6 @@ class BallInMazeDemo:
             return Task.cont       # Continue the task indefinitely
         else:
             return Task.done
-        #return taskMgr.remove("rollTask")
 
     # If the ball hits a hole trigger, then it should fall in the hole.
     # This is faked rather than dealing with the actual physics of it.

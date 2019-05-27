@@ -127,6 +127,7 @@ class Xcore(FSM):
         Enter game1
         :return:
         """
+
         game.BallInMazeDemo(1, "game1", 10101, "Carlos")
 
     def exitGame1(self):

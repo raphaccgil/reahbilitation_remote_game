@@ -27,14 +27,14 @@ class MainMenu(Calibration):
         :param Calibration:
         :return:
         """
-        path_now = os.path.dirname(os.getcwd())
-        files_path_menu = PathGenMenu().path_gen_menu(path_now)
-        self.sound_back = base.loader.loadSfx(files_path_menu[0])
+        self.path_now = os.path.dirname(os.getcwd())
+        self.files_path_menu = PathGenMenu().path_gen_menu(self.path_now)
+        self.sound_back = base.loader.loadSfx(self.files_path_menu[0])
         self.sound_back.setVolume(0.02)
         self.sound_back.setLoop(True)
         self.sound_back.play()
         self.button = DirectButton(text="Game1", command=self.test, scale=0.1, pos=(-1, 0, 0))
-        self.button1 = DirectButton(text="Game2", command=self.test, scale=0.1, pos=(-0.5, 0, 0))
+        self.button1 = DirectButton(text="Game2", command=self.quit, scale=0.1, pos=(-0.5, 0, 0))
         self.button2 = DirectButton(text="Game3", command=self.quit, scale=0.1, pos=(0, 0, 0))
         self.button3 = DirectButton(text="Credits", command=self.quit, scale=0.1, pos=(0.5, 0, 0))
         self.button4 = DirectButton(text="Quit", command=self.quit, scale=0.1, pos=(1.0, 0, 0))
@@ -63,6 +63,7 @@ class MainMenu(Calibration):
         sys.exit(0)
 
     def test(self):
+        print('Limpou?')
         self.sound_back.stop()
         self.button.destroy()
         self.button1.destroy()
