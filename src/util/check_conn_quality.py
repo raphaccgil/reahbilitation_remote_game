@@ -6,7 +6,6 @@ import psutil
 import time
 from datetime import datetime
 import speedtest
-import speedtest_cli
 
 
 class CheckConnQuality:
@@ -14,38 +13,10 @@ class CheckConnQuality:
     def __int__(self):
         self.interface = 'WiFi'
 
-    def internet_quality(self, last_time, last_tot, flag):
+    def internet_quality(self):
         """
-        :param last_time:
-        :param : Difference between last verification and actual (ms)
-        :return: Return mesure of couting value
+        :return: Values of ping, download and upload
         """
-        try:
-            temp = psutil.net_io_counters().bytes_sent(permin=True)
-            print(temp['WiFi'])
-        except:
-            print('no wifi')
-
-        t1 = datetime.now()
-        diff = (t1 - last_time).microseconds
-        if flag == 0:
-            last_tot = (psutil.net_io_counters().bytes_sent,
-                        psutil.net_io_counters().bytes_recv)
-            flag = 1
-
-        tot = (psutil.net_io_counters().bytes_sent,
-               psutil.net_io_counters().bytes_recv)
-
-        ul, dl = [(now - last) / (float(diff)/1000000.0) / 100000.0
-                  for now, last in zip(tot, last_tot)]
-        print()
-        print(tot)
-        print(last_tot)
-        rate = (ul, dl)
-        return [rate, tot, t1, flag]
-
-
-    def get_bytes(self):
         alfa = datetime.now()
         s = speedtest.Speedtest()
 
