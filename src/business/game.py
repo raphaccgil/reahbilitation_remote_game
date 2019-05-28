@@ -81,7 +81,7 @@ class BallInMazeDemo:
         self.buff_game = LocalDb()
         self.buff_game.conn_db(self.files_path_game1)
         self.data_collect = self.buff_game.verify_data_calibration()
-        print(self.data_collect)
+
         if len(self.data_collect) == 0:
             sys.exit(1)
         else:
@@ -457,7 +457,7 @@ class BallInMazeDemo:
             self.inc_check += 0.25
         else:
             self.inc_check = 0
-        print('Insercao inc_check {}'.format(self.inc_check))
+
         if self.inc_check >= 1:
             self.inc_check = 0
             self.database_store[0].append(1)
@@ -696,12 +696,12 @@ class BallInMazeDemo:
             # self.imageObject = OnscreenImage(image='images/ok.png', pos=(-1.1, 0.2, 0.92), scale=(0.075, 0.075, 0.075))
             # If dt is large, then there has been a # hiccup that could cause the ball
             # to leave the field if this functions runs, so ignore the frame
-            print('delay value: {}'.format(str(dt)))
+
             if dt > .2:
                 return Task.cont
             # The collision handler collects the collisions. We dispatch which function
             # to handle the collision based on the name of what was collided into
-            print(self.cHandler.getNumEntries())
+
             for i in range(self.cHandler.getNumEntries()):
                 entry = self.cHandler.getEntry(i)
                 name = entry.getIntoNode().getName()
