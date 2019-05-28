@@ -13,16 +13,18 @@ class JsonPrepare:
         :param local_list: All data stored in list to be prepared in json
         :return: return a list of json prepared
         """
-        json_collect = []
-        for cont, val in enumerate(local_list[0]):
-            json_collect.append({})
-            json_collect[-1]['time_coll'] = val
-            json_collect[-1]['pitch'] = local_list[1][cont]
-            json_collect[-1]['pitch_median'] = local_list[2][cont]
-            json_collect[-1]['roll'] = local_list[3][cont]
-            json_collect[-1]['roll_median'] = local_list[4][cont]
-            json_collect[-1]['yam'] = local_list[5][cont]
-            json_collect[-1]['yam_median'] = local_list[6][cont]
+        json_collect = {}
+        json_collect['datetime'] = local_list[0]
+        json_collect['datetime_int'] = local_list[1]
+        json_collect['pitch'] = local_list[2]
+        json_collect['pitch_median'] = local_list[3]
+        json_collect['roll'] = local_list[4]
+        json_collect['roll_median'] = local_list[5]
+        json_collect['yam'] = local_list[6]
+        json_collect['yam_median'] = local_list[7]
+        json_collect['game_selection'] = local_list[8]
+        json_collect['name_patient'] = local_list[9]
+        json_collect['id_patient'] = local_list[10]
 
         return json_collect
 
@@ -37,3 +39,5 @@ class JsonPrepare:
             info_doctor = "No internet connection - No doctor message"
 
         return info_doctor
+
+

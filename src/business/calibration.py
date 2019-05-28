@@ -54,6 +54,10 @@ class Calibration:
 
         self.check_ping = 0
 
+        self.down = 0
+        self.upl = 0
+        self.ping = 0
+
     def ret_variables(self):
         """
         Return variables called
@@ -162,20 +166,20 @@ class Calibration:
 
         if self.check_ping == 0:
             if status is True:
-                ping = check_conn[0]
-                down = check_conn[1]
-                upl = check_conn[2]
+                self.ping = check_conn[0]
+                self.down = check_conn[1]
+                self.upl = check_conn[2]
             else:
-                ping = 0.0
-                down = 0.0
-                upl = 9999.9999
+                self.ping = 0.0
+                self.down = 0.0
+                self.upl = 9999.9999
 
         date_ping = datetime.datetime.now()
 
         path_now = os.path.dirname(os.getcwd())
         files_path_calibration = re.sub("/src", "", path_now)
 
-        buff_list = [date_ping, float(down), float(upl), float(ping)]
+        buff_list = [date_ping, float(self.down), float(self.upl), float(self.ping)]
         buff_median = LocalDb()
         buff_median.conn_db(files_path_calibration)
         buff_median.insert_tbl_conn_speed(buff_list)

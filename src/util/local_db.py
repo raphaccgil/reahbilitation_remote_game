@@ -259,9 +259,37 @@ class LocalDb:
             self.conn.close()
             return 0
 
-    def verify_data_calibration(self):
+    def verify_speed(self):
         """
         Collect data from calibration
+
+        :return: The information of calibration
+        """
+        speed_list = []
+        try:
+            self.cursor.execute(
+                """
+                 SELECT 
+                 datetime,
+                 down_kbps,
+                 upl_kbps,
+                 ping
+                 FROM SPEEDTEST
+                 order by datetime desc
+                 LIMIT 1
+                 """)
+            cont_val = self.cursor.fetchall()
+            for cont, val in enumerate(cont_val[0]):
+                speed_list.append(val)
+        except:
+            print("Erro seleção")
+
+        self.conn.close()
+        return speed_list
+
+    def verify_data_calibration(self):
+        """
+        Collect last day
 
         :return: The information of calibration
         """

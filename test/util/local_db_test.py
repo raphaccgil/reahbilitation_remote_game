@@ -141,5 +141,21 @@ class TestSaveDb:
         flag = test_connection.insert_tbl_conn_speed(val)
         assert flag == 0
 
+    def test_verify_speed_test(self):
+        """
+
+        :return: Verify if the same quantity of data was sent on local database
+        """
+
+        path_now = os.path.dirname(os.getcwd())
+        print(path_now)
+        files_path_test = re.sub("/test", "", path_now)
+
+        test_connection = LocalDb()
+        test_connection.conn_db(files_path_test)
+        list_flag = test_connection.verify_speed()
+        print(list_flag)
+        assert len(list_flag) == 4
+
 if __name__ == "__main__":
-    TestSaveDb().test_insert_tbl_conn_speed()
+    TestSaveDb().test_verify_speed_test()

@@ -11,6 +11,7 @@ import re
 import os
 import sys
 import socket
+import time
 from direct.gui.OnscreenText import OnscreenText
 from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.LerpInterval import LerpFunc
@@ -24,7 +25,7 @@ from src.service import core as cc
 from src.util.fusion import Fusion
 from src.util.local_db import LocalDb, MongoConn
 from src.util.check_conn import CheckConn
-from src.util.check_conn_quality import CheckConnQuality
+from src.util.json_prepare import JsonPrepare
 
 
 class BallInMazeDemo:
@@ -59,6 +60,19 @@ class BallInMazeDemo:
         self.rroll = 0
 
         self.now_t = 0
+
+        # check speed coneection
+        self.download_speed = 0
+        self.upload_speed = 0
+        self.check_speed = 0
+        self.inc_check = 0
+
+        # database store
+        # in the list1 store if its going to store local or remote
+        # in the second list its going to stroe the infor
+        self.database_store= [[], []]
+        self.flag_index_local = 0
+        self.flag_index_remote = 0
 
         # collect info of median on local database
         self.path_now_game1 = os.path.dirname(os.getcwd())
@@ -361,14 +375,97 @@ class BallInMazeDemo:
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
         taskMgr.remove("status_doctor")
+        taskMgr.remove("sensor_coll")
+        taskMgr.remove("database_local")
         taskMgr.setupTaskChain('chain1', numThreads=1, threadPriority=TPUrgent, frameSync=True)
         taskMgr.setupTaskChain('chain2', numThreads=1, threadPriority=TPHigh, frameSync=True)
         taskMgr.setupTaskChain('chain3', numThreads=1, threadPriority=TPHigh, frameSync=True)
         taskMgr.setupTaskChain('chain4', numThreads=1, threadPriority=TPHigh, frameSync=True)
+        taskMgr.setupTaskChain('chain5', numThreads=1, threadPriority=TPHigh, frameSync=True)
+        taskMgr.setupTaskChain('chain6', numThreads=1, threadPriority=TPHigh, frameSync=True)
         taskMgr.add(self.database, "database", taskChain='chain1')
         taskMgr.add(self.rollTask, "rollTask", uponDeath=self.cleanall, taskChain='chain2')
         taskMgr.add(self.actorcontrol, "actorcontrol", taskChain='chain3')
         taskMgr.add(self.status_doctor, "status_doctor", taskChain='chain4')
+        taskMgr.add(self.sensor_coll, "sensor_coll", taskChain='chain5')
+        taskMgr.add(self.database_local, "database_local", taskChain='chain6')
+
+    def sensor_coll(self, task):
+        """
+        Routine to save on remote database according with available communication
+        and save upload and download info
+
+        :param task: Routine of pandas3d to collect data from sensor
+        :return:
+        """
+
+        if self.check_speed == 0:
+            self.path_now_game1 = os.path.dirname(os.getcwd())
+            self.files_path_game1 = re.sub("/src", "", self.path_now_game1)
+
+            speed_conn = LocalDb()
+            speed_conn.conn_db(self.files_path_game1)
+            list_speed = speed_conn.verify_speed()
+            self.download_speed = list_speed[1]
+            self.upload_speed = list_speed[2]
+            self.check_speed = 1
+
+        # acquire the data from acceloremeter, the most important data is pithc and roll for sensor
+        data, addr = self.sock.recvfrom(1024)
+        self.date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz = re.split(',', data.decode('utf-8'))
+        self.acc = (float(accx), float(accy), float(accz))
+        self.mag = (float(magx), float(magy), float(magz))
+        self.gyr = (float(gyrx), float(gyry), float(gyrz))
+        if self.flagtime == 0:
+            self.acquir_data.update(self.acc, self.gyr, self.mag, 0)
+            self.flagtime = 1
+        else:
+            self.now_t = self.date_time
+            diff = int(self.now_t) - int(self.last_t)
+            diff *= 1000
+            self.acquir_data.update(self.acc, self.gyr, self.mag, float(diff))
+        self.last_t = self.date_time
+
+        self.rhead = self.acquir_data.heading
+        self.rpitch = self.acquir_data.pitch
+        self.rroll = self.acquir_data.roll
+
+        # here is the moment to analyze the absolute variation between the median and the
+        self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)
+        self.x_var = abs(self.rmed_roll - self.acquir_data.roll)
+
+        clean_list = []
+        date_time_prep = datetime.datetime.fromtimestamp(float(self.date_time) / 1000.0) \
+            .strftime('%Y-%m-%d %H:%M:%S.%f')
+        clean_list.append(self.date_time)
+        clean_list.append(date_time_prep)
+        clean_list.append(self.acquir_data.pitch)
+        clean_list.append(self.rmed_pitch)
+        clean_list.append(self.acquir_data.heading)
+        clean_list.append(self.rmed_yam)
+        clean_list.append(self.acquir_data.roll)
+        clean_list.append(self.rmed_roll)
+        clean_list.append(self.exercise)
+        clean_list.append(self.patient_id)
+        clean_list.append(self.patient_name)
+
+        if self.upload_speed > 100:
+            self.inc_check += 1
+        elif 50 < self.upload_speed <= 100:
+            self.inc_check += 0.5
+        elif self.status_connection is True:
+            self.inc_check += 0.25
+        else:
+            self.inc_check = 0
+        print('Insercao inc_check {}'.format(self.inc_check))
+        if self.inc_check >= 1:
+            self.inc_check = 0
+            self.database_store[0].append(1)
+        else:
+            self.database_store[0].append(0)
+        self.database_store[1].append(clean_list)
+
+        return task.cont
 
     def status_doctor(self, task):
         """
@@ -388,6 +485,8 @@ class BallInMazeDemo:
                 self.text_doctor.setText("Erro em conectar a base de dadost")
         else:
             self.text_doctor.setText("Messagem Médica: Sem conexão com internet")
+
+        time.sleep(3)
 
         return task.cont
 
@@ -434,6 +533,25 @@ class BallInMazeDemo:
 
         return task.cont
 
+    def database_local(self, task):
+        """
+        Insert on sqlLite
+        :param task:
+        :return:
+        """
+        temp = len(self.database_store[1])
+        for cont in range(self.flag_index_local, temp):
+            if int(self.database_store[0][cont]) == 0 and cont >= self.flag_index_local:
+                try:
+                    self.buff_game = LocalDb()
+                    self.buff_game.conn_db(self.files_path_game1)
+                    self.buff_game.insert_tbl_sep(self.database_store[1][cont])
+                except:
+                    print("Error1")
+            self.flag_index_local = temp
+
+        return task.cont
+
     def database(self, task):
         """
         Routine to save on remote database according with available communication
@@ -441,80 +559,39 @@ class BallInMazeDemo:
         :param task: Routine of pandas3d to collect data from sensor
         :return:
         """
-        # acquire the data from acceloremeter, the most important data is pithc and roll for sensor
-        data, addr = self.sock.recvfrom(1024)
-        date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz = re.split(',', data.decode('utf-8'))
-        self.acc = (float(accx), float(accy), float(accz))
-        self.mag = (float(magx), float(magy), float(magz))
-        self.gyr = (float(gyrx), float(gyry), float(gyrz))
-        if self.flagtime == 0:
-            self.acquir_data.update(self.acc, self.gyr, self.mag, 0)
-            self.flagtime = 1
-        else:
-            self.now_t = date_time
-            diff = int(self.now_t) - int(self.last_t)
-            diff *= 1000
-            self.acquir_data.update(self.acc, self.gyr, self.mag, float(diff))
-        self.last_t = date_time
-
-        self.rhead = self.acquir_data.heading
-        self.rpitch = self.acquir_data.pitch
-        self.rroll = self.acquir_data.roll
-
-        if self.status_connection is False:
-
-            """
-            Nesse caso possui internet, mas qual a qualidade
-            """
-            CheckConnQuality().internet_quality()
-        else:
-            """
-            Sem internet, gravar no sqlite 
-            """
-            clean_list = []
-            date_time_prep = datetime.datetime.fromtimestamp(float(date_time) / 1000.0)\
-                .strftime('%Y-%m-%d %H:%M:%S.%f')
-            clean_list.append(date_time)
-            clean_list.append(date_time_prep)
-            clean_list.append(self.acquir_data.pitch)
-            clean_list.append(self.rmed_pitch)
-            clean_list.append(self.acquir_data.heading)
-            clean_list.append(self.rmed_yam)
-            clean_list.append(self.acquir_data.roll)
-            clean_list.append(self.rmed_roll)
-            clean_list.append(self.exercise)
-            clean_list.append(self.patient_id)
-            clean_list.append(self.patient_name)
-
-            self.buff_game.conn_db(self.files_path_game1)
-            self.buff_game.insert_tbl_sep(clean_list)
-
-        '''
-        Inserir aqui conexão com o mongo e leitura de rede
-        Os dados enviados são os 6 dos sensores, mais o tipo do jogo
-        Remover conexão com o postgresql
-        '''
-
-        # here is the moment to analyze the absolute variation between the median and the
-        self.y_var = abs(self.rmed_pitch - self.acquir_data.pitch)
-        self.x_var = abs(self.rmed_roll - self.acquir_data.roll)
-
+        temp = len(self.database_store[1])
+        for cont in range(self.flag_index_remote, temp):
+            if int(self.database_store[0][cont]) == 1 and cont >= self.flag_index_remote:
+                try:
+                    test_conn = MongoConn()
+                    test_conn.mongodb_conn('reahbilitation_db',
+                                           'sensor_coll',
+                                           'mongodb://localhost:27017/')
+                    json_check = JsonPrepare().local_to_mongo(self.database_store[1][cont])
+                    test_conn.insert_data(json_check)
+                except:
+                    try:
+                        self.buff_game = LocalDb()
+                        self.buff_game.conn_db(self.files_path_game1)
+                        self.buff_game.insert_tbl_sep(self.database_store[1][cont])
+                    except:
+                        print('Error2')
+        self.flag_index_remote = temp
         return task.cont
 
     def cleanall(self, task):
-
         """
         Clean all nodes of this game
         :param task:
         :return:
         """
-
         self.sound_loop_music.stop()
-        #self.imageObject.destroy()
         taskMgr.remove("rollTask")
         taskMgr.remove("actorcontrol")
         taskMgr.remove("database")
         taskMgr.remove("status_doctor")
+        taskMgr.remove("sensor_coll")
+        taskMgr.remove("database_local")
         self.actor1.cleanup()
         self.score.remove_node()
         self.ball.remove_node()
@@ -597,11 +674,6 @@ class BallInMazeDemo:
         self.cTrav.traverse(render)
         if task.time < self.time_required:
             # base.graphicsEngine.renderFrame()
-            if hasattr(self, 'comments'):
-                self.comments.destroy()
-                self.comments2.destroy()
-            else:
-                pass
             part_time = self.future - self.timenow
             check = part_time.seconds
 
