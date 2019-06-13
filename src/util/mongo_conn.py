@@ -3,7 +3,7 @@ Routine to manipulate from mongoDB
 '''
 
 from pymongo import MongoClient, errors, DESCENDING
-
+from pprint import pprint
 
 class MongoConn:
     """
@@ -41,11 +41,10 @@ class MongoConn:
 
         index_name1 = 'datetime_int'
         index_name2 = 'id_patient'
+
         try:
-            if index_name1 not in self.album.index_information():
-                self.album.create_index(index_name1, unique=True)
-            if index_name2 not in self.album.index_information():
-                self.album.create_index(index_name2, unique=True)
+            if 'index_sensor' not in self.album.index_information():
+                self.album.create_index([(index_name1,1), (index_name2,1)], name='index_sensor', unique=True)
             self.cliente.close()
             return 0
         except:
@@ -71,12 +70,31 @@ class MongoConn:
         :return: status of insertion
         """
         try:
-            self.album.insert_many(sample_all)
+            self.album.insert_many(sample_all, ordered=False)
             self.cliente.close()
             return 0
-        except:
+        except errors.BulkWriteError:
+            pprint(errors.BulkWriteError.details)
             self.cliente.close()
             return 1
+
+    def collect_data_sensor(self):
+        """
+
+        :return:
+        """
+        collect_lst = [[], [], [], []]
+        try:
+            values = self.album.find()
+            for obj in values:
+                collect_lst[0].append(obj['datetime_server'])
+                collect_lst[1].append(obj['datetime_server_unix'])
+                collect_lst[2].append(obj['datetime_sensor'])
+                collect_lst[3].append(obj['datetime_sensor_unix'])
+        except:
+            print('Error')
+
+        return collect_lst
 
     def collect_partial_doctor(self):
         """
