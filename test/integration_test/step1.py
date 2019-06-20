@@ -8,19 +8,27 @@ from src.util.fusion import Fusion
 from datetime import datetime, timedelta
 
 
-def threading_sensor(sock, flagtime, acquir_data, acq_list, time_check):
+def threading_sensor(sock, flagtime, acquir_data, acq_list, time_check, upload_speed):
 
     a = 0
     last_t = datetime.now()
     now_t = datetime.now()
+
+    inc_check = 0
+
     while a < 6000:
+
+        if upload_speed > 100:
+            inc_check += 1
+        elif 50 <= upload_speed <= 100:
+            inc_check += 0.5
+        else:
+            inc_check += 0.1
+
         data, addr = sock.recvfrom(1024)
         date_time, accx, accy, accz, magx, magy, magz, gyrx, gyry, gyrz,  = re.split(',', data.decode('utf-8'))
         check_time = datetime.now()
         sensor_time = datetime.fromtimestamp(float(date_time) / 1000.0)
-        print('----------------------------------------')
-        time_check = (sensor_time - check_time).total_seconds()
-        print('----------------------------------------')
         acc = (float(accx), float(accy), float(accz))
         mag = (float(magx), float(magy), float(magz))
         gyr = (float(gyrx), float(gyry), float(gyrz))
@@ -33,12 +41,18 @@ def threading_sensor(sock, flagtime, acquir_data, acq_list, time_check):
             diff = float((now_t - last_t).microseconds)
             acquir_data.update(acc, gyr, mag, diff)
 
-        acq_list[0].append(acquir_data.heading)
-        acq_list[1].append(acquir_data.pitch)
-        acq_list[2].append(acquir_data.roll)
-        acq_list[3].append(date_time)
-        acq_list[4].append(datetime.fromtimestamp(float(date_time) / 1000.0) \
-            .strftime('%Y-%m-%d %H:%M:%S.%f'))
+        if inc_check >= 1:
+            acq_list[0].append(acquir_data.heading)
+            acq_list[1].append(acquir_data.pitch)
+            acq_list[2].append(acquir_data.roll)
+            #acq_list[3].append(date_time)
+            #acq_list[4].append(datetime.fromtimestamp(float(date_time) / 1000.0) \
+            #    .strftime('%Y-%m-%d %H:%M:%S.%f'))
+            acq_list[4].append(datetime.now())
+            alfa = lambda: int(round(time.time() * 1000))
+            acq_list[3].append(alfa())
+
+            inc_check = 0
 
         a += 1
 
@@ -359,7 +373,7 @@ def prepare_json(acq_list, old_len, new_len):
 
 class Step1:
 
-    def log_catch(self):
+    def log_catch(self, upload_speed):
         """
         Collect info from cellphone and write on mongoDB
         time collection: 10 mins
@@ -381,12 +395,12 @@ class Step1:
         self.time_diff = 68
         self.flag_time = 0
         self.acquir_data = Fusion()
-
         x = threading.Thread(target=threading_sensor, args=(self.sock,
                                                             self.flag_time,
                                                             self.acquir_data,
                                                             self.acq_list,
                                                             self.time_diff,
+                                                            upload_speed
                                                             ))
         x.start()
         temp = datetime.now()
@@ -394,13 +408,13 @@ class Step1:
         while x.is_alive():
             new = datetime.now()
             diff = float((new - temp).total_seconds())
-            if diff > 1:
+            if diff > 3:
                 temp = datetime.now()
                 buf = len(self.acq_list[0])
                 data_transfer = prepare_json(self.acq_list, old_len, buf)
                 test_conn = MongoConn()
                 test_conn.mongodb_conn('reahbilitation_db_test',
-                                       'diff_collection_100kbps',
+                                       'diff_collection_25kbps',
                                        'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
                 test_conn.insert_data_many(data_transfer)
                 old_len = buf
@@ -419,11 +433,11 @@ class Step1:
         """
         test_conn = MongoConn()
         test_conn.mongodb_conn('reahbilitation_db_test',
-                               'diff_collection_100kbps',
+                               'diff_collection_25kbps',
                                'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
         list_collect = test_conn.collect_data_sensor()
         with open(
-                '/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/diff_sensor_100kbps_basic_upload.csv',
+                '/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/diff_sensor_25kbps_basic_upload_3s_10%.csv',
                 'w') as csvfile:
             csvfile.write("{},{},{},{}".format('server_time',
                                                'server_time_unix',
@@ -468,6 +482,7 @@ class Step1:
 
 
 if __name__ == "__main__":
+    #Step1().log_catch(25)
     Step1().log_collect()
 
 
