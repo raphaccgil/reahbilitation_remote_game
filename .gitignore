@@ -1,0 +1,25 @@
+#Remoção de virtual enviroment
+venv/
+venv_old/
+
+#Removção de arquivos gerados python
+*.pyc
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Remover pacotes IDE
+*.idea/
+
+# Quality code analysis
+pylint-report.txt
+
+# Ignore initial database
+*.db
+
+#Office files
+*.doc
+*.docx
+*.csv
+*.xls
+*.xlsx
