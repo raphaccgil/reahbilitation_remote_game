@@ -19,9 +19,15 @@ class CheckConnQuality:
         """
         try:
             s = speedtest.Speedtest()
-            down = round(s.download()/1024.0, 2)
-            upl = round(s.upload()/1024.0, 2)
+            #down = round(s.download()/1024.0, 2)
+            #upl = round(s.upload()/1024.0, 2)
+            s.download()
+            s.upload()
+            res = s.results.dict()
+            down = round(float(res["download"])/1024.0, 2)
+            upl = round(float(res["upload"])/1024.0, 2)
             ping = round(s.results.ping, 2)
+
         except:
             down = 0.0
             upl = 0.0

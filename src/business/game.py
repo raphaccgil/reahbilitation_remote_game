@@ -460,9 +460,9 @@ class BallInMazeDemo:
         clean_list.append(self.patient_id)
         clean_list.append(self.patient_name)
 
-        if self.upload_speed > 100:
+        if self.upload_speed > 300:
             self.inc_check += 1
-        elif 50 < self.upload_speed <= 100:
+        elif 100 < self.upload_speed <= 300:
             self.inc_check += 0.5
         elif int(self.status_connection) == 1:
             self.inc_check += 0.25
@@ -575,12 +575,12 @@ class BallInMazeDemo:
             if int(self.database_store[0][cont]) == 1 and cont >= self.flag_index_remote:
                 try:
                     test_conn = MongoConn()
-                    #test_conn.mongodb_conn('reahbilitation_db',
-                    #                       'sensor_coll',
-                    #                       'mongodb://localhost:27017/')
-                    test_conn.mongodb_conn('reahbilitation_db_test',
+                    test_conn.mongodb_conn('reahbilitation_db',
                                            'sensor_coll',
-                                           'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+                                           'mongodb://localhost:27017/')
+                    #test_conn.mongodb_conn('reahbilitation_db_test',
+                    #                       'sensor_coll',
+                    #                       'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
                     json_check = JsonPrepare().local_to_mongo(self.database_store[1][cont])
                     test_conn.insert_data(json_check)
                 except:

@@ -97,7 +97,7 @@ class Xcore(FSM):
                 base.graphicsEngine.renderFrame()
                 time.sleep(2)
             elif results_local == 1:
-                self.text.setText("Existe dados armazenados, enviando dados...")
+                self.text.setText("Existem dados armazenados, enviando dados...")
                 base.graphicsEngine.renderFrame()
                 base.graphicsEngine.renderFrame()
                 time.sleep(2)
