@@ -7,6 +7,7 @@ import re
 import socket
 import numpy as np
 import datetime
+import time
 from panda3d.core import *
 from direct.gui.DirectGui import *
 from direct.task.Task import Task
@@ -104,7 +105,7 @@ class Calibration:
                      socket.SOCK_DGRAM)
         self.sock.bind((self.UDP_IP, self.UDP_PORT))
         self.acquir_data = Fusion()
-        taskMgr.setupTaskChain('chain5', numThreads=1, threadPriority=TPHigh, frameSync=False)
+        taskMgr.setupTaskChain('chain5', numThreads=1, threadPriority=TPUrgent, frameSync=False)
         taskMgr.setupTaskChain('chain6', numThreads=1, threadPriority=TPHigh, frameSync=False)
         taskMgr.add(self.roll_acquire_task, "accel_acquire", taskChain='chain5', uponDeath=self.cleanall)
         taskMgr.add(self.speed_test_task, "speed_test", taskChain='chain6')
@@ -129,8 +130,8 @@ class Calibration:
         cc.Xcore().request("Menu_game")
 
     def cal_rot_stop(self):
-        taskMgr.remove("accel_acquire")
-        taskMgr.remove("speed_test")
+        #taskMgr.remove("accel_acquire")
+        #taskMgr.remove("speed_test")
         if hasattr(self, 'texthead'):
             self.texthead.destroy()
             self.textpitch.destroy()
@@ -151,9 +152,6 @@ class Calibration:
         self.texthead.destroy()
         self.textpitch.destroy()
         self.textroll.destroy()
-        self.button.destroy()
-        self.button2.destroy()
-        self.button3.destroy()
         self.cal.destroy()
         self.notactivate = 1
 
@@ -186,7 +184,7 @@ class Calibration:
 
         self.check_ping = 1
 
-        return Task.cont
+        return Task.done
 
     def roll_acquire_task(self, task):
         self.now = datetime.datetime.now()
@@ -324,4 +322,8 @@ class Calibration:
                              shadow=(0, 0, 0, 0.5))
         self.flagtime = 1
 
-        return Task.cont
+        if self.buffer > 20 and self.check_ping == 1:
+            time.sleep(5)
+            return Task.done
+        else:
+            return Task.cont

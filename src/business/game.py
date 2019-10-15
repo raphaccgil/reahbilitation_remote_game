@@ -24,7 +24,6 @@ from src.business.actor_moviment import *
 from src.service import core as cc
 from src.util.fusion import Fusion
 from src.util.local_db import LocalDb, MongoConn
-from src.util.check_conn import CheckConn
 from src.util.json_prepare import JsonPrepare
 
 
@@ -48,7 +47,7 @@ class BallInMazeDemo:
         self.patient_name = patient_name
 
         # check if is available internnet during the game
-        self.status_connection = CheckConn().internet_on()
+        self.status_connection = 0
 
         # parameters collected
         self.acc = 0.0
@@ -210,6 +209,9 @@ class BallInMazeDemo:
 
         # cont times of repetion
         self.repetion = 0
+
+        # check statis connection
+        self.status_db = False
 
         #self.score = loader.loadModel("models/baisc")
         self.score.setScale(1.2)
@@ -405,10 +407,19 @@ class BallInMazeDemo:
 
             speed_conn = LocalDb()
             speed_conn.conn_db(self.files_path_game1)
-            list_speed = speed_conn.verify_speed()
-            self.download_speed = list_speed[1]
-            self.upload_speed = list_speed[2]
+            self.status_db = speed_conn.verify_status_conn()
+            self.status_connection = self.status_db
+
+            if int(self.status_db) == 1:
+                speed_conn.conn_db(self.files_path_game1)
+                list_speed = speed_conn.verify_speed()
+                self.download_speed = list_speed[1]
+                self.upload_speed = list_speed[2]
+            else:
+                self.download_speed = 0
+                self.upload_speed = 0
             self.check_speed = 1
+
 
         # acquire the data from acceloremeter, the most important data is pithc and roll for sensor
         data, addr = self.sock.recvfrom(1024)
@@ -449,11 +460,11 @@ class BallInMazeDemo:
         clean_list.append(self.patient_id)
         clean_list.append(self.patient_name)
 
-        if self.upload_speed > 100:
+        if self.upload_speed > 300:
             self.inc_check += 1
-        elif 50 < self.upload_speed <= 100:
+        elif 100 < self.upload_speed <= 300:
             self.inc_check += 0.5
-        elif self.status_connection is True:
+        elif int(self.status_connection) == 1:
             self.inc_check += 0.25
         else:
             self.inc_check = 0
@@ -473,7 +484,7 @@ class BallInMazeDemo:
         :return:
         """
 
-        if self.status_connection is True:
+        if int(self.status_connection) == 1:
             try:
                 test_conn = MongoConn()
                 test_conn.mongodb_conn('reahbilitation_db',
@@ -567,10 +578,14 @@ class BallInMazeDemo:
                     test_conn.mongodb_conn('reahbilitation_db',
                                            'sensor_coll',
                                            'mongodb://localhost:27017/')
+                    #test_conn.mongodb_conn('reahbilitation_db_test',
+                    #                       'sensor_coll',
+                    #                       'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
                     json_check = JsonPrepare().local_to_mongo(self.database_store[1][cont])
                     test_conn.insert_data(json_check)
                 except:
                     try:
+                        print("SAVE_LOCAL_BASE")
                         self.buff_game = LocalDb()
                         self.buff_game.conn_db(self.files_path_game1)
                         self.buff_game.insert_tbl_sep(self.database_store[1][cont])
@@ -600,7 +615,7 @@ class BallInMazeDemo:
         self.textNodePathDoctor.removeNode()
         self.textNodePathAdvice.removeNode()
         cc.Xcore().request("Results")
-        return
+
 
     # This function handles the collision between the ray and the ground
     # Information about the interaction is passed in colEntry

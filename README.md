@@ -11,7 +11,7 @@ jogo de reabilitação: https://github.com/raphaccgil/reahbilitation_remote_game
 
 aplicação web: https://github.com/raphaccgil/RealTimeReahbilitation
 
-microserviço para e-mail: A CRIAR
+microserviço para e-mail: https://github.com/raphaccgil/microservice_mail
 
 ## Arquitetura geral
 

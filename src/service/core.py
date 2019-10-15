@@ -3,16 +3,17 @@
 from direct.fsm.FSM import FSM
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import *
+import sys
+import os
+import re
+import time
+from datetime import datetime
 from src.business import calibration, game
 from src.service import menu_game
-import time
 from src.business.calibration import Calibration
 from src.util.check_conn import CheckConn
 from src.util.local_db import LocalDb, CheckDb
 from src.service.results import Results
-import sys
-import os
-import re
 
 
 class Xcore(FSM):
@@ -70,11 +71,20 @@ class Xcore(FSM):
         conn_temp_database.create_db()
         conn_temp_database.conn_db(files_path_core)
         conn_temp_database.create_tbl_calibration()
-
+        conn_temp_database.conn_db(files_path_core)
+        conn_temp_database.create_tbl_conn_status()
         conn_temp_database.conn_db(files_path_core)
         results_local = conn_temp_database.verify_data()
-        print(status)
-        if status is True:
+
+        date_val = datetime.now()
+        list_status = [date_val, status]
+        conn_temp_database.conn_db(files_path_core)
+        conn_temp_database.insert_tbl_conn_status(list_status)
+
+        conn_temp_database.conn_db(files_path_core)
+        status_db = conn_temp_database.verify_status_conn()
+
+        if int(status_db) == 1:
             self.text.setText("Conexão com Internet, verificando dados armazenados...")
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.renderFrame()
@@ -87,7 +97,7 @@ class Xcore(FSM):
                 base.graphicsEngine.renderFrame()
                 time.sleep(2)
             elif results_local == 1:
-                self.text.setText("Existe dados armazenados, enviando dados...")
+                self.text.setText("Existem dados armazenados, enviando dados...")
                 base.graphicsEngine.renderFrame()
                 base.graphicsEngine.renderFrame()
                 time.sleep(2)
@@ -97,6 +107,7 @@ class Xcore(FSM):
             self.text.setText("Sem Internet, carregando jogo em offline")
             base.graphicsEngine.renderFrame()
             base.graphicsEngine.renderFrame()
+
             #ping base local e se tiver já envia
             time.sleep(2)
         # This moment the software calls menu game of this game
@@ -119,6 +130,8 @@ class Xcore(FSM):
         Exit game
         :return:
         """
+        menu = menu_game.MainMenu(Calibration)
+        menu.cal_rot_stop()
         print('exit Menu')
 
 
@@ -132,6 +145,7 @@ class Xcore(FSM):
 
     def exitGame1(self):
         print('exit Game1')
+        game.BallInMazeDemo(1, "game1", 10101, "Carlos").cleanall()
 
     def enterGame2(self):
         """
@@ -160,9 +174,11 @@ class Xcore(FSM):
 
     def exitCalibration(self):
         print('exit calibration')
+        calibration.Calibration().cal_rot_stop()
 
     def enterResults(self):
+        print("esta aqui results")
         Results().show()
 
     def exitResults(self):
-        print ('ttt6')
+        print('ttt6')

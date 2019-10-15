@@ -15,13 +15,17 @@ class Step2:
         :return: Return collect data
         """
         test_conn = MongoConn()
+        #test_conn.mongodb_conn('reahbilitation_db_test',
+        #                       'doctor_coll',
+        #                       'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+
         test_conn.mongodb_conn('reahbilitation_db_test',
                                'doctor_coll',
-                               'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+                               'mongodb://localhost:27017/')
 
         values = {}
         values['datetime'] = datetime.now()
-        values['doctor_message'] = 'Nova Mensagem'
+        values['doctor_message'] = 'Cuidado com o joelho'
         test_conn.insert_data(values)
 
 
@@ -61,4 +65,5 @@ class Step2:
 
 if __name__ == "__main__":
     temp = 0
-    Step2().collect_partial_remote_doctor_test('doctor_message_100kbps')
+    Step2().insert_partial_remote_doctor_test()
+    #Step2().collect_partial_remote_doctor_test('doctor_message_100kbps')

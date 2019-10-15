@@ -413,9 +413,12 @@ class Step1:
                 buf = len(self.acq_list[0])
                 data_transfer = prepare_json(self.acq_list, old_len, buf)
                 test_conn = MongoConn()
-                test_conn.mongodb_conn('reahbilitation_db_test',
-                                       'diff_collection_25kbps',
-                                       'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+                #test_conn.mongodb_conn('reahbilitation_db_test',
+                #                       'diff_collection_100kbps',
+                #                       'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+                test_conn.mongodb_conn('reahbilitation_db',
+                                       'sensor_coll',
+                                       'mongodb://localhost:27017/')
                 test_conn.insert_data_many(data_transfer)
                 old_len = buf
             print('-----------------------')
@@ -433,11 +436,11 @@ class Step1:
         """
         test_conn = MongoConn()
         test_conn.mongodb_conn('reahbilitation_db_test',
-                               'diff_collection_25kbps',
+                               'diff_collection_100kbps',
                                'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
         list_collect = test_conn.collect_data_sensor()
         with open(
-                '/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/diff_sensor_25kbps_basic_upload_3s_10%.csv',
+                '/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/diff_sensor_100kbps_basic_upload_3s.csv',
                 'w') as csvfile:
             csvfile.write("{},{},{},{}".format('server_time',
                                                'server_time_unix',
@@ -477,13 +480,15 @@ class Step1:
                                                             self.flag_time,
                                                             self.acquir_data,
                                                             self.acq_list,
+                                                            0,
+                                                            200,
                                                             ))
         x.start()
 
 
 if __name__ == "__main__":
-    #Step1().log_catch(25)
-    Step1().log_collect()
+    #Step1().log_catch(101)
+    Step1().log_catch(200)
 
 
 

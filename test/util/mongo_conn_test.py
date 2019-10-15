@@ -868,7 +868,7 @@ class TestMongoConn:
 
         values = {}
         values['datetime'] = datetime.now()
-        values['doctor_message'] = 'Nova Mensagem'
+        values['doctor_message'] = 'Cuidado com o joelho'
         test_conn.insert_data(values)
 
         test_conn = MongoConn()
@@ -877,16 +877,17 @@ class TestMongoConn:
                                'mongodb://localhost:27017/')
 
         flag = test_conn.collect_partial_doctor()
-        assert flag == 'Nova Mensagem'
+        assert flag == 'Cuidado com o joelho'
 
 if __name__ == "__main__":
     a = 0
     list_collect = []
+    TestMongoConn().collect_partial_doctor_test()
     #TestMongoConn().mongo_create_index_sensor_remote_test()
-    while a < 50:
-        a += 1
-        list_collect = TestMongoConn().insert_data_many_remote_test(list_collect)
-    with open('/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/upload_25kbps_block5.csv', 'w') as csvfile:
-        for line in list_collect:
-            csvfile.write(str(line))
-            csvfile.write('\n')
+    #while a < 50:
+    #    a += 1
+    #    list_collect = TestMongoConn().insert_data_many_remote_test(list_collect)
+    #with open('/Users/raphacgil/Documents/Raphael/Mestrado/git/reahbilitation_remote_game/logs/upload_25kbps_block5.csv', 'w') as csvfile:
+    #    for line in list_collect:
+    #        csvfile.write(str(line))
+    #        csvfile.write('\n')

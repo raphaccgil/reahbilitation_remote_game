@@ -17,7 +17,7 @@ class CheckConn:
         try:
             http.request('GET',
                          'http://216.58.192.142',
-                         timeout=5)
+                         timeout=8)
             return True
         except:
             return False
