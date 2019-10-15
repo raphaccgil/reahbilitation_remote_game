@@ -17,8 +17,13 @@ class CheckConnQuality:
         """
         :return: Values of ping, download and upload
         """
-        s = speedtest.Speedtest()
-        down = round(s.download()/1000.0, 2)
-        upl = round(s.upload()/1000.0, 2)
-        ping = round(s.results.ping, 2)
+        try:
+            s = speedtest.Speedtest()
+            down = round(s.download()/1024.0, 2)
+            upl = round(s.upload()/1024.0, 2)
+            ping = round(s.results.ping, 2)
+        except:
+            down = 0.0
+            upl = 0.0
+            ping = 999
         return [ping, down, upl]

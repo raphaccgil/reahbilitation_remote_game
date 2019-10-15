@@ -45,6 +45,23 @@ class TestSaveDb:
 
         assert flag == 0
 
+    def test_create_tbl_conn_status(self):
+        """
+
+        :return: Verify if return a table created
+        """
+
+        path_now = os.path.dirname(os.getcwd())
+        files_path_test = re.sub("/test", "", path_now)
+
+        test_connection = LocalDb()
+        test_connection.conn_db(files_path_test)
+
+        flag = test_connection.create_tbl_conn_status()
+        print(flag)
+
+        assert flag == 0
+
     def test_insert_db2(self):
         '''
 
@@ -157,5 +174,21 @@ class TestSaveDb:
         print(list_flag)
         assert len(list_flag) == 4
 
+    def test_verify_status_conn(self):
+        """
+
+        :return: Verify if the same quantity of data was sent on local database
+        """
+
+        path_now = os.path.dirname(os.getcwd())
+        print(path_now)
+        files_path_test = re.sub("/test", "", path_now)
+
+        test_connection = LocalDb()
+        test_connection.conn_db(files_path_test)
+        list_flag = test_connection.verify_status_conn()
+        print(list_flag)
+        assert len(list_flag) == 4
+
 if __name__ == "__main__":
-    TestSaveDb().test_verify_speed_test()
+    TestSaveDb().test_verify_status_conn()

@@ -99,6 +99,24 @@ class LocalDb:
         except:
             return 1
 
+    def create_tbl_conn_status(self):
+
+        """
+        Buff connection speed
+        :return: Create database if not exists
+        """
+        try:
+            self.cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS CONN_STATUS(
+                           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                           datetime timestamp,
+                           status STRING) 
+                       """)
+            self.conn.close()
+            return 0
+        except:
+            return 1
+
     def insert_tbl_sep(self, list_val):
         """
         Insert collect data from sensors
@@ -239,6 +257,30 @@ class LocalDb:
             self.conn.close()
             return 1
 
+    def insert_tbl_conn_status(self, list_val):
+
+        """
+        Insert data according status connection
+
+        :return: The information that database was inserted
+        """
+        try:
+            self.cursor.execute(
+                """
+                INSERT INTO CONN_STATUS 
+                    (datetime,
+                     status)
+                  VALUES  (?, ?)
+                  """, (list_val[0],
+                        list_val[1]))
+            self.conn.commit()
+            self.conn.close()
+            return 0
+        except:
+            print("Error inserting connection")
+            self.conn.close()
+            return 1
+
     def verify_data(self):
         """
         Verify if has data on table from sensors
@@ -261,7 +303,7 @@ class LocalDb:
 
     def verify_speed(self):
         """
-        Collect data from calibration
+        Collect data from speed
 
         :return: The information of calibration
         """
@@ -286,6 +328,33 @@ class LocalDb:
 
         self.conn.close()
         return speed_list
+
+    def verify_status_conn(self):
+        """
+        Collect data from calibration
+
+        :return: The information of calibration
+        """
+        conn_status = []
+        try:
+            self.cursor.execute(
+                """
+                 SELECT 
+                 datetime,
+                 status
+                 FROM CONN_STATUS
+                 order by datetime desc
+                 LIMIT 1
+                 """)
+            cont_val = self.cursor.fetchall()
+            for cont, val in enumerate(cont_val[0]):
+                conn_status.append(val)
+        except:
+            print("Erro seleção")
+
+        self.conn.close()
+        print(conn_status)
+        return conn_status[1]
 
     def verify_data_calibration(self):
         """
@@ -356,7 +425,6 @@ class LocalDb:
             self.conn.close()
             return 1
 
-
 class CheckDb:
 
     def __init__(self):
@@ -373,10 +441,13 @@ class CheckDb:
         """
         :return: Verify if is possible to connect on mongoDB
         """
-        conn_mongo = MongoConn().\
-            mongodb_conn('reahbilitation_db',
+        conn_mongo = MongoConn(). \
+            mongodb_conn('reahbilitation_db_test',
                          'sensor_coll',
-                         'mongodb://localhost:27017/')
+                         'mongodb://ec2-3-14-14-152.us-east-2.compute.amazonaws.com:27017/test')
+            #mongodb_conn('reahbilitation_db',
+            #             'sensor_coll',
+            #             'mongodb://localhost:27017/')
         if conn_mongo == "error":
             return 0
         else:

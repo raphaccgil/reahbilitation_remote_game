@@ -25,5 +25,5 @@ class Step0:
                 csvfile.write('\n')
 
 if __name__ == "__main__":
-    Step0().start('upload_100kbps_block40.csv', '25FREE')
+    Step0().start('upload_2mbps_block40.csv', 'BASIC')
 

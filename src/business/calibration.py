@@ -130,7 +130,7 @@ class Calibration:
 
     def cal_rot_stop(self):
         taskMgr.remove("accel_acquire")
-        taskMgr.remove("speed_test")
+        #taskMgr.remove("speed_test")
         if hasattr(self, 'texthead'):
             self.texthead.destroy()
             self.textpitch.destroy()
@@ -151,9 +151,6 @@ class Calibration:
         self.texthead.destroy()
         self.textpitch.destroy()
         self.textroll.destroy()
-        self.button.destroy()
-        self.button2.destroy()
-        self.button3.destroy()
         self.cal.destroy()
         self.notactivate = 1
 
@@ -186,7 +183,7 @@ class Calibration:
 
         self.check_ping = 1
 
-        return Task.cont
+        return Task.done
 
     def roll_acquire_task(self, task):
         self.now = datetime.datetime.now()
